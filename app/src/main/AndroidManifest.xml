@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.meita.rentalpemilik">
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".SplashScreen"
+            android:label="Rental Pemilik"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Autentifikasi.InputProfilRental" />
+        <activity android:name=".Autentifikasi.Registrasi" />
+        <activity android:name=".Autentifikasi.Login" />
+        <activity android:name=".MenuManajemenKendaraan.MenuTambahKendaraan" />
+        <activity
+            android:name=".MenuManajemenKendaraan.MenuLihatDetailKendaraan"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MenuManajemenKendaraan.EditKendaraan"
+            android:label="@string/title_activity_edit_kendaraan"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCWeoFzn6aYs1OnkdF_rah_H_zSVwCbtQI" />
+
+        <activity android:name=".MenuStatusPemesanan.DetailPemesananStatus1" />
+        <activity android:name=".MenuStatusPemesanan.DetailPemesananStatus2" />
+        <activity android:name=".MenuStatusPemesanan.GambarBuktiPembayaran" />
+        <activity android:name=".MenuStatusPemesanan.DetailPemesananStatus3" />
+        <activity android:name=".MenuStatusPemesanan.DetailPemesananStatus4" />
+        <activity android:name=".MenuStatusPemesanan.DetailPemesananStatus5" />
+        <activity android:name=".MenuStatusPemesanan.DetailPemesananStatus6" />
+        <activity android:name=".MenuPembatalanPesanan.UnggahBuktiPengembalianDana" />
+        <activity android:name=".MenuProfilRental.UbahProfil" />
+        <activity android:name=".MenuProfilRental.PengaturanRekeningPembayaran" />
+        <activity android:name=".MenuProfilRental.PengaturanProfil" />
+        <activity
+            android:name="com.gun0912.tedpicker.ImagePickerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme2" />
+        <activity android:name=".MenuKelolaKetersediaan.KelolaKetersediaan" />
+        <activity android:name=".MenuProfilRental.UbahRekeningPembayaran" />
+        <activity android:name=".MenuProfilRental.TambahRekeningPembayaran" />
+        <activity android:name=".MenuKelolaKetersediaan.CekTanggalKetersediaan" />
+        <activity android:name=".Autentifikasi.AutentifikasiTelepon"></activity>
+    </application>
+
+</manifest>

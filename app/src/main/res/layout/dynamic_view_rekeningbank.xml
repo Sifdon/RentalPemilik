@@ -1,0 +1,65 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <Button
+        android:id="@+id/remove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="Hapus"/>
+    <TextView
+        android:id="@+id/spinnerNamaBank"
+        android:hint="nama bank"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/remove"/>
+    <TextView
+        android:id="@+id/editTextNamaPemilikBank"
+        android:hint="pemilik bank"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/spinnerNamaBank"/>
+    <TextView
+        android:id="@+id/editTextNmrRekening"
+        android:hint="nomor rekening"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/editTextNamaPemilikBank"/>
+</RelativeLayout>
+
+    <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content">-->
+
+
+    <!--<Spinner-->
+    <!--android:id="@+id/spinnerNamaBank"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"></Spinner>-->
+    <!--<EditText-->
+    <!--android:id="@+id/editTextNamaPemilikBank"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@+id/spinnerNamaBank"-->
+    <!--android:layout_alignParentLeft="true"-->
+    <!--android:hint="Nama Pemilik Bank"/>-->
+    <!--<EditText-->
+    <!--android:id="@+id/editTextNmrRekening"-->
+    <!--android:layout_below="@+id/editTextNamaPemilikBank"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentLeft="true"-->
+    <!--android:hint="Nomor Rekening Bank"/>-->
+    <!--<Button-->
+    <!--android:id="@+id/remove"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@id/editTextNmrRekening"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:text="Remove"/>-->
+    <!--</RelativeLayout>-->

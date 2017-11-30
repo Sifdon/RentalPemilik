@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/appbar"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/orange"
+            android:elevation="5dp"
+            android:title="Edit Data Kendaraan"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/linear_action"
+        android:layout_below="@+id/appbar"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
+        <LinearLayout
+            android:id="@+id/linear_slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="0.4"
+                        android:text="Ubah Data Kendaraan"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+                        android:padding="5dp"
+                        android:background="@color/abu_muda"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:text="Tipe Kendaraan"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/abu_tua"
+                                android:textSize="17dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginTop="10dp"
+                                android:orientation="vertical"/>
+                            <TextView
+                                android:text="Harga Sewa"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/abu_tua"
+                                android:textSize="17dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginTop="20dp"
+                                android:orientation="vertical"/>
+                            <TextView
+                                android:text="Jumlah Kendaraan"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/abu_tua"
+                                android:textSize="17dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginTop="20dp"
+                                android:orientation="vertical"/>
+                            <TextView
+                                android:text="Jumlah Penumpang"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/abu_tua"
+                                android:textSize="17dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginTop="20dp"
+                                android:orientation="vertical"/>
+                            <TextView
+                                android:text="Durasi Penyewaan"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/abu_tua"
+                                android:textSize="17dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginTop="20dp"
+                                android:orientation="vertical"/>
+                            <TextView
+                                android:text="Fasilitas kendaraan"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/abu_tua"
+                                android:textSize="17dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginTop="20dp"
+                                android:orientation="vertical"/>
+                            <TextView
+                                android:text="Cakupan Area Pemakaian"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/abu_tua"
+                                android:textSize="17dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginTop="50dp"
+                                android:orientation="vertical"/>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginLeft="10dp">
+                            <EditText
+                                android:hint="tipe kendaraan"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/abu_tua"
+                                android:textSize="17dp"
+                                android:id="@+id/editTextTipeKendaraan"
+                                android:orientation="vertical"/>
+                            <EditText
+                                android:hint="Harga Sewa"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/abu_tua"
+                                android:textSize="17dp"
+                                android:id="@+id/editTextHargaSewa"
+                                android:inputType="number"
+                                android:orientation="vertical"/>
+                            <EditText
+                                android:hint="Jumlah Kendaraan"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/abu_tua"
+                                android:textSize="17dp"
+                                android:id="@+id/editTextJumlahKendaraan"
+                                android:inputType="number"
+                                android:orientation="vertical"/>
+                            <EditText
+                                android:hint="Jumlah Penumpang"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/abu_tua"
+                                android:textSize="17dp"
+                                android:id="@+id/editTextJumlahPenumpang"
+                                android:inputType="number"
+                                android:orientation="vertical"/>
+                            <android.support.v7.widget.AppCompatSpinner
+                                android:id="@+id/spinnerLamaPenyewaan"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:entries="@array/lama_penyewaan"
+                                android:layout_marginTop="5dp"/>
+                            <EditText
+                                android:hint="Fasilitas Kendaraan"
+                                android:layout_width="match_parent"
+                                android:layout_height="80dp"
+                                android:textColor="@color/abu_tua"
+                                android:textSize="17dp"
+                                android:id="@+id/editTextFasilitasKendaraan"
+                                android:scrollbars="horizontal"
+                                android:orientation="vertical"/>
+                            <EditText
+                                android:hint="Cakupan Area Pemakaian"
+                                android:layout_width="match_parent"
+                                android:layout_height="80dp"
+                                android:textColor="@color/abu_tua"
+                                android:textSize="17dp"
+                                android:scrollbars="horizontal"
+                                android:id="@+id/editTextCakupanAreaPemakaian"
+                                android:orientation="vertical"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/linear_checkbox"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="10dp"
+                        android:paddingTop="2dp">
+                        <CheckBox
+                            android:id="@+id/checkBoxSupir"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginLeft="10dp"
+                            android:text="Dengan Supir" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/linear_checkbox2"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="2dp"
+                        android:paddingTop="10dp">
+                        <CheckBox
+                            android:id="@+id/checkBoxBahanBakar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginLeft="10dp"
+                            android:text="Dengan Bahan Bakar" />
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="20dp"
+                    android:padding="5dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_alignParentBottom="true"
+                    android:layout_weight="1">
+                    <Button
+                        android:layout_width="330dp"
+                        android:layout_height="wrap_content"
+                        android:text="Simmpan Perubahan"
+                        android:id="@+id/buttonSimpan"
+                        android:background="@drawable/round_button"/>
+                </LinearLayout>
+            </LinearLayout>
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center|bottom"
+                android:layout_marginBottom="20dp"
+                android:visibility="gone" />
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <!--<android.support.v4.widget.NestedScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_above="@+id/linear_action"-->
+        <!--android:layout_below="@+id/appbar"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentStart="true">-->
+
+    <!--<LinearLayout-->
+        <!--android:id="@+id/linear_slider"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical">-->
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:padding="10dp">-->
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:text="Tipe Kendaraan : "-->
+            <!--android:textSize="15dp"-->
+            <!--android:gravity="center"/>-->
+        <!--<EditText-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:id="@+id/editTextTipeKendaraan" />-->
+        <!--</LinearLayout>-->
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:paddingTop="5dp"-->
+            <!--android:padding="10dp">-->
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:text="Jumlah Penumpang : "-->
+                <!--android:textSize="15dp"-->
+                <!--android:gravity="center"/>-->
+            <!--<EditText-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:id="@+id/editTextJmlPenumpang" />-->
+        <!--</LinearLayout>-->
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:paddingTop="5dp"-->
+            <!--android:padding="10dp">-->
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:text="Harga Sewa : "-->
+                <!--android:textSize="15dp"-->
+                <!--android:gravity="center"/>-->
+            <!--<EditText-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:id="@+id/editTextHargaSewa" />-->
+        <!--</LinearLayout>-->
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:paddingTop="5dp"-->
+            <!--android:padding="10dp">-->
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:text="Lama Penyewaan : "-->
+                <!--android:textSize="15dp"-->
+                <!--android:gravity="center"/>-->
+            <!--<EditText-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:id="@+id/editTextLamaPenyewaan" />-->
+        <!--</LinearLayout>-->
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:paddingTop="5dp"-->
+            <!--android:padding="10dp">-->
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:text="Fasilitas Kendaraan : "-->
+                <!--android:textSize="15dp"-->
+                <!--android:gravity="center"/>-->
+            <!--<EditText-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:id="@+id/editTextFasilitasKendaraan" />-->
+        <!--</LinearLayout>-->
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:paddingTop="5dp"-->
+            <!--android:padding="10dp">-->
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:text="Jumlah Kendaraan : "-->
+                <!--android:textSize="15dp"-->
+                <!--android:gravity="center"/>-->
+            <!--<EditText-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:id="@+id/editTextJumlahKendaraan" />-->
+        <!--</LinearLayout>-->
+
+        <!--<Button-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/buttonSimpanUpdate"-->
+            <!--android:text="Simpan"/>-->
+        <!--</LinearLayout>-->
+    <!--</android.support.v4.widget.NestedScrollView>-->
+
+
+</RelativeLayout>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/putih">
+    <LinearLayout
+        android:id="@+id/linear1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/a"
+            android:layout_marginBottom="30dp"
+            android:text="jumlah kendaraan model"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/b"
+            android:layout_marginBottom="30dp"
+            android:text="jumlah kendaraan tersedia"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_below="@+id/linear1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <com.gildaswise.horizontalcounter.HorizontalCounter
+            android:id="@+id/horizontal_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:stepValue="1"
+            app:textColor="@color/hitam"
+            app:textSize="10dp"
+            app:minusButtonColor="@color/merah"
+            app:plusButtonColor="@color/hijau_tua"
+            app:displayAsInteger="true"
+            app:initialValue="1"
+            app:maxValue="100"
+            app:minValue="1" />
+    </LinearLayout>
+</RelativeLayout>
