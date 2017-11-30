@@ -160,7 +160,6 @@ public class MenuTambahKendaraan extends AppCompatActivity implements View.OnCli
                 updateImage.put(Constants.UPLOAD_FOTO, photoUrls);
                 dbKendaraan.child(kategori).child(idKendaraan).updateChildren(updateImage);
 
-                progressDialog.show();
                 KendaraanModel dataKendaraanRental = new KendaraanModel(idKendaraan, kategori);
                 dbRental.child(userID).child("kendaraan").child(idKendaraan).setValue(dataKendaraanRental);
             }

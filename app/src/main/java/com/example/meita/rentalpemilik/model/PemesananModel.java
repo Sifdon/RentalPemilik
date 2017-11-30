@@ -69,7 +69,18 @@ public class PemesananModel implements Serializable {
         this.idRekeningRental = idRekeningRental;
     }
 
-
+    public PemesananModel(String idPemesanan, String idKendaraan, String idRental, String statusPemesanan, String tglPembuatanPesanan, String tglSewa,
+                          String tglKembali, int jumlahKendaraan, String kategoriKendaraan) {
+        this.idPemesanan = idPemesanan;
+        this.idKendaraan = idKendaraan;
+        this.idRental = idRental;
+        this.statusPemesanan = statusPemesanan;
+        this.tglPembuatanPesanan = tglPembuatanPesanan;
+        this.tglSewa = tglSewa;
+        this.tglKembali = tglKembali;
+        this.jumlahKendaraan = jumlahKendaraan;
+        this.kategoriKendaraan = kategoriKendaraan;
+    }
 
     public String getIdPemesanan() {
         return idPemesanan;

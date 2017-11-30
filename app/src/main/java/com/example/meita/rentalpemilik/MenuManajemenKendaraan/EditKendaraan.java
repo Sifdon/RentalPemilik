@@ -1,5 +1,6 @@
 package com.example.meita.rentalpemilik.MenuManajemenKendaraan;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,12 +11,14 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.meita.rentalpemilik.Constants;
+import com.example.meita.rentalpemilik.MainActivity;
 import com.example.meita.rentalpemilik.R;
 import com.example.meita.rentalpemilik.Utils.ShowAlertDialog;
 import com.example.meita.rentalpemilik.model.KendaraanModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class EditKendaraan extends AppCompatActivity {
@@ -61,13 +64,14 @@ public class EditKendaraan extends AppCompatActivity {
 
     public void loadDataKendaraan() {
         dataKendaraan = (KendaraanModel) getIntent().getSerializableExtra(Constants.KENDARAAN);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("kendaraan").child(dataKendaraan.getKategoriKendaraan()).child(dataKendaraan.getIdKendaraan()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 KendaraanModel dataKendaraan = dataSnapshot.getValue(KendaraanModel.class);
                 editTextTipeKendaraan.setText(dataKendaraan.getTipeKendaraan());
                 editTextHargaSewa.setText(String.valueOf(dataKendaraan.getHargaSewa()));
-                editTextJumlahKendaraan.setText(dataKendaraan.getJumlahKendaraan());
+                editTextJumlahKendaraan.setText(String.valueOf(dataKendaraan.getJumlahKendaraan()));
                 editTextJumlahPenumpang.setText(dataKendaraan.getJumlahPenumpang());
                 editTextFasilitasKendaraan.setText(dataKendaraan.getFasilitasKendaraan());
                 editTextCakupanAreaPemakaian.setText(dataKendaraan.getAreaPemakaian());
@@ -94,9 +98,10 @@ public class EditKendaraan extends AppCompatActivity {
     public void simpanPerubahanKendaraan() {
         dataKendaraan = (KendaraanModel) getIntent().getSerializableExtra(Constants.KENDARAAN);
         double hargaSewa = Double.valueOf(editTextHargaSewa.getText().toString().trim());
+        int jmlKendaraan = Integer.valueOf(editTextJumlahKendaraan.getText().toString().trim());
         mDatabase.child("kendaraan").child(dataKendaraan.getKategoriKendaraan()).child(dataKendaraan.getIdKendaraan()).child("tipeKendaraan").setValue(editTextTipeKendaraan.getText().toString());
         mDatabase.child("kendaraan").child(dataKendaraan.getKategoriKendaraan()).child(dataKendaraan.getIdKendaraan()).child("hargaSewa").setValue(hargaSewa);
-        mDatabase.child("kendaraan").child(dataKendaraan.getKategoriKendaraan()).child(dataKendaraan.getIdKendaraan()).child("jumlahKendaraan").setValue(editTextJumlahKendaraan.getText().toString());
+        mDatabase.child("kendaraan").child(dataKendaraan.getKategoriKendaraan()).child(dataKendaraan.getIdKendaraan()).child("jumlahKendaraan").setValue(jmlKendaraan);
         mDatabase.child("kendaraan").child(dataKendaraan.getKategoriKendaraan()).child(dataKendaraan.getIdKendaraan()).child("jumlahPenumpang").setValue(editTextJumlahPenumpang.getText().toString());
         mDatabase.child("kendaraan").child(dataKendaraan.getKategoriKendaraan()).child(dataKendaraan.getIdKendaraan()).child("fasilitasKendaraan").setValue(editTextFasilitasKendaraan.getText().toString());
         mDatabase.child("kendaraan").child(dataKendaraan.getKategoriKendaraan()).child(dataKendaraan.getIdKendaraan()).child("areaPemakaian").setValue(editTextCakupanAreaPemakaian.getText().toString());
@@ -113,13 +118,16 @@ public class EditKendaraan extends AppCompatActivity {
         } else {
             mDatabase.child("kendaraan").child(dataKendaraan.getKategoriKendaraan()).child(dataKendaraan.getIdKendaraan()).child("bahanBakar").setValue(false);
         }
+
+        Intent intent = new Intent(EditKendaraan.this, MainActivity.class);
+        startActivity(intent);
     }
 
     public boolean cekKolomIsian() {
         boolean sukses = true;
         if (editTextTipeKendaraan.getText().toString() == null || editTextHargaSewa.getText().toString() == null || editTextJumlahKendaraan.getText().toString() == null ||
-                editTextJumlahPenumpang.getText().toString() == null || editTextFasilitasKendaraan.getText().toString() == null || editTextCakupanAreaPemakaian.getText().toString() == null ||
-                checkBoxBahanBakar.isChecked() == false || checkBoxSupir.isChecked() == false || spinnerLamaPenyewaan.getSelectedItem().toString() == null) {
+                editTextJumlahPenumpang.getText().toString() == null || editTextFasilitasKendaraan.getText().toString() == null || editTextCakupanAreaPemakaian.getText().toString() == null
+                || spinnerLamaPenyewaan.getSelectedItem().toString().equals("Lama Penyewaan")) {
             sukses = false;
             ShowAlertDialog.showAlert("Lengkapi Seluruh Kolom Isian", this);
 

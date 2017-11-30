@@ -1,19 +1,30 @@
 package com.example.meita.rentalpemilik.MenuKelolaKetersediaan;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.meita.rentalpemilik.MainActivity;
 import com.example.meita.rentalpemilik.R;
+import com.example.meita.rentalpemilik.Utils.ShowAlertDialog;
 import com.example.meita.rentalpemilik.model.KendaraanModel;
 import com.example.meita.rentalpemilik.model.PemesananModel;
 import com.gildaswise.horizontalcounter.HorizontalCounter;
+import com.gildaswise.horizontalcounter.RepeatListener;
+import com.google.android.gms.vision.text.Line;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,10 +35,16 @@ public class KelolaKetersediaan extends AppCompatActivity {
     Date tglSewaPencarian, tglKembaliPencarian, tglSewaReserved, tglKembaliReserved;
     int jmlKendaraanPencarian, jmlKendaraanDipesan, jmlKendaraanModel, jumlahKendaraanTersedia;
     int sum;
+    String idRental;
+    double numberPickerValue;
     private HorizontalCounter numberPicker;
-    TextView a, b;
+    LinearLayout linearLayoutPeringatan, linearLayoutKelolaKetersediaan;
+    TextView textViewTglSewa, textViewTglSewa2, textViewTglKembali, textViewTglKembali2, textViewTotalKendaraan,
+            textViewKendaraanDipesan, textViewKendaraanTersedia;
+    Button buttonSimpan;
 
     DatabaseReference mDatabase;
+    private FirebaseAuth auth;
 
 
     @Override
@@ -35,23 +52,46 @@ public class KelolaKetersediaan extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kelola_ketersediaan);
 
-        a = (TextView)findViewById(R.id.a);
-        b = (TextView)findViewById(R.id.b);
+        textViewTglSewa = (TextView)findViewById(R.id.textViewTglSewa);
+        textViewTglSewa2 = (TextView)findViewById(R.id.textViewTglSewa2);
+        textViewTglKembali = (TextView)findViewById(R.id.textViewTglKembali);
+        textViewTglKembali2 = (TextView)findViewById(R.id.textViewTglKembali2);
+        textViewTotalKendaraan = (TextView)findViewById(R.id.textViewTotalKendaraan);
+        textViewKendaraanDipesan = (TextView)findViewById(R.id.textViewKendaraanDipesan);
+        textViewKendaraanTersedia = (TextView)findViewById(R.id.textViewKendaraanTersedia);
+        linearLayoutPeringatan = (LinearLayout) findViewById(R.id.linearLayoutPeringatan);
+        linearLayoutKelolaKetersediaan = (LinearLayout) findViewById(R.id.linearLayoutKelolaKetersediaan);
+        buttonSimpan = (Button) findViewById(R.id.buttonSimpan);
 
-//        numberPicker = (HorizontalCounter) findViewById(R.id.horizontal_counter);
-//        numberPicker.setDisplayingInteger(true);
-//        numberPicker.setMaxValue(getJumlahKendaraanTersedia());
-//        numberPicker.setMinValue((double) 0);
 
-        final String tglSewaPencarian = getIntent().getStringExtra("tglSewaPencarian");
-        final String tglKembaliPencarian = getIntent().getStringExtra("tglKembaliPencarian");
-        final String idKendaraan = getIntent().getStringExtra("idKendaraan");
+        numberPicker = (HorizontalCounter) findViewById(R.id.horizontal_counter);
+        numberPicker.setDisplayingInteger(true);
+        numberPicker.setOnReleaseListener(new RepeatListener.ReleaseCallback() {
+            @Override
+            public void onRelease() {
+                numberPickerValue = numberPicker.getCurrentValue();
+            }
+        });
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+        idRental = user.getUid();
+
         getJumlahKendaraanTersedia();
-        a.setText(String.valueOf(jumlahKendaraanTersedia));
+
+        buttonSimpan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (cekKolomIsian()) {
+                    simpanKetersediaan();
+                }
+            }
+        });
 
     }
 
-    public double getJumlahKendaraanTersedia() {
+    public void getJumlahKendaraanTersedia() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         final String idKendaraan = getIntent().getStringExtra("idKendaraan");
         final String kategoriKendaraan = getIntent().getStringExtra("kategoriKendaraan");
@@ -74,7 +114,6 @@ public class KelolaKetersediaan extends AppCompatActivity {
                 KendaraanModel dataKendaraan = dataSnapshot.getValue(KendaraanModel.class);
                 int jumlahKendaraan = dataKendaraan.getJumlahKendaraan();
                 jmlKendaraanModel = jumlahKendaraan;
-//                a.setText(String.valueOf(jmlKendaraanModel));
             }
 
             @Override
@@ -86,51 +125,94 @@ public class KelolaKetersediaan extends AppCompatActivity {
         mDatabase.child("cekKetersediaanKendaraan").orderByChild("idKendaraan").equalTo(idKendaraan).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    PemesananModel pemesanan = postSnapshot.getValue(PemesananModel.class);
-                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                    jmlKendaraanDipesan = pemesanan.getJumlahKendaraan();
-                    b.setText(String.valueOf(jmlKendaraanDipesan));
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
 
-                    try {
-                        tglSewaReserved = format.parse(pemesanan.getTglSewa());
-                        tglKembaliReserved = format.parse(pemesanan.getTglKembali());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    if ((tglSewaPencarian.before(tglKembaliReserved) || tglSewaPencarian.equals(tglKembaliReserved)) && (tglKembaliPencarian.after(tglSewaReserved) || tglKembaliPencarian.equals(tglSewaReserved))
-                            || tglSewaPencarian.equals(tglSewaReserved) && tglKembaliPencarian.equals(tglKembaliReserved)){
-                        listJumlah.add(jmlKendaraanDipesan);
-                        sum = 0;
-                        for (int i = 0; i < listJumlah.size(); i++) {
-                            sum += listJumlah.get(i);
-                            jmlKendaraanDipesan = sum;
+                        PemesananModel pemesanan = postSnapshot.getValue(PemesananModel.class);
+                        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                        jmlKendaraanDipesan = pemesanan.getJumlahKendaraan();
+
+                        try {
+                            tglSewaReserved = format.parse(pemesanan.getTglSewa());
+                            tglKembaliReserved = format.parse(pemesanan.getTglKembali());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
                         }
-                        int jmlKendaraanTersedia = jmlKendaraanModel - jmlKendaraanDipesan;
-                        //set nilai maksnya == jumlahKendaraanTersedia
-                        jumlahKendaraanTersedia = jmlKendaraanTersedia;
-                    } else {
-                        // set nilai maks nya sama kaya jumlah kendaraan model
-                        jumlahKendaraanTersedia = jmlKendaraanModel;
+                        if ((tglSewaPencarian.before(tglKembaliReserved) || tglSewaPencarian.equals(tglKembaliReserved)) && (tglKembaliPencarian.after(tglSewaReserved) || tglKembaliPencarian.equals(tglSewaReserved))
+                                || tglSewaPencarian.equals(tglSewaReserved) && tglKembaliPencarian.equals(tglKembaliReserved)) {
+                            listJumlah.add(jmlKendaraanDipesan);
+                            sum = 0;
+                            for (int i = 0; i < listJumlah.size(); i++) {
+                                sum += listJumlah.get(i);
+                                jmlKendaraanDipesan = sum;
+                            }
+                            int jmlKendaraanTersedia = jmlKendaraanModel - jmlKendaraanDipesan;
+                            if (jmlKendaraanTersedia == 0) {
+                                linearLayoutPeringatan.setVisibility(View.VISIBLE);
+                                linearLayoutKelolaKetersediaan.setVisibility(View.GONE);
+                                textViewTglSewa.setText(tanggalSewaPencarian);
+                                textViewTglKembali.setText(tanggalKembaliPencarian);
+                            } else {
+                                linearLayoutPeringatan.setVisibility(View.GONE);
+                                linearLayoutKelolaKetersediaan.setVisibility(View.VISIBLE);
+                                numberPicker.setMaxValue((double) jmlKendaraanTersedia);
+                                numberPicker.setMinValue((double) 1);
+                                textViewTglSewa2.setText(tanggalSewaPencarian);
+                                textViewTglKembali2.setText(tanggalKembaliPencarian);
+                                textViewTotalKendaraan.setText(String.valueOf(jmlKendaraanModel));
+                                textViewKendaraanDipesan.setText(String.valueOf(jmlKendaraanDipesan));
+                                textViewKendaraanTersedia.setText(String.valueOf(jmlKendaraanTersedia));
+                            }
+
+                        }
                     }
+                } else {
+                    linearLayoutPeringatan.setVisibility(View.GONE);
+                    linearLayoutKelolaKetersediaan.setVisibility(View.VISIBLE);
+                    numberPicker.setMaxValue((double) jmlKendaraanModel);
+                    numberPicker.setMinValue((double) 1);
+                    textViewTglSewa2.setText(tanggalSewaPencarian);
+                    textViewTglKembali2.setText(tanggalKembaliPencarian);
+                    textViewTotalKendaraan.setText(String.valueOf(jmlKendaraanModel));
+                    textViewKendaraanDipesan.setText(String.valueOf(0));
+                    textViewKendaraanTersedia.setText(String.valueOf(jmlKendaraanModel));
+                    }
+
                 }
-            }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
+    }
 
-        return jumlahKendaraanTersedia;
+    public void simpanKetersediaan() {
+        String status = "Dikelola Rental";
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        String idPemesanan = mDatabase.push().getKey();
+        String tglPembuatanPesanan = DateFormat.getDateTimeInstance().format(new Date());
+        Double d = new Double(numberPickerValue);
+        int aturJumlahKendaraan = d.intValue();
+        final String idKendaraan = getIntent().getStringExtra("idKendaraan");
+        final String kategoriKendaraan = getIntent().getStringExtra("kategoriKendaraan");
+        final String tanggalSewaPencarian = getIntent().getStringExtra("tglSewaPencarian");
+        final String tanggalKembaliPencarian = getIntent().getStringExtra("tglKembaliPencarian");
+
+
+        PemesananModel dataKelolaKetersediaan = new PemesananModel(idPemesanan, idKendaraan, idRental, status, tglPembuatanPesanan, tanggalSewaPencarian, tanggalKembaliPencarian, aturJumlahKendaraan, kategoriKendaraan);
+        mDatabase.child("cekKetersediaanKendaraan").child(idPemesanan).setValue(dataKelolaKetersediaan);
+        mDatabase.child("pemesananKendaraan").child("dikelolaRental").child(idPemesanan).setValue(dataKelolaKetersediaan);
+        Intent intent = new Intent(KelolaKetersediaan.this, MainActivity.class);
+        startActivity(intent);
     }
 
     private boolean cekKolomIsian(){
         boolean sukses = true;
-//        if (valueTglSewa == null || valueTglKembali == null){
-//            sukses = false;
-//            ShowAlertDialog.showAlert("Lengkapi Seluruh Kolom Isian", KelolaKetersediaan.this);
-//        }
+        if (numberPickerValue == 0){
+            sukses = false;
+            ShowAlertDialog.showAlert("Lengkapi Seluruh Kolom Isian", KelolaKetersediaan.this);
+        }
         return sukses;
     }
 }

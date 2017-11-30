@@ -59,19 +59,6 @@ public class MainActivity extends AppCompatActivity
         //get current user
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        authListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user == null) {
-                    // user auth state is changed - user is null
-                    // launch login activity
-                    startActivity(new Intent(MainActivity.this, AutentifikasiTelepon.class));
-                    finish();
-                }
-            }
-        };
-
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         if (progressBar != null) {
@@ -161,28 +148,12 @@ public class MainActivity extends AppCompatActivity
 
     //sign out method
     public void signOut() {
-        auth.signOut();
+        FirebaseAuth.getInstance().signOut();
+//        Intent intent = new Intent(this, AutentifikasiTelepon.class);
+        Intent intent = new Intent(this, Login.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
-    // kalo method dibawah ga di komen, drawernya gabisa jalan hm
-   /* @Override
-    protected void onResume() {
-        super.onResume();
-        progressBar.setVisibility(View.GONE);
-    } */
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        auth.addAuthStateListener(authListener);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (authListener != null) {
-            auth.removeAuthStateListener(authListener);
-        }
-
-    }
 }

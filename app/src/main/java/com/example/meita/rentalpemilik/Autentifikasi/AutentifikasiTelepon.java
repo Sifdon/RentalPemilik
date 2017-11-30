@@ -128,7 +128,7 @@ public class AutentifikasiTelepon extends AppCompatActivity implements View.OnCl
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(AutentifikasiTelepon.this, "berhasil login", Toast.LENGTH_SHORT).show();
-                            mDatabase.child("rentalPelanggan").child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+                            mDatabase.child("rentalKendaraan").child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     if (dataSnapshot != null) {
