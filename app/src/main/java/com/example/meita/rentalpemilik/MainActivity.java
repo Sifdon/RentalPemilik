@@ -2,7 +2,6 @@ package com.example.meita.rentalpemilik;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -16,9 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.example.meita.rentalpemilik.Autentifikasi.AutentifikasiTelepon;
 import com.example.meita.rentalpemilik.Autentifikasi.Login;
-import com.example.meita.rentalpemilik.MenuKelolaKetersediaan.DaftarKendaraanFragment;
+import com.example.meita.rentalpemilik.Base.DeviceToken;
 import com.example.meita.rentalpemilik.MenuManajemenKendaraan.MenuManajemenKendaraanFragment;
 import com.example.meita.rentalpemilik.MenuPemberitahuan.MenuPemberitahuan;
 import com.example.meita.rentalpemilik.MenuProfilRental.MenuProfil;
@@ -26,6 +24,9 @@ import com.example.meita.rentalpemilik.MenuStatusPemesanan.MenuStatusPemesanan;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -33,6 +34,8 @@ public class MainActivity extends AppCompatActivity
     private ProgressBar progressBar;
     private FirebaseAuth.AuthStateListener authListener;
     private FirebaseAuth auth;
+    DatabaseReference mDatabase;
+    String idRental;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +58,9 @@ public class MainActivity extends AppCompatActivity
 
         //get firebase auth instance
         auth = FirebaseAuth.getInstance();
-
-        //get current user
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        idRental = user.getUid();
+
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
@@ -65,8 +68,43 @@ public class MainActivity extends AppCompatActivity
             progressBar.setVisibility(View.GONE);
         }
 
+        int halamanStatus2 = getIntent().getIntExtra("halamanStatus2", 1);
+        int halamanStatus3 = getIntent().getIntExtra("halamanStatus3", 2);
+        int halamanStatus4 = getIntent().getIntExtra("halamanStatus4", 3);
 
+        if (findViewById(R.id.content_frame) != null && halamanStatus2 != 1) {
+            Bundle bundle=new Bundle();
+            bundle.putInt("valueHalamanStatus2", 2);
+            MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
+            menuStatusPemesanan.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuStatusPemesanan).commit();
+        } else if (findViewById(R.id.content_frame) != null && halamanStatus3 != 2) {
+            Bundle bundle=new Bundle();
+            bundle.putInt("valueHalamanStatus3", 3);
+            MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
+            menuStatusPemesanan.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuStatusPemesanan).commit();
+        }  else if (findViewById(R.id.content_frame) != null && halamanStatus4 != 3) {
+            Bundle bundle=new Bundle();
+            bundle.putInt("valueHalamanStatus4", 4);
+            MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
+            menuStatusPemesanan.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuStatusPemesanan).commit();
+        }
 
+        initData();
+
+    }
+
+    private void initData() {
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            signOut();
+        } else {
+            mDatabase = FirebaseDatabase.getInstance().getReference();
+            String token = FirebaseInstanceId.getInstance().getToken();
+            DeviceToken.getInstance().addDeviceToken(mDatabase, idRental, token);
+
+        }
     }
 
     @Override
@@ -86,21 +124,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    /*@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    } */
-
     private void displaySelectedScreen (int itemId) {
         Fragment fragment = null; // membuat objek dari kelas fragment
 
@@ -118,7 +141,7 @@ public class MainActivity extends AppCompatActivity
                 fragment = new MenuProfil();
                 break;
             case R.id.nav_kelola_ketersediaan:
-                fragment = new DaftarKendaraanFragment();
+                fragment = new com.example.meita.rentalpemilik.MenuKelolaKetersediaan.DaftarKendaraanFragment();
                 break;
             case R.id.nav_tentang:
                 fragment = new MenuTentangAplikasi();

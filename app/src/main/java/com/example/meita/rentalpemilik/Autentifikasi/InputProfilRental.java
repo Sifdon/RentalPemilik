@@ -43,6 +43,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -257,7 +258,7 @@ public class InputProfilRental extends AppCompatActivity {
                             RentalModel dataProfil = new RentalModel(userID, taskSnapshot.getDownloadUrl().toString(), nama_lengkap.getText().toString().trim(),
                                     nama_rental.getText().toString().trim(), alamat_rental.getText().toString().trim(), no_telfon_rental.getText().toString().trim(),
                                      kebijakan_sewa.getText().toString().trim(), kebijakan_pemesanan.getText().toString().trim(),
-                                    kebijakan_pembatalan.getText().toString().trim(), latitude_rental, longitude_rental);
+                                    kebijakan_pembatalan.getText().toString().trim(), latitude_rental, longitude_rental, getToken());
 
                             mDatabase.child("rentalKendaraan").child(userID).setValue(dataProfil).addOnCompleteListener(InputProfilRental.this, new OnCompleteListener<Void>() {
                                 @Override
@@ -316,6 +317,10 @@ public class InputProfilRental extends AppCompatActivity {
         }
 
         return sukses;
+    }
+
+    private String getToken() {
+        return FirebaseInstanceId.getInstance().getToken();
     }
 
 }
