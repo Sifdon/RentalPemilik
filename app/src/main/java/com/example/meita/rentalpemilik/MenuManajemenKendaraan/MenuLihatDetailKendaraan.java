@@ -32,7 +32,7 @@ public class MenuLihatDetailKendaraan extends AppCompatActivity {
     ViewPager viewPager;
     private DatabaseReference mDatabase;
     private KendaraanModel dataKendaraan;
-    private PostRef postRefs;
+    private KendaraanReference postRefs;
     private FirebaseAuth auth;
     private String userID;
     private AdapterImagePager mViewImagePager;
@@ -71,7 +71,7 @@ public class MenuLihatDetailKendaraan extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         dataKendaraan = (KendaraanModel) getIntent().getSerializableExtra(Constants.KENDARAAN);
-        postRefs = (PostRef) getIntent().getSerializableExtra(Constants.POSTREF);
+        postRefs = (KendaraanReference) getIntent().getSerializableExtra(Constants.POSTREF);
 
         infoKendaraan();
         loadFotoKendaraan();
@@ -128,7 +128,7 @@ public class MenuLihatDetailKendaraan extends AppCompatActivity {
     public void infoKendaraan() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         dataKendaraan = (KendaraanModel) getIntent().getSerializableExtra(Constants.KENDARAAN);
-        postRefs = (PostRef) getIntent().getSerializableExtra(Constants.POSTREF);
+        postRefs = (KendaraanReference) getIntent().getSerializableExtra(Constants.POSTREF);
         String jmlKendaraan = String.valueOf(dataKendaraan.getJumlahKendaraan());
 
         tipeKendaraan.setText(dataKendaraan.getTipeKendaraan());

@@ -45,7 +45,7 @@ public class MenuManajemenKendaraanFragment extends Fragment {
     private List<KendaraanModel> dataKendaraan;
     private Activity activity;
 
-    private List<PostRef> postRefs = new ArrayList<>();
+    private List<KendaraanReference> kendaraanReference = new ArrayList<>();
 
     private FirebaseAuth auth;
     private String userID;
@@ -67,20 +67,41 @@ public class MenuManajemenKendaraanFragment extends Fragment {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+
+        Firebase.setAndroidContext(getActivity());
+
+        fab_tambah_kendaraan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // INI ERROR DISINI (SOLVED!!) utk intent dari fragment ke fragment
+                /*FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                MenuKategoriTambahKendaraan tambah_kendaraan = new MenuKategoriTambahKendaraan();
+                transaction.replace(R.id.content_frame, tambah_kendaraan).commit(); */
+
+                //coba intent ke main activity, soalnya coding di fragment beda
+                Intent a = new Intent(getActivity(), MenuTambahKendaraan.class);
+                startActivity(a);
+            }
+        });
+
+        getIndexKendaraan();
+
+        return v;
+    }
+
+    public void getIndexKendaraan() {
         auth = FirebaseAuth.getInstance();
         FirebaseUser user = auth.getCurrentUser();
         userID = user.getUid();
-        Firebase.setAndroidContext(getActivity());
-
-        getAllPost(user.getUid()).addChildEventListener(new ChildEventListener() {
+        getPostKendaraan(user.getUid()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 try {
                     if (dataSnapshot != null) {
-                        PostRef postRef = dataSnapshot.getValue(PostRef.class);
-                        if (!postRefs.contains(postRef)) {
-                            postRefs.add(postRef);
-                            adapter = new MenuManajemenKendaraanAdapter(activity, getActivity(), postRefs);
+                        KendaraanReference postRef = dataSnapshot.getValue(KendaraanReference.class);
+                        if (!kendaraanReference.contains(postRef)) {
+                            kendaraanReference.add(postRef);
+                            adapter = new MenuManajemenKendaraanAdapter(activity, getActivity(), kendaraanReference);
                             //adding adapter to recyclerview
                             recyclerView.setAdapter(adapter);
                         }
@@ -97,15 +118,7 @@ public class MenuManajemenKendaraanFragment extends Fragment {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                try {
-                    PostRef postRef = dataSnapshot.getValue(PostRef.class);
-                    int indexMyPostInList = IndexProduk(postRef);
-                    postRefs.remove(indexMyPostInList);
-                    adapter = new MenuManajemenKendaraanAdapter(activity, getActivity(), postRefs);
-                    //adding adapter to recyclerview
-                    recyclerView.setAdapter(adapter);
-                } catch (Exception e) {
-                }
+
             }
 
             @Override
@@ -118,35 +131,9 @@ public class MenuManajemenKendaraanFragment extends Fragment {
 
             }
         });
-
-        fab_tambah_kendaraan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // INI ERROR DISINI (SOLVED!!) utk intent dari fragment ke fragment
-                /*FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                MenuKategoriTambahKendaraan tambah_kendaraan = new MenuKategoriTambahKendaraan();
-                transaction.replace(R.id.content_frame, tambah_kendaraan).commit(); */
-
-                //coba intent ke main activity, soalnya coding di fragment beda
-                Intent a = new Intent(getActivity(), MenuTambahKendaraan.class);
-                startActivity(a);
-            }
-        });
-        return v;
     }
 
-    private int IndexProduk(PostRef postRef){
-        int index = 0;
-        for (int i=0; i < postRefs.size(); i++){
-            if (postRefs.get(i).getIdKendaraan().equals(postRef.getIdKendaraan())){
-                index = i;
-                break;
-            }
-        }
-        return index;
-    }
-
-    public Query getAllPost(String userID) {
+    public Query getPostKendaraan(String userID) {
         Query query = mDatabase.child("rentalKendaraan").child(userID).child("kendaraan");
         return query;
     }

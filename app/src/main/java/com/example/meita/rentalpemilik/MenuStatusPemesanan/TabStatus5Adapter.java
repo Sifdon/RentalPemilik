@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.meita.rentalpemilik.Base.BaseActivity;
 import com.example.meita.rentalpemilik.MenuManajemenKendaraan.ImageLoader;
 import com.example.meita.rentalpemilik.R;
 import com.example.meita.rentalpemilik.model.KendaraanModel;
@@ -46,7 +47,6 @@ public class TabStatus5Adapter extends RecyclerView.Adapter<TabStatus5Adapter.Vi
     @Override
     public void onBindViewHolder(final TabStatus5Adapter.ViewHolder holder, int position) {
         final PemesananModel dataPemesanan = pemesananModel.get(position);
-        String total = String.valueOf(dataPemesanan.getTotalBiayaPembayaran());
         final String kategoriKendaraan = dataPemesanan.getKategoriKendaraan();
         final String idKendaraan = dataPemesanan.getIdKendaraan();
         final String idRental = dataPemesanan.getIdRental();
@@ -55,7 +55,7 @@ public class TabStatus5Adapter extends RecyclerView.Adapter<TabStatus5Adapter.Vi
         holder.textViewStatusPemesanan.setText(dataPemesanan.getStatusPemesanan());
         holder.textViewTglSewa.setText(dataPemesanan.getTglSewa());
         holder.textViewTglKembali.setText(dataPemesanan.getTglKembali());
-        holder.textViewTotalPembayaran.setText(total);
+        holder.textViewTotalPembayaran.setText("Rp. "+ BaseActivity.rupiah().format(dataPemesanan.getTotalBiayaPembayaran()));
         holder.setClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClick) {

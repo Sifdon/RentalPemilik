@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.meita.rentalpemilik.Base.BaseActivity;
 import com.example.meita.rentalpemilik.MainActivity;
 import com.example.meita.rentalpemilik.R;
 import com.example.meita.rentalpemilik.model.KendaraanModel;
@@ -119,22 +120,19 @@ public class DetailPemesananStatus2 extends AppCompatActivity {
                         mDatabase.child("pemesananKendaraan").child("menungguKonfirmasiRental").child(idPemesanan).removeValue();
                         Toast.makeText(getApplicationContext(), "Konfirmasi Pembayaran Berhasil", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(DetailPemesananStatus2.this, MainActivity.class);
+                        intent.putExtra("halamanStatus2", 2);
                         startActivity(intent);
                         finish();
                     }
                 });
 
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
-
         Intent intent = new Intent(DetailPemesananStatus2.this, MainActivity.class);
         startActivity(intent);
-
     }
 
     public void infoKendaraan() {
@@ -238,8 +236,7 @@ public class DetailPemesananStatus2 extends AppCompatActivity {
                     if (dataSnapshot.exists()) {
                         PemesananModel dataPemesanan = dataSnapshot.getValue(PemesananModel.class);
                         textViewStatusPemesanan.setText(dataPemesanan.getStatusPemesanan());
-                        String total = String.valueOf(dataPemesanan.getTotalBiayaPembayaran());
-                        textViewTotalPembayaran.setText(total);
+                        textViewTotalPembayaran.setText("Rp. "+ BaseActivity.rupiah().format(dataPemesanan.getTotalBiayaPembayaran()));
                         if (dataPemesanan.getJamPenjemputan() == null) {
                             textViewWaktuPenjemputan.setVisibility(View.GONE);
                             textViewWaktuPenjemputanValue.setVisibility(View.GONE);
@@ -308,147 +305,5 @@ public class DetailPemesananStatus2 extends AppCompatActivity {
         }
     }
 
-    public void infoPemesananBerhasil() {
-        final String idPemesanan = getIntent().getStringExtra("idPemesanan");
-        mDatabase.child("pemesananKendaraan").child("berhasil").child(idPemesanan).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    PemesananModel dataPemesanan = dataSnapshot.getValue(PemesananModel.class);
-                    textViewStatusPemesanan.setText(dataPemesanan.getStatusPemesanan());
-                    String total = String.valueOf(dataPemesanan.getTotalBiayaPembayaran());
-                    textViewTotalPembayaran.setText(total);
-                    if (dataPemesanan.getJamPenjemputan() == null) {
-                        textViewWaktuPenjemputan.setVisibility(View.GONE);
-                        textViewWaktuPenjemputanValue.setVisibility(View.GONE);
-                        textViewLokasiPenjemputan.setVisibility(View.GONE);
-                        textViewLokasiPenjemputanValue.setVisibility(View.GONE);
-                        icLokasiPenjemputan.setVisibility(View.GONE);
-                        textViewWaktuPengambilanValue.setText(dataPemesanan.getJamPengambilan());
-                    } else {
-                        textViewWaktuPengambilan.setVisibility(View.GONE);
-                        textViewWaktuPengambilanValue.setVisibility(View.GONE);
-                        textViewWaktuPenjemputanValue.setText(dataPemesanan.getJamPenjemputan());
-                        textViewLokasiPenjemputanValue.setText(dataPemesanan.getAlamatPenjemputan());
-                    }
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    public void infoPembayaranBerhasil() {
-        final String idPemesanan = getIntent().getStringExtra("idPemesanan");
-        final String idRental = getIntent().getStringExtra("idRental");
-        mDatabase.child("pemesananKendaraan").child("berhasil").child(idPemesanan).child("pembayaran").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                PembayaranModel dataPembayaran = dataSnapshot.getValue(PembayaranModel.class);
-                final String idRekening = dataPembayaran.getIdRekeningRental();
-
-                textViewNamaRekeningPelanggan.setText(dataPembayaran.getNamaPemilikRekeningPelanggan());
-                textViewNomorRekeningPelanggan.setText(dataPembayaran.getNomorRekeningPelanggan());
-                textViewNamaBankPelanggan.setText(dataPembayaran.getBankPelanggan());
-                textViewJumlahTransfer.setText(dataPembayaran.getJumlahTransfer());
-                textViewWaktuTransfer.setText(dataPembayaran.getWaktuPembayaran());
-                mDatabase.child("rentalKendaraan").child(idRental).child("rekeningPembayaran").child(idRekening).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        RentalModel dataRental = dataSnapshot.getValue(RentalModel.class);
-                        textViewNamaRekeningRental.setText(dataRental.getNamaPemilikBank());
-                        textViewNomorRekeningRental.setText(dataRental.getNomorRekeningBank());
-                        textViewNamaBankRental.setText(dataRental.getNamaBank());
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    public void infoPemesananSelesai() {
-        final String idPemesanan = getIntent().getStringExtra("idPemesanan");
-        mDatabase.child("pemesananKendaraan").child("selesai").child(idPemesanan).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    PemesananModel dataPemesanan = dataSnapshot.getValue(PemesananModel.class);
-                    textViewStatusPemesanan.setText(dataPemesanan.getStatusPemesanan());
-                    String total = String.valueOf(dataPemesanan.getTotalBiayaPembayaran());
-                    textViewTotalPembayaran.setText(total);
-                    if (dataPemesanan.getJamPenjemputan() == null) {
-                        textViewWaktuPenjemputan.setVisibility(View.GONE);
-                        textViewWaktuPenjemputanValue.setVisibility(View.GONE);
-                        textViewLokasiPenjemputan.setVisibility(View.GONE);
-                        textViewLokasiPenjemputanValue.setVisibility(View.GONE);
-                        icLokasiPenjemputan.setVisibility(View.GONE);
-                        textViewWaktuPengambilanValue.setText(dataPemesanan.getJamPengambilan());
-                    } else {
-                        textViewWaktuPengambilan.setVisibility(View.GONE);
-                        textViewWaktuPengambilanValue.setVisibility(View.GONE);
-                        textViewWaktuPenjemputanValue.setText(dataPemesanan.getJamPenjemputan());
-                        textViewLokasiPenjemputanValue.setText(dataPemesanan.getAlamatPenjemputan());
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    public void infoPembayaranSelesai() {
-        final String idPemesanan = getIntent().getStringExtra("idPemesanan");
-        final String idRental = getIntent().getStringExtra("idRental");
-        mDatabase.child("pemesananKendaraan").child("berhasil").child(idPemesanan).child("pembayaran").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                PembayaranModel dataPembayaran = dataSnapshot.getValue(PembayaranModel.class);
-                final String idRekening = dataPembayaran.getIdRekeningRental();
-
-                textViewNamaRekeningPelanggan.setText(dataPembayaran.getNamaPemilikRekeningPelanggan());
-                textViewNomorRekeningPelanggan.setText(dataPembayaran.getNomorRekeningPelanggan());
-                textViewNamaBankPelanggan.setText(dataPembayaran.getBankPelanggan());
-                textViewJumlahTransfer.setText(dataPembayaran.getJumlahTransfer());
-                textViewWaktuTransfer.setText(dataPembayaran.getWaktuPembayaran());
-                mDatabase.child("rentalKendaraan").child(idRental).child("rekeningPembayaran").child(idRekening).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        RentalModel dataRental = dataSnapshot.getValue(RentalModel.class);
-                        textViewNamaRekeningRental.setText(dataRental.getNamaPemilikBank());
-                        textViewNomorRekeningRental.setText(dataRental.getNomorRekeningBank());
-                        textViewNamaBankRental.setText(dataRental.getNamaBank());
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    public void infoPemesananPengajuanPembatalan () {}
-
-    public void infoPembayaranPengajuanPembatalan() {}
-
-    public void infoPemesananBatal() {}
-
-    public void infoPembayaranBatal() {}
 }

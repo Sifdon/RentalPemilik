@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.example.meita.rentalpemilik.MenuManajemenKendaraan.ImageLoader;
 import com.example.meita.rentalpemilik.MenuManajemenKendaraan.ItemClickListener;
-import com.example.meita.rentalpemilik.MenuManajemenKendaraan.PostRef;
+import com.example.meita.rentalpemilik.MenuManajemenKendaraan.KendaraanReference;
 import com.example.meita.rentalpemilik.R;
 import com.example.meita.rentalpemilik.model.KendaraanModel;
 import com.google.firebase.database.DataSnapshot;
@@ -33,11 +33,11 @@ public class DaftarKendaraanAdapter extends RecyclerView.Adapter<DaftarKendaraan
     private Activity activity;
     private Context context;
     private List<KendaraanModel> dataKendaraan;
-    private List<PostRef> postRefs;
+    private List<KendaraanReference> postRefs;
     private DatabaseReference mDatabase;
 
 
-    public DaftarKendaraanAdapter(Activity activity, Context context, List<PostRef> postRefs) {
+    public DaftarKendaraanAdapter(Activity activity, Context context, List<KendaraanReference> postRefs) {
         this.activity = activity;
         this.postRefs = postRefs;
         this.context = context;
@@ -55,13 +55,13 @@ public class DaftarKendaraanAdapter extends RecyclerView.Adapter<DaftarKendaraan
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final PostRef postRef = postRefs.get(position);
+        final KendaraanReference postRef = postRefs.get(position);
         mDatabase.child("kendaraan").child((postRef.getKategoriKendaraan())).child((postRef.getIdKendaraan())).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot != null) {
                     final KendaraanModel data = dataSnapshot.getValue(KendaraanModel.class);
-                    final PostRef postRef = dataSnapshot.getValue(PostRef.class);
+                    final KendaraanReference postRef = dataSnapshot.getValue(KendaraanReference.class);
                     if(data != null) {
                         holder.tipeKendaraan.setText(data.getTipeKendaraan());
                         holder.lamaPenyewaan.setText(data.getLamaPenyewaan());

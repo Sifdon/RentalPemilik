@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ public class TabStatus6 extends Fragment {
     ProgressBar progressBar;
     private FirebaseAuth auth;
     private String idRental;
+    ImageView imageViewNoOrder;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,6 +50,8 @@ public class TabStatus6 extends Fragment {
 
         progressBar = (ProgressBar) v.findViewById(R.id.progress_circle);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#FEBD3D"), PorterDuff.Mode.SRC_ATOP);
+        progressBar.setVisibility(View.VISIBLE);
+        imageViewNoOrder.setVisibility(View.GONE);
 
         pemesananModel = new ArrayList<>();
 

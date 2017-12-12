@@ -30,13 +30,13 @@ public class MenuManajemenKendaraanAdapter extends RecyclerView.Adapter<MenuMana
 
     private Activity activity;
     private Context context;
-    private List<PostRef> postRefs;
+    private List<KendaraanReference> kendaraanReference;
     private DatabaseReference mDatabase;
 
 
-    public MenuManajemenKendaraanAdapter(Activity activity, Context context, List<PostRef> postRefs) {
+    public MenuManajemenKendaraanAdapter(Activity activity, Context context, List<KendaraanReference> kendaraanReference) {
         this.activity = activity;
-        this.postRefs = postRefs;
+        this.kendaraanReference = kendaraanReference;
         this.context = context;
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
@@ -55,13 +55,13 @@ public class MenuManajemenKendaraanAdapter extends RecyclerView.Adapter<MenuMana
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final PostRef postRef = postRefs.get(position);
-        mDatabase.child("kendaraan").child((postRef.getKategoriKendaraan())).child((postRef.getIdKendaraan())).addValueEventListener(new ValueEventListener() {
+        final KendaraanReference kendaraanRef = kendaraanReference.get(position);
+        mDatabase.child("kendaraan").child((kendaraanRef.getKategoriKendaraan())).child((kendaraanRef.getIdKendaraan())).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot != null) {
                     final KendaraanModel dataKendaraan = dataSnapshot.getValue(KendaraanModel.class);
-                    final PostRef postRef = dataSnapshot.getValue(PostRef.class);
+                    final KendaraanReference postRef = dataSnapshot.getValue(KendaraanReference.class);
                     if(dataKendaraan != null) {
                         holder.tipeKendaraan.setText(dataKendaraan.getTipeKendaraan());
                         holder.lamaPenyewaan.setText(dataKendaraan.getLamaPenyewaan());
@@ -121,7 +121,7 @@ public class MenuManajemenKendaraanAdapter extends RecyclerView.Adapter<MenuMana
 
     @Override
     public int getItemCount() {
-        return postRefs.size();
+        return kendaraanReference.size();
     }
 
     @Override

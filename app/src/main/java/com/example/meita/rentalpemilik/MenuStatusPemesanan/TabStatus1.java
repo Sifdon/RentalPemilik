@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ public class TabStatus1 extends Fragment {
     ProgressBar progressBar;
     private FirebaseAuth auth;
     private String idRental;
+    ImageView imageViewNoOrder;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class TabStatus1 extends Fragment {
 
         recyclerView = (RecyclerView) v.findViewById(R.id.listView);
         recyclerView.setHasFixedSize(true);
+        imageViewNoOrder = (ImageView)v.findViewById(R.id.ic_noOrder);
 
         final FragmentActivity c = getActivity();
         LinearLayoutManager layoutManager = new LinearLayoutManager(c);
@@ -51,6 +54,8 @@ public class TabStatus1 extends Fragment {
         progressBar = (ProgressBar)v.findViewById(R.id.progress_circle);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#FEBD3D"), PorterDuff.Mode.SRC_ATOP);
         pemesananModel = new ArrayList<>();
+        progressBar.setVisibility(View.VISIBLE);
+        imageViewNoOrder.setVisibility(View.GONE);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         auth = FirebaseAuth.getInstance();
@@ -71,7 +76,6 @@ public class TabStatus1 extends Fragment {
             mDatabase.child("pemesananKendaraan").child(status1).orderByChild("idRental").equalTo(idRental).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    progressBar.setVisibility(View.VISIBLE);
                     if (dataSnapshot.exists()) {
                         for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                             PemesananModel dataPemesanan = postSnapshot.getValue(PemesananModel.class);
@@ -82,8 +86,8 @@ public class TabStatus1 extends Fragment {
                             progressBar.setVisibility(View.GONE);
                         }
                     } else {
+                        imageViewNoOrder.setVisibility(View.VISIBLE);
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(getActivity(), "Anda Tidak Mempunyai Pesanan Belum Bayar", Toast.LENGTH_LONG).show();
                     }
                 }
 

@@ -30,6 +30,35 @@ public class MenuStatusPemesanan extends Fragment {
         tabLayout = (TabLayout) v.findViewById(R.id.tabs);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
+
+        try {
+            Bundle extras = getActivity().getIntent().getExtras();
+            int valueStatusHalaman2 = extras.getInt("halamanStatus2", 1);
+            if (valueStatusHalaman2 == 2) {
+                viewPager.setCurrentItem(2);
+            }
+        } catch (Exception e) {
+        }
+
+        try {
+            Bundle extras = getActivity().getIntent().getExtras();
+            int valueStatusHalaman3 = extras.getInt("halamanStatus3", 2);
+            if (valueStatusHalaman3 == 3) {
+                viewPager.setCurrentItem(3);
+            }
+        } catch (Exception e) {
+        }
+
+        try {
+            Bundle extras = getActivity().getIntent().getExtras();
+            int valueStatusHalaman4= extras.getInt("halamanStatus4", 3);
+            if (valueStatusHalaman4 == 4) {
+                viewPager.setCurrentItem(5);
+            }
+        } catch (Exception e) {
+        }
+
+
         return v;
 
     }

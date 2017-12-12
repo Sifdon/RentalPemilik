@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.meita.rentalpemilik.MenuManajemenKendaraan.PostRef;
+import com.example.meita.rentalpemilik.MenuManajemenKendaraan.KendaraanReference;
 import com.example.meita.rentalpemilik.R;
 import com.example.meita.rentalpemilik.model.KendaraanModel;
 import com.firebase.client.Firebase;
@@ -40,7 +40,7 @@ public class DaftarKendaraanFragment extends Fragment {
     private List<KendaraanModel> dataKendaraan;
     private Activity activity;
 
-    private List<PostRef> postRefs = new ArrayList<>();
+    private List<KendaraanReference> postRefs = new ArrayList<>();
 
     private FirebaseAuth auth;
     private String userID;
@@ -77,7 +77,7 @@ public class DaftarKendaraanFragment extends Fragment {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 try {
                     if (dataSnapshot != null) {
-                        PostRef postRef = dataSnapshot.getValue(PostRef.class);
+                        KendaraanReference postRef = dataSnapshot.getValue(KendaraanReference.class);
                         if (!postRefs.contains(postRef)) {
                             postRefs.add(postRef);
                             adapter = new DaftarKendaraanAdapter(activity, getActivity(), postRefs);
@@ -98,7 +98,7 @@ public class DaftarKendaraanFragment extends Fragment {
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 try {
-                    PostRef postRef = dataSnapshot.getValue(PostRef.class);
+                    KendaraanReference postRef = dataSnapshot.getValue(KendaraanReference.class);
                     int indexMyPostInList = IndexProduk(postRef);
                     postRefs.remove(indexMyPostInList);
                     adapter = new DaftarKendaraanAdapter(activity, getActivity(), postRefs);
@@ -120,7 +120,7 @@ public class DaftarKendaraanFragment extends Fragment {
         });
     }
 
-    private int IndexProduk(PostRef postRef){
+    private int IndexProduk(KendaraanReference postRef){
         int index = 0;
         for (int i=0; i < postRefs.size(); i++){
             if (postRefs.get(i).getIdKendaraan().equals(postRef.getIdKendaraan())){

@@ -11,6 +11,13 @@
         android:padding="5dp"
         android:scrollbars="vertical"
         android:id="@+id/listView"></android.support.v7.widget.RecyclerView>
+    <ImageView
+        android:id="@+id/ic_noOrder"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/ic_no_order"
+        android:gravity="center_vertical"
+        android:layout_centerInParent="true"/>
     <ProgressBar
         android:id="@+id/progress_circle"
         style="?android:attr/progressBarStyle"

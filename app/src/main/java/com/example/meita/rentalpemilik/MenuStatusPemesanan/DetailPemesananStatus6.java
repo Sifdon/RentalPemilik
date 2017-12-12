@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.meita.rentalpemilik.Base.BaseActivity;
 import com.example.meita.rentalpemilik.R;
 import com.example.meita.rentalpemilik.model.KendaraanModel;
 import com.example.meita.rentalpemilik.model.PelangganModel;
@@ -195,8 +196,7 @@ public class DetailPemesananStatus6 extends AppCompatActivity {
                     if (dataSnapshot.exists()) {
                         PemesananModel dataPemesanan = dataSnapshot.getValue(PemesananModel.class);
                         textViewStatusPemesanan.setText(dataPemesanan.getStatusPemesanan());
-                        String total = String.valueOf(dataPemesanan.getTotalBiayaPembayaran());
-                        textViewTotalPembayaran.setText(total);
+                        textViewTotalPembayaran.setText("Rp. "+ BaseActivity.rupiah().format(dataPemesanan.getTotalBiayaPembayaran()));
                         if (dataPemesanan.getJamPenjemputan() == null) {
                             textViewWaktuPenjemputan.setVisibility(View.GONE);
                             textViewWaktuPenjemputanValue.setVisibility(View.GONE);
