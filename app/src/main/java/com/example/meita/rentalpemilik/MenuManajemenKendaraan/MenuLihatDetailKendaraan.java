@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.meita.rentalpemilik.Constants;
+import com.example.meita.rentalpemilik.MainActivity;
 import com.example.meita.rentalpemilik.R;
 import com.example.meita.rentalpemilik.model.KendaraanModel;
 import com.google.firebase.auth.FirebaseAuth;
@@ -73,6 +74,11 @@ public class MenuLihatDetailKendaraan extends AppCompatActivity {
         dataKendaraan = (KendaraanModel) getIntent().getSerializableExtra(Constants.KENDARAAN);
         postRefs = (KendaraanReference) getIntent().getSerializableExtra(Constants.POSTREF);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
         infoKendaraan();
         loadFotoKendaraan();
     }
@@ -110,6 +116,10 @@ public class MenuLihatDetailKendaraan extends AppCompatActivity {
     public void deleteKendaraan() {
         mDatabase.child(Constants.KENDARAAN).child(postRefs.getKategoriKendaraan()).child(postRefs.getIdKendaraan()).removeValue();
         mDatabase.child(Constants.RENTAL).child(userID).child("kendaraan").child(postRefs.getIdKendaraan()).removeValue();
+        Intent intent = new Intent(MenuLihatDetailKendaraan.this, MainActivity.class);
+        intent.putExtra("hapusKendaraan", 13);
+        startActivity(intent);
+        finish();
     }
 
     private void loadFotoKendaraan() {
@@ -132,7 +142,7 @@ public class MenuLihatDetailKendaraan extends AppCompatActivity {
         String jmlKendaraan = String.valueOf(dataKendaraan.getJumlahKendaraan());
 
         tipeKendaraan.setText(dataKendaraan.getTipeKendaraan());
-        jmlPenumpang.setText(dataKendaraan.jumlahPenumpang);
+        jmlPenumpang.setText(dataKendaraan.getJumlahPenumpang());
         hargaSewa.setText(String.valueOf(dataKendaraan.getHargaSewa()));
         durasiSewa.setText(dataKendaraan.getLamaPenyewaan());
         fasilitas.setText(dataKendaraan.getFasilitasKendaraan());
@@ -190,6 +200,14 @@ public class MenuLihatDetailKendaraan extends AppCompatActivity {
             }
         });
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId()==android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

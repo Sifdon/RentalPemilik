@@ -67,6 +67,7 @@ public class MenuProfil extends Fragment {
 
         progressBar = (ProgressBar)v.findViewById(R.id.progressBar);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#FEBD3D"), PorterDuff.Mode.SRC_ATOP);
+        progressBar.setVisibility(View.VISIBLE);
 
         final FragmentActivity c = getActivity();
         LinearLayoutManager layoutManager = new LinearLayoutManager(c);
@@ -94,10 +95,10 @@ public class MenuProfil extends Fragment {
     }
 
     public void getDataRental() {
-        progressBar.setVisibility(View.VISIBLE);
         mDatabase.child("rentalKendaraan").child(idRental).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                progressBar.setVisibility(View.GONE);
                 RentalModel dataRental = dataSnapshot.getValue(RentalModel.class);
                 textViewNamaPemilikRental.setText(dataRental.getNama_pemilik());
                 textViewNamaRental.setText(dataRental.getNama_rental());

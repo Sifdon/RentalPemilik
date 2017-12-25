@@ -39,10 +39,10 @@ public class TabStatus6 extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getActivity().setTitle("Pengajuan Pembatalan");
         View v = inflater.inflate(R.layout.fragment_tab_status6, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.listView);
         recyclerView.setHasFixedSize(true);
+        imageViewNoOrder = (ImageView)v.findViewById(R.id.ic_noOrder);
 
         final FragmentActivity c = getActivity();
         LinearLayoutManager layoutManager = new LinearLayoutManager(c);
@@ -73,6 +73,7 @@ public class TabStatus6 extends Fragment {
                 public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
                     progressBar.setVisibility(View.VISIBLE);
                     if (dataSnapshot.exists()) {
+                        pemesananModel.clear();
                         for (com.google.firebase.database.DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                             PemesananModel dataPemesanan = postSnapshot.getValue(PemesananModel.class);
                             pemesananModel.add(dataPemesanan);
@@ -83,8 +84,7 @@ public class TabStatus6 extends Fragment {
                         }
                     } else {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(getContext(), "Anda Tidak Mempunyai Pesanan Menunggu Konfirmasi Pesanan", Toast.LENGTH_LONG).show();
-                    }
+                     }
                 }
 
                 @Override

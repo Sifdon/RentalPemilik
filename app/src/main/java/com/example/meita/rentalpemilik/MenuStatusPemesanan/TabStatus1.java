@@ -40,7 +40,6 @@ public class TabStatus1 extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getActivity().setTitle("Belum Bayar");
         View v = inflater.inflate(R.layout.fragment_tab_status1, container, false);
 
         recyclerView = (RecyclerView) v.findViewById(R.id.listView);
@@ -77,6 +76,7 @@ public class TabStatus1 extends Fragment {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
+                        pemesananModel.clear();
                         for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                             PemesananModel dataPemesanan = postSnapshot.getValue(PemesananModel.class);
                             pemesananModel.add(dataPemesanan);

@@ -40,6 +40,7 @@ public class DetailPemesananStatus5 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_pemesanan_status5);
+        setTitle("Detail Pesanan Status Pengajuan Pembatalan");
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         textViewStatusPemesanan = (TextView)findViewById(R.id.textViewStatusPemesanan);

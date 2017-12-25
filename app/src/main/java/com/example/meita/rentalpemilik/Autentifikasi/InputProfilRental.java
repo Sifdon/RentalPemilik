@@ -59,7 +59,7 @@ public class InputProfilRental extends AppCompatActivity {
     private Button buttonSimpanData;
     private Button buttonCariGambar;
     private ProgressBar progressBarSimpan;
-    private String userID;
+    private String userID, emailRental;
     private double latitude_rental, longitude_rental;
     private ImageView imageView;
     private Uri imgProfileUri;
@@ -106,6 +106,7 @@ public class InputProfilRental extends AppCompatActivity {
         FirebaseUser user = auth.getCurrentUser();
         userID = user.getUid();
         mStorageRef = FirebaseStorage.getInstance().getReference();
+        emailRental = user.getEmail();
 
         buttonTambahRekening.setOnClickListener(new View.OnClickListener(){
 
@@ -258,7 +259,7 @@ public class InputProfilRental extends AppCompatActivity {
                             RentalModel dataProfil = new RentalModel(userID, taskSnapshot.getDownloadUrl().toString(), nama_lengkap.getText().toString().trim(),
                                     nama_rental.getText().toString().trim(), alamat_rental.getText().toString().trim(), no_telfon_rental.getText().toString().trim(),
                                      kebijakan_sewa.getText().toString().trim(), kebijakan_pemesanan.getText().toString().trim(),
-                                    kebijakan_pembatalan.getText().toString().trim(), latitude_rental, longitude_rental, getToken());
+                                    kebijakan_pembatalan.getText().toString().trim(), latitude_rental, longitude_rental, getToken(), emailRental);
 
                             mDatabase.child("rentalKendaraan").child(userID).setValue(dataProfil).addOnCompleteListener(InputProfilRental.this, new OnCompleteListener<Void>() {
                                 @Override

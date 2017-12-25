@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.example.meita.rentalpemilik.Base.BaseActivity;
 import com.example.meita.rentalpemilik.MainActivity;
 import com.example.meita.rentalpemilik.R;
+import com.example.meita.rentalpemilik.SisaKendaraanModel;
 import com.example.meita.rentalpemilik.model.KendaraanModel;
 import com.example.meita.rentalpemilik.model.PelangganModel;
 import com.example.meita.rentalpemilik.model.PembayaranModel;
@@ -22,6 +23,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class DetailPemesananStatus3 extends AppCompatActivity {
 
@@ -34,12 +39,14 @@ public class DetailPemesananStatus3 extends AppCompatActivity {
     TextView textViewNamaRekeningRental, textViewNomorRekeningRental, textViewNamaBankRental;
     public ImageView checkListDenganSupir, checkListTanpaSupir, checkListDenganBBM, checkListTanpaBBM, icLokasiPenjemputan;
     Button buttonLihatBuktiPembayaran, buttonKonfirmasiPenyewaanSelesai;
+    Date tglSewaCekSisa, tglKembaliCekSisa, tglSewaDipesan, tglKembaliDipesan;
     DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_pemesanan_status3);
+        setTitle("Detail Pesanan Status Berhasil");
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -108,16 +115,23 @@ public class DetailPemesananStatus3 extends AppCompatActivity {
 
     public void konfirmasiPemesananSelesai() {
         final String idPemesanan = getIntent().getStringExtra("idPemesanan");
+        final String idKendaraan = getIntent().getStringExtra("idKendaraan");
         final String statusPemesanan4 = "Selesai";
         mDatabase.child("pemesananKendaraan").child("berhasil").child(idPemesanan).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                PemesananModel dataPemesanan = dataSnapshot.getValue(PemesananModel.class);
+                final int jmlKendaraanDipesan = dataPemesanan.getJumlahKendaraan();
+                final String tglSewaDipesan = dataPemesanan.getTglSewa();
+                final String tglKembaliDipesan = dataPemesanan.getTglKembali();
+
                 mDatabase.child("pemesananKendaraan").child("selesai").child(idPemesanan).setValue(dataSnapshot.getValue(), new DatabaseReference.CompletionListener() {
                     @Override
                     public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                         mDatabase.child("pemesananKendaraan").child("selesai").child(idPemesanan).child("statusPemesanan").setValue(statusPemesanan4);
                         mDatabase.child("pemesananKendaraan").child("berhasil").child(idPemesanan).removeValue();
                         mDatabase.child("cekKetersediaanKendaraan").child(idPemesanan).removeValue();
+                        perbaruiSisaKendaraan(idKendaraan, jmlKendaraanDipesan, tglSewaDipesan, tglKembaliDipesan);
                         Toast.makeText(getApplicationContext(), "Konfirmasi Pemenyewaan Selesai Berhasil", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(DetailPemesananStatus3.this, MainActivity.class);
                         intent.putExtra("halamanStatus3", 3);
@@ -125,7 +139,6 @@ public class DetailPemesananStatus3 extends AppCompatActivity {
                         finish();
                     }
                 });
-
             }
 
             @Override
@@ -133,9 +146,54 @@ public class DetailPemesananStatus3 extends AppCompatActivity {
 
             }
         });
-
         Intent intent = new Intent(DetailPemesananStatus3.this, MainActivity.class);
         startActivity(intent);
+    }
+
+
+    public void perbaruiSisaKendaraan(String idKendaraan, final int jumlahKendaraanDipesan, final String tanggalSewaDipesan, final String tanggalKembaliDipesan) {
+        try {
+            mDatabase.child("cekSisaKendaraan").orderByChild("idKendaraan").equalTo(idKendaraan).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        SisaKendaraanModel sisaModel = postSnapshot.getValue(SisaKendaraanModel.class);
+                        final int sisaKendaraan = sisaModel.getSisaKendaraan();
+                        final String idCek = sisaModel.getIdCekSisa();
+
+                        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+
+                        try {
+                            tglSewaCekSisa = format.parse(sisaModel.getTglSewa());
+                            tglKembaliCekSisa = format.parse(sisaModel.getTglKembali());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        try {
+                            tglSewaDipesan = format.parse(tanggalSewaDipesan);
+                            tglKembaliDipesan = format.parse(tanggalKembaliDipesan);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        if ((tglSewaDipesan.before(tglKembaliCekSisa) || tglSewaDipesan.equals(tglKembaliCekSisa)) && (tglKembaliDipesan.after(tglSewaCekSisa) ||
+                                tglKembaliDipesan.equals(tglSewaCekSisa))
+                                || tglSewaDipesan.equals(tglSewaCekSisa) && tglKembaliDipesan.equals(tglKembaliCekSisa)) {
+                            int perbaruiSisa = sisaKendaraan + jumlahKendaraanDipesan;
+                            mDatabase.child("cekSisaKendaraan").child(idCek).child("sisaKendaraan").setValue(perbaruiSisa);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        } catch (Exception e) {
+
+        }
     }
 
     public void infoKendaraan() {

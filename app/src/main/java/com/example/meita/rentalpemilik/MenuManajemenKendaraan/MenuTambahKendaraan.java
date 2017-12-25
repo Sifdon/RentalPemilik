@@ -12,7 +12,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -24,8 +27,10 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import com.example.meita.rentalpemilik.Constants;
+import com.example.meita.rentalpemilik.MainActivity;
 import com.example.meita.rentalpemilik.MenuManajemenKendaraan.service.UploadPhotoThread;
 import com.example.meita.rentalpemilik.MenuManajemenKendaraan.service.UploadPhotoThreadListener;
+import com.example.meita.rentalpemilik.MenuStatusPemesanan.DetailPemesananStatus2;
 import com.example.meita.rentalpemilik.R;
 import com.example.meita.rentalpemilik.model.KendaraanModel;
 import com.google.firebase.auth.FirebaseAuth;
@@ -77,6 +82,7 @@ public class MenuTambahKendaraan extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_tambah_kendaraan);
+        setTitle("Tambah Kendaraan");
 
         //imageKendaraan = (ImageView) findViewById(R.id.imageViewKendaraan);
         editTextTipe = (EditText) findViewById(R.id.editTextTipeKendaraan);
@@ -103,6 +109,15 @@ public class MenuTambahKendaraan extends AppCompatActivity implements View.OnCli
 
         buttonCari.setOnClickListener(this);
         buttonSimpan.setOnClickListener(this);
+
+        progressBarSimpan.setVisibility(View.GONE);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         checkBoxSupir.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,10 +153,6 @@ public class MenuTambahKendaraan extends AppCompatActivity implements View.OnCli
     }
 
     private void simpanData(){
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Menyimpan Data Kendaraan");
-        progressDialog.show();
-
         final String idKendaraan = dbKendaraan.push().getKey();
         final String kategori = spinnerKategori.getSelectedItem().toString();
         String jmlKendaraan = editTextJumlahKendaraan.getText().toString().trim();
@@ -165,7 +176,13 @@ public class MenuTambahKendaraan extends AppCompatActivity implements View.OnCli
             }
         };
         new UploadPhotoThread(idKendaraan, listImage, uploadPhotoThreadListener).execute();
-        progressDialog.dismiss();
+
+        Intent intent = new Intent(MenuTambahKendaraan.this, MainActivity.class);
+        intent.putExtra("halamanManajemenKendaraan", 11);
+        startActivity(intent);
+        finish();
+
+
     }
 
     public void onClick(View view) {
@@ -257,6 +274,14 @@ public class MenuTambahKendaraan extends AppCompatActivity implements View.OnCli
                 dimenId,
                 resources.getDisplayMetrics()
         );
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId()==android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 //    private void showFileChooser() {

@@ -98,17 +98,15 @@ public class MenuManajemenKendaraanFragment extends Fragment {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 try {
                     if (dataSnapshot != null) {
-                        KendaraanReference postRef = dataSnapshot.getValue(KendaraanReference.class);
-                        if (!kendaraanReference.contains(postRef)) {
-                            kendaraanReference.add(postRef);
+                        KendaraanReference kendaraanRef = dataSnapshot.getValue(KendaraanReference.class);
+                        if (!kendaraanReference.contains(kendaraanRef)) {
+                            kendaraanReference.add(kendaraanRef);
                             adapter = new MenuManajemenKendaraanAdapter(activity, getActivity(), kendaraanReference);
-                            //adding adapter to recyclerview
                             recyclerView.setAdapter(adapter);
                         }
                     }
                 } catch (Exception e) {
                 }
-
             }
 
             @Override

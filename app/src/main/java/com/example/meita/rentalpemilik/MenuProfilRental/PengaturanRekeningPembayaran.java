@@ -1,6 +1,8 @@
 package com.example.meita.rentalpemilik.MenuProfilRental;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -25,12 +27,12 @@ import java.util.List;
 
 public class PengaturanRekeningPembayaran extends AppCompatActivity {
     private RecyclerView recyclerView;
-    ProgressBar progressBar;
     private List<RentalModel> rentalModel;
     private DatabaseReference mDatabase;
     private FirebaseAuth auth;
     private String idRental, emailRental;
     private PengaturanRekeningPembayaranAdapter adapter;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,9 @@ public class PengaturanRekeningPembayaran extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         FloatingActionButton fabTambahRekening = (FloatingActionButton)findViewById(R.id.fab);
+        progressBar = (ProgressBar)findViewById(R.id.progressBar);
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#FEBD3D"), PorterDuff.Mode.SRC_ATOP);
+        progressBar.setVisibility(View.VISIBLE);
 
         rentalModel = new ArrayList<>();
 
@@ -70,6 +75,7 @@ public class PengaturanRekeningPembayaran extends AppCompatActivity {
             mDatabase.child("rentalKendaraan").child(idRental).child("rekeningPembayaran").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    progressBar.setVisibility(View.GONE);
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                         RentalModel dataRekening = postSnapshot.getValue(RentalModel.class);
                         rentalModel.add(dataRekening);

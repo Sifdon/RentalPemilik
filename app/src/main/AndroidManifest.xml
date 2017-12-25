@@ -33,7 +33,9 @@
         <activity android:name=".Autentifikasi.InputProfilRental" />
         <activity android:name=".Autentifikasi.Registrasi" />
         <activity android:name=".Autentifikasi.Login" />
-        <activity android:name=".MenuManajemenKendaraan.MenuTambahKendaraan" />
+        <activity
+            android:name=".MenuManajemenKendaraan.MenuTambahKendaraan"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MenuManajemenKendaraan.MenuLihatDetailKendaraan"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -46,13 +48,27 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCWeoFzn6aYs1OnkdF_rah_H_zSVwCbtQI" />
 
-        <activity android:name=".MenuStatusPemesanan.DetailPemesananStatus1" />
-        <activity android:name=".MenuStatusPemesanan.DetailPemesananStatus2" />
-        <activity android:name=".MenuStatusPemesanan.GambarBuktiPembayaran" />
-        <activity android:name=".MenuStatusPemesanan.DetailPemesananStatus3" />
-        <activity android:name=".MenuStatusPemesanan.DetailPemesananStatus4" />
-        <activity android:name=".MenuStatusPemesanan.DetailPemesananStatus5" />
-        <activity android:name=".MenuStatusPemesanan.DetailPemesananStatus6" />
+        <activity
+            android:name=".MenuStatusPemesanan.DetailPemesananStatus1"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MenuStatusPemesanan.DetailPemesananStatus2"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MenuStatusPemesanan.GambarBuktiPembayaran"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MenuStatusPemesanan.DetailPemesananStatus3"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MenuStatusPemesanan.DetailPemesananStatus4"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MenuStatusPemesanan.DetailPemesananStatus5"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MenuStatusPemesanan.DetailPemesananStatus6"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".MenuPembatalanPesanan.UnggahBuktiPengembalianDana" />
         <activity android:name=".MenuProfilRental.UbahProfil" />
         <activity android:name=".MenuProfilRental.PengaturanRekeningPembayaran" />
@@ -65,7 +81,11 @@
         <activity android:name=".MenuProfilRental.UbahRekeningPembayaran" />
         <activity android:name=".MenuProfilRental.TambahRekeningPembayaran" />
         <activity android:name=".MenuKelolaKetersediaan.CekTanggalKetersediaan" />
-        <activity android:name=".Autentifikasi.AutentifikasiTelepon"></activity>
+        <activity android:name=".Autentifikasi.AutentifikasiTelepon" />
+        <activity
+            android:name=".ProfilPelanggan.LihatProfilPelanggan"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".MenuPenilaianDanUlasan.MenuPenilaianDanUlasanAdapter"></activity>
     </application>
 
 </manifest>

@@ -38,6 +38,7 @@ public class DetailPemesananStatus4 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_pemesanan_status4);
+        setTitle("Detail Pesanan Status Selesai");
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 

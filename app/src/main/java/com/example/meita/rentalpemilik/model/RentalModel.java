@@ -9,6 +9,7 @@ public class RentalModel {
     public String idRental, nama_pemilik, nama_rental, alamat_rental, notelfon_rental, kebijakan_sewa_rental,
     kebijakan_pemesanan_rental, kebijakan_pembatalan_rental, namaBank, namaPemilikBank, nomorRekeningBank, idRekening;
     public double latitude, longitude;
+    String emailRental;
 
     public RentalModel() {
 
@@ -17,7 +18,7 @@ public class RentalModel {
 
     public RentalModel(String idRental, String uriFotoProfil, String nama_pemilik, String nama_rental, String alamat_rental, String notelfon_rental,
                        String kebijakan_sewa_rental, String kebijakan_pemesanan_rental, String kebijakan_pembatalan_rental,
-                       double latitude, double longitude, String deviceToken) {
+                       double latitude, double longitude, String deviceToken, String emailRental) {
         this.idRental = idRental;
         this.uriFotoProfil = uriFotoProfil;
         this.nama_pemilik = nama_pemilik;
@@ -30,6 +31,7 @@ public class RentalModel {
         this.latitude = latitude;
         this.longitude = longitude;
         this.deviceToken = deviceToken;
+        this.emailRental = emailRental;
     }
 
     public RentalModel(String idRekening, String namaPemilikBank, String nomorRekeningBank, String namaBank) {
@@ -168,5 +170,13 @@ public class RentalModel {
 
     public void setIdRekening(String idRekening) {
         this.idRekening = idRekening;
+    }
+
+    public String getDeviceToken() {
+        return deviceToken;
+    }
+
+    public String getEmailRental() {
+        return emailRental;
     }
 }

@@ -2,12 +2,15 @@ package com.example.meita.rentalpemilik.MenuProfilRental;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +40,7 @@ public class UbahProfil extends AppCompatActivity {
     private FirebaseAuth auth;
     private String idRental;
     private double latitude_rental, longitude_rental;
+    ProgressBar progressBar;
 
     private final static int PLACE_PICKER_REQUEST = 2;
     private final static int MY_PERMISSION_FINE_LOCATION = 101;
@@ -55,6 +59,9 @@ public class UbahProfil extends AppCompatActivity {
         editTextKebijakanPemesanan = (EditText)findViewById(R.id.editTextKebijakanPemesanan);
         editTextKebijakanPembatalan = (EditText)findViewById(R.id.editTextKebijakanPembatalan);
         textViewEmailRental = (TextView)findViewById(R.id.textViewEmailRental);
+        progressBar = (ProgressBar)findViewById(R.id.progressBar);
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#FEBD3D"), PorterDuff.Mode.SRC_ATOP);
+        progressBar.setVisibility(View.VISIBLE);
 
         buttonSimpanPerubahan = (Button)findViewById(R.id.buttonSimpan);
         buttonSimpanPerubahan.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +92,7 @@ public class UbahProfil extends AppCompatActivity {
         mDatabase.child("rentalKendaraan").child(idRental).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                progressBar.setVisibility(View.GONE);
                 RentalModel dataRental = dataSnapshot.getValue(RentalModel.class);
                 editTextNamaPemilikRental.setText(dataRental.getNama_pemilik());
                 editTextNamaRental.setText(dataRental.getNama_rental());

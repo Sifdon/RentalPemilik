@@ -12,6 +12,7 @@ public class PelangganModel {
     private String email;
     private String noTelp;
     private String createdAt;
+    String uriFotoPelanggan;
 
 
         public PelangganModel() {
@@ -83,5 +84,9 @@ public class PelangganModel {
         public void setCreatedAt(String createdAt) {
             this.createdAt = createdAt;
         }
+
+    public String getUriFotoPelanggan() {
+        return uriFotoPelanggan;
     }
+}
 

@@ -1,19 +1,25 @@
 package com.example.meita.rentalpemilik.MenuStatusPemesanan;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.meita.rentalpemilik.Base.BaseActivity;
+import com.example.meita.rentalpemilik.ProfilPelanggan.LihatProfilPelanggan;
 import com.example.meita.rentalpemilik.R;
 import com.example.meita.rentalpemilik.model.KendaraanModel;
 import com.example.meita.rentalpemilik.model.PelangganModel;
 import com.example.meita.rentalpemilik.model.PemesananModel;
 import com.example.meita.rentalpemilik.model.RentalModel;
+import com.google.android.gms.vision.text.Line;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,13 +32,15 @@ public class DetailPemesananStatus1 extends AppCompatActivity {
             textViewWaktuPenjemputanValue, textViewWaktuPengambilanValue, textViewLokasiPenjemputan, textViewLokasiPenjemputanValue,
             textViewNamaPemesan, textViewAlamatPemesan, textViewTelponPemesan, textViewEmailPemesan;
     public ImageView checkListDenganSupir, checkListTanpaSupir, checkListDenganBBM, checkListTanpaBBM, icLokasiPenjemputan;
-    Button buttonLanjutkanPembayaran;
+    Button btnLihatProfilPelanggan, btnLihatLokasiPenjemputan;
+    LinearLayout linearLayoutLokasiPenjemputan;
     DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_pemesanan_status1);
+        setTitle("Detail Pesanan Status Belum Bayar");
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -61,11 +69,32 @@ public class DetailPemesananStatus1 extends AppCompatActivity {
         checkListDenganBBM = (ImageView)findViewById(R.id.icCheckListDenganBBM);
         checkListTanpaBBM = (ImageView)findViewById(R.id.icCheckListTanpaBBM);
         icLokasiPenjemputan = (ImageView)findViewById(R.id.icLokasiPenjemputan);
+        linearLayoutLokasiPenjemputan = (LinearLayout)findViewById(R.id.linearLayoutLokasiPenjemputan);
+
+        btnLihatProfilPelanggan = (Button)findViewById(R.id.btnLihatProfilPelanggan);
+        btnLihatLokasiPenjemputan = (Button)findViewById(R.id.btnLihatLokasiPenjemputan);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         infoPemesanan();
         infoKendaraan();
         infoRentalKendaraan();
         infoPelanggan();
+
+        btnLihatProfilPelanggan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String idPelanggan = getIntent().getStringExtra("idPelanggan");
+                Intent intent = new Intent(DetailPemesananStatus1.this, LihatProfilPelanggan.class);
+                intent.putExtra("idPelanggan", idPelanggan);
+                startActivity(intent);
+            }
+        });
     }
 
     public void infoPemesanan() {
@@ -84,10 +113,12 @@ public class DetailPemesananStatus1 extends AppCompatActivity {
                             textViewLokasiPenjemputan.setVisibility(View.GONE);
                             textViewLokasiPenjemputanValue.setVisibility(View.GONE);
                             icLokasiPenjemputan.setVisibility(View.GONE);
+                            btnLihatLokasiPenjemputan.setVisibility(View.GONE);
                             textViewWaktuPengambilanValue.setText(dataPemesanan.getJamPengambilan());
                         } else {
                             textViewWaktuPengambilan.setVisibility(View.GONE);
                             textViewWaktuPengambilanValue.setVisibility(View.GONE);
+                            btnLihatLokasiPenjemputan.setVisibility(View.VISIBLE);
                             textViewWaktuPenjemputanValue.setText(dataPemesanan.getJamPenjemputan());
                             textViewLokasiPenjemputanValue.setText(dataPemesanan.getAlamatPenjemputan());
                         }
@@ -197,5 +228,13 @@ public class DetailPemesananStatus1 extends AppCompatActivity {
         } catch (Exception e) {
         }
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId()==android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

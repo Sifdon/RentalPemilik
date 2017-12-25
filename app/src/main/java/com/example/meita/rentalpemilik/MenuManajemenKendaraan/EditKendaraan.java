@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -36,6 +37,7 @@ public class EditKendaraan extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_detail_kendaraan);
+        setTitle("Ubah Kendaraan");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -58,6 +60,11 @@ public class EditKendaraan extends AppCompatActivity {
                 }
             }
         });
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         loadDataKendaraan();
     }
@@ -120,7 +127,9 @@ public class EditKendaraan extends AppCompatActivity {
         }
 
         Intent intent = new Intent(EditKendaraan.this, MainActivity.class);
+        intent.putExtra("halamanEditKendaraan", 12);
         startActivity(intent);
+        finish();
     }
 
     public boolean cekKolomIsian() {
@@ -133,6 +142,14 @@ public class EditKendaraan extends AppCompatActivity {
 
         }
         return sukses;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId()==android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
 

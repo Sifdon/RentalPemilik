@@ -38,12 +38,11 @@ public class TabStatus3 extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        getActivity().setTitle("Berhasil");
         View v = inflater.inflate(R.layout.fragment_tab_status3, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.listView);
         recyclerView.setHasFixedSize(true);
-        progressBar.setVisibility(View.VISIBLE);
-        imageViewNoOrder.setVisibility(View.GONE);
+        imageViewNoOrder = (ImageView)v.findViewById(R.id.ic_noOrder);
+
 
         final FragmentActivity c = getActivity();
         LinearLayoutManager layoutManager = new LinearLayoutManager(c);
@@ -51,7 +50,8 @@ public class TabStatus3 extends Fragment {
 
         progressBar = (ProgressBar) v.findViewById(R.id.progress_circle);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#FEBD3D"), PorterDuff.Mode.SRC_ATOP);
-
+        progressBar.setVisibility(View.VISIBLE);
+        imageViewNoOrder.setVisibility(View.GONE);
         pemesananModel = new ArrayList<>();
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -72,6 +72,8 @@ public class TabStatus3 extends Fragment {
                 @Override
                 public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
+                        pemesananModel.clear();
+
                         for (com.google.firebase.database.DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                             PemesananModel dataPemesanan = postSnapshot.getValue(PemesananModel.class);
                             pemesananModel.add(dataPemesanan);

@@ -9,11 +9,11 @@ import java.util.ArrayList;
 
 public class KendaraanModel implements Serializable {
    // public String uriFotoKendaraan;
-    public String idRental;
-    public String idKendaraan, kategoriKendaraan, tipeKendaraan, fasilitasKendaraan,  lamaPenyewaan, jumlahPenumpang, areaPemakaian;
-    int jumlahKendaraan;
-    double hargaSewa;
-    boolean supir, bahanBakar;
+    private String idRental;
+    private String idKendaraan, kategoriKendaraan, tipeKendaraan, fasilitasKendaraan,  lamaPenyewaan, jumlahPenumpang, areaPemakaian;
+    private int jumlahKendaraan;
+    private double hargaSewa;
+    private boolean supir, bahanBakar;
     ArrayList<String> uriFotoKendaraan = new ArrayList<>();
 
     public KendaraanModel() {

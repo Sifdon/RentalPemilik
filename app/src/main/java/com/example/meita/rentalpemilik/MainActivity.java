@@ -19,6 +19,7 @@ import com.example.meita.rentalpemilik.Autentifikasi.Login;
 import com.example.meita.rentalpemilik.Base.DeviceToken;
 import com.example.meita.rentalpemilik.MenuManajemenKendaraan.MenuManajemenKendaraanFragment;
 import com.example.meita.rentalpemilik.MenuPemberitahuan.MenuPemberitahuan;
+import com.example.meita.rentalpemilik.MenuPenilaianDanUlasan.MenuPenilaianDanUlasan;
 import com.example.meita.rentalpemilik.MenuProfilRental.MenuProfil;
 import com.example.meita.rentalpemilik.MenuStatusPemesanan.MenuStatusPemesanan;
 import com.google.firebase.FirebaseApp;
@@ -71,6 +72,9 @@ public class MainActivity extends AppCompatActivity
         int halamanStatus2 = getIntent().getIntExtra("halamanStatus2", 1);
         int halamanStatus3 = getIntent().getIntExtra("halamanStatus3", 2);
         int halamanStatus4 = getIntent().getIntExtra("halamanStatus4", 3);
+        int halamanManajemenKendaraan = getIntent().getIntExtra("halamanManajemenKendaraan", 10);
+        int halamanEditKendaraan = getIntent().getIntExtra("halamanEditKendaraan", 11);
+        int halamanHapusKendaraan = getIntent().getIntExtra("hapusKendaraan", 12);
 
         if (findViewById(R.id.content_frame) != null && halamanStatus2 != 1) {
             Bundle bundle=new Bundle();
@@ -90,6 +94,15 @@ public class MainActivity extends AppCompatActivity
             MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
             menuStatusPemesanan.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuStatusPemesanan).commit();
+        } else if (findViewById(R.id.content_frame) != null && halamanManajemenKendaraan != 10) {
+            MenuManajemenKendaraanFragment menuManajemenKendaraanFragment = new MenuManajemenKendaraanFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuManajemenKendaraanFragment).commit();
+        } else if (findViewById(R.id.content_frame) != null && halamanEditKendaraan != 11) {
+            MenuManajemenKendaraanFragment menuManajemenKendaraanFragment = new MenuManajemenKendaraanFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuManajemenKendaraanFragment).commit();
+        } else if (findViewById(R.id.content_frame) != null && halamanHapusKendaraan != 12) {
+            MenuManajemenKendaraanFragment menuManajemenKendaraanFragment = new MenuManajemenKendaraanFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuManajemenKendaraanFragment).commit();
         }
 
         initData();
@@ -144,7 +157,7 @@ public class MainActivity extends AppCompatActivity
                 fragment = new com.example.meita.rentalpemilik.MenuKelolaKetersediaan.DaftarKendaraanFragment();
                 break;
             case R.id.nav_tentang:
-                fragment = new MenuTentangAplikasi();
+                fragment = new MenuPenilaianDanUlasan();
                 break;
             case R.id.nav_keluar:
                 signOut();

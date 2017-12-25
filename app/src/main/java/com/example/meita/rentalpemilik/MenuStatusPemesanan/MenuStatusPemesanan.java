@@ -24,7 +24,7 @@ public class MenuStatusPemesanan extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getActivity().setTitle("Pencarian Kendaraan");
+        getActivity().setTitle("Kelola Pesanan");
         View v = inflater.inflate(R.layout.fragment_menu_status_pemesanan, container, false);
         viewPager = (ViewPager) v.findViewById(R.id.viewpager);
         tabLayout = (TabLayout) v.findViewById(R.id.tabs);
