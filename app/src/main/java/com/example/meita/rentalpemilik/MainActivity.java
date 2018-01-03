@@ -10,10 +10,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.meita.rentalpemilik.Autentifikasi.Login;
 import com.example.meita.rentalpemilik.Base.DeviceToken;
@@ -37,6 +39,8 @@ public class MainActivity extends AppCompatActivity
     private FirebaseAuth auth;
     DatabaseReference mDatabase;
     String idRental;
+    int intValueHalaman;
+    int halamanStatus2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,41 +73,150 @@ public class MainActivity extends AppCompatActivity
             progressBar.setVisibility(View.GONE);
         }
 
-        int halamanStatus2 = getIntent().getIntExtra("halamanStatus2", 1);
-        int halamanStatus3 = getIntent().getIntExtra("halamanStatus3", 2);
-        int halamanStatus4 = getIntent().getIntExtra("halamanStatus4", 3);
+        String notif1 = getIntent().getStringExtra("notifBelumBayar");
+        String notif2 = getIntent().getStringExtra("notifMenungguKonfirmasi");
+        String notifPenilaian = getIntent().getStringExtra("notifPenilaian");
+
         int halamanManajemenKendaraan = getIntent().getIntExtra("halamanManajemenKendaraan", 10);
         int halamanEditKendaraan = getIntent().getIntExtra("halamanEditKendaraan", 11);
         int halamanHapusKendaraan = getIntent().getIntExtra("hapusKendaraan", 12);
+        int halamanStatusKonfirmasiPesanan = getIntent().getIntExtra("halamanStatusKonfirmasiPesanan", 1);
+        int halamanStatusKonfirmasiSelesai = getIntent().getIntExtra("halamanStatusKonfirmasiSelesai", 2);
 
-        if (findViewById(R.id.content_frame) != null && halamanStatus2 != 1) {
+        if (findViewById(R.id.content_frame) != null && notif1 != null && notif1.equals("belumBayar") ) {
             Bundle bundle=new Bundle();
-            bundle.putInt("valueHalamanStatus2", 2);
+            bundle.putInt("tab1", 0);
             MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
             menuStatusPemesanan.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuStatusPemesanan).commit();
-        } else if (findViewById(R.id.content_frame) != null && halamanStatus3 != 2) {
+        }
+
+        if (findViewById(R.id.content_frame) != null && notif2 != null && notif2.equals("menungguKonfirmasiRental")) {
             Bundle bundle=new Bundle();
-            bundle.putInt("valueHalamanStatus3", 3);
+            bundle.putInt("tab2", 1);
             MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
             menuStatusPemesanan.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuStatusPemesanan).commit();
-        }  else if (findViewById(R.id.content_frame) != null && halamanStatus4 != 3) {
+        }
+
+        if (findViewById(R.id.content_frame) != null && halamanStatusKonfirmasiPesanan != 1) {
             Bundle bundle=new Bundle();
-            bundle.putInt("valueHalamanStatus4", 4);
+            bundle.putInt("tab3", 2);
             MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
             menuStatusPemesanan.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuStatusPemesanan).commit();
-        } else if (findViewById(R.id.content_frame) != null && halamanManajemenKendaraan != 10) {
-            MenuManajemenKendaraanFragment menuManajemenKendaraanFragment = new MenuManajemenKendaraanFragment();
-            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuManajemenKendaraanFragment).commit();
-        } else if (findViewById(R.id.content_frame) != null && halamanEditKendaraan != 11) {
-            MenuManajemenKendaraanFragment menuManajemenKendaraanFragment = new MenuManajemenKendaraanFragment();
-            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuManajemenKendaraanFragment).commit();
-        } else if (findViewById(R.id.content_frame) != null && halamanHapusKendaraan != 12) {
+        }
+
+
+        if (findViewById(R.id.content_frame) != null && halamanStatusKonfirmasiPesanan != 1) {
+            Bundle bundle=new Bundle();
+            bundle.putInt("tab4", 3);
+            MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
+            menuStatusPemesanan.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuStatusPemesanan).commit();
+        }
+
+        if (findViewById(R.id.content_frame) != null && notifPenilaian != null && notifPenilaian.equals("penilaian")) {
+            MenuPenilaianDanUlasan menuPenilaianDanUlasan = new MenuPenilaianDanUlasan();
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuPenilaianDanUlasan).commit();
+        }
+
+        if (findViewById(R.id.content_frame) != null && halamanManajemenKendaraan != 10) {
             MenuManajemenKendaraanFragment menuManajemenKendaraanFragment = new MenuManajemenKendaraanFragment();
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuManajemenKendaraanFragment).commit();
         }
+        if (findViewById(R.id.content_frame) != null && halamanEditKendaraan != 11) {
+            MenuManajemenKendaraanFragment menuManajemenKendaraanFragment = new MenuManajemenKendaraanFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuManajemenKendaraanFragment).commit();
+        }
+        if (findViewById(R.id.content_frame) != null && halamanHapusKendaraan != 12) {
+            MenuManajemenKendaraanFragment menuManajemenKendaraanFragment = new MenuManajemenKendaraanFragment();
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuManajemenKendaraanFragment).commit();
+        }
+
+//        int halamanStatus0 = getIntent().getIntExtra("halamanStatus0", -1);
+//        int halamanStatus1 = getIntent().getIntExtra("halamanStatus1", 0);
+//        int halamanStatus2 = getIntent().getIntExtra("halamanStatus2", 1);
+//        int halamanStatus3 = getIntent().getIntExtra("halamanStatus3", 2);
+//        int halamanStatus4 = getIntent().getIntExtra("halamanStatus4", 3);
+
+//
+//
+//        if (findViewById(R.id.content_frame) != null && notif1 != null && notif1.equals("belumBayar") ) {
+//            Bundle bundle=new Bundle();
+//            bundle.putInt("notifStatus1", 1);
+//            MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
+//            menuStatusPemesanan.setArguments(bundle);
+//            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuStatusPemesanan).commit();
+//        }
+//
+//        if (findViewById(R.id.content_frame) != null && notif2 != null && notif2.equals("menungguKonfirmasiRental")) {
+//            Bundle bundle=new Bundle();
+//            bundle.putInt("notifStatus2", 2);
+//            MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
+//            menuStatusPemesanan.setArguments(bundle);
+//            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuStatusPemesanan).commit();
+//            Toast.makeText(getApplicationContext(), "value halaman2 eksekusi : " + notif2, Toast.LENGTH_LONG).show();
+//        }
+//        Toast.makeText(getApplicationContext(), "value halaman1 : " + notif1, Toast.LENGTH_LONG).show();
+//        Toast.makeText(getApplicationContext(), "value halaman2 : " + notif2, Toast.LENGTH_LONG).show();
+//
+//        if (findViewById(R.id.content_frame) != null && halamanStatus2 != 1) {
+//            Bundle bundle=new Bundle();
+//            bundle.putInt("valueHalamanStatus2", 2);
+//            MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
+//            menuStatusPemesanan.setArguments(bundle);
+//            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuStatusPemesanan).commit();
+//        }
+
+//        else if (findViewById(R.id.content_frame) != null && halamanStatus0 != -1) {
+//            Bundle bundle=new Bundle();
+//            bundle.putInt("valueHalamanStatus0", 0);
+//            MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
+//            menuStatusPemesanan.setArguments(bundle);
+//            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuStatusPemesanan).commit();
+//        }  else if (findViewById(R.id.content_frame) != null && halamanStatus1 != 0) {
+//            Bundle bundle=new Bundle();
+//            bundle.putInt("valueHalamanStatus1", 1);
+//            MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
+//            menuStatusPemesanan.setArguments(bundle);
+//            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuStatusPemesanan).commit();
+//        } else if (findViewById(R.id.content_frame) != null && halamanStatus2 != 1) {
+//            Bundle bundle=new Bundle();
+//            bundle.putInt("valueHalamanStatus2", 2);
+//            MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
+//            menuStatusPemesanan.setArguments(bundle);
+//            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuStatusPemesanan).commit();
+//        } else if (findViewById(R.id.content_frame) != null && halamanStatus3 != 2) {
+//            Bundle bundle=new Bundle();
+//            bundle.putInt("valueHalamanStatus3", 3);
+//            MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
+//            menuStatusPemesanan.setArguments(bundle);
+//            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuStatusPemesanan).commit();
+//        }  else if (findViewById(R.id.content_frame) != null && halamanStatus4 != 3)  {
+//            Bundle bundle=new Bundle();
+//            bundle.putInt("valueHalamanStatus4", 4);
+//            MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
+//            menuStatusPemesanan.setArguments(bundle);
+//            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuStatusPemesanan).commit();
+//        } else if (findViewById(R.id.content_frame) != null && halamanManajemenKendaraan != 10) {
+//            MenuManajemenKendaraanFragment menuManajemenKendaraanFragment = new MenuManajemenKendaraanFragment();
+//            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuManajemenKendaraanFragment).commit();
+//        } else if (findViewById(R.id.content_frame) != null && halamanEditKendaraan != 11) {
+//            MenuManajemenKendaraanFragment menuManajemenKendaraanFragment = new MenuManajemenKendaraanFragment();
+//            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuManajemenKendaraanFragment).commit();
+//        } else if (findViewById(R.id.content_frame) != null && halamanHapusKendaraan != 12) {
+//            MenuManajemenKendaraanFragment menuManajemenKendaraanFragment = new MenuManajemenKendaraanFragment();
+//            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuManajemenKendaraanFragment).commit();
+//        }
+
+//        else if (findViewById(R.id.content_frame) != null && valueHalamanPemberitahuan.equals(value1)) {
+//            Bundle bundle=new Bundle();
+//            bundle.putString("valueHalamanPemberitahuanBelumBayar", "pemberitahuanBelumBayar");
+//            MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
+//            menuStatusPemesanan.setArguments(bundle);
+//            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuStatusPemesanan).commit();
+//        }
 
         initData();
 
@@ -150,14 +263,14 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_manajemendata:
                 fragment = new MenuManajemenKendaraanFragment();
                 break;
-            case R.id.nav_profilku:
-                fragment = new MenuProfil();
-                break;
             case R.id.nav_kelola_ketersediaan:
                 fragment = new com.example.meita.rentalpemilik.MenuKelolaKetersediaan.DaftarKendaraanFragment();
                 break;
-            case R.id.nav_tentang:
+            case R.id.nav_ulasan:
                 fragment = new MenuPenilaianDanUlasan();
+                break;
+            case R.id.nav_profilku:
+                fragment = new MenuProfil();
                 break;
             case R.id.nav_keluar:
                 signOut();

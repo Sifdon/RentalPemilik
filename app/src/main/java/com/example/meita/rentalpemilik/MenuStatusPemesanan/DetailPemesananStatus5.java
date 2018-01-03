@@ -3,6 +3,8 @@ package com.example.meita.rentalpemilik.MenuStatusPemesanan;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -35,6 +37,7 @@ public class DetailPemesananStatus5 extends AppCompatActivity {
     Button buttonLihatBuktiPembayaran, buttonKonfirmasiPembatalan;
     DatabaseReference mDatabase;
     String alasanPembatalan;
+    TextView textViewTglSewa, textViewTglKembali, textViewJumlahSewaKendaraan, textViewMobil, textViewMotor, textViewJmlHariPenyewaan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,12 +75,26 @@ public class DetailPemesananStatus5 extends AppCompatActivity {
         textViewEmailPemesan = (TextView)findViewById(R.id.textViewEmailPemesan);
         textViewAlasanPembatalan = (TextView)findViewById(R.id.textViewAlasanPembatalan);
 
+        textViewTglSewa = (TextView)findViewById(R.id.textViewTglSewa);
+        textViewTglKembali = (TextView)findViewById(R.id.textViewTglKembali);
+        textViewJumlahSewaKendaraan = (TextView)findViewById(R.id.textViewJumlahSewaKendaraan);
+        textViewMobil = (TextView)findViewById(R.id.textViewMobil);
+        textViewMotor = (TextView)findViewById(R.id.textViewMotor);
+        textViewJmlHariPenyewaan = (TextView)findViewById(R.id.textViewJmlHariPenyewaan);
+
         checkListDenganSupir = (ImageView)findViewById(R.id.icCheckListDenganSupir);
         checkListTanpaSupir = (ImageView)findViewById(R.id.icCheckListTanpaSupir);
         checkListDenganBBM = (ImageView)findViewById(R.id.icCheckListDenganBBM);
         checkListTanpaBBM = (ImageView)findViewById(R.id.icCheckListTanpaBBM);
         icLokasiPenjemputan = (ImageView)findViewById(R.id.icLokasiPenjemputan);
         buttonKonfirmasiPembatalan = (Button)findViewById(R.id.buttonKonfirmasiPembatalan);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         buttonLihatBuktiPembayaran = (Button)findViewById(R.id.btnLihatBuktiPembayaran);
         buttonLihatBuktiPembayaran.setOnClickListener(new View.OnClickListener() {
@@ -216,6 +233,18 @@ public class DetailPemesananStatus5 extends AppCompatActivity {
                             textViewLokasiPenjemputanValue.setVisibility(View.GONE);
                             icLokasiPenjemputan.setVisibility(View.GONE);
                             textViewWaktuPengambilanValue.setText(dataPemesanan.getJamPengambilan());
+
+                            textViewTglSewa.setText(dataPemesanan.getTglSewa());
+                            textViewTglKembali.setText(dataPemesanan.getTglKembali());
+                            textViewJumlahSewaKendaraan.setText(String.valueOf(dataPemesanan.getJumlahKendaraan()));
+                            textViewJmlHariPenyewaan.setText(String.valueOf(dataPemesanan.getJumlahHariPenyewaan()));
+                            if (dataPemesanan.getKategoriKendaraan().equals("Mobil")) {
+                                textViewMobil.setVisibility(View.VISIBLE);
+                                textViewMotor.setVisibility(View.GONE);
+                            } else {
+                                textViewMotor.setVisibility(View.VISIBLE);
+                                textViewMobil.setVisibility(View.GONE);
+                            }
                         } else {
                             textViewWaktuPengambilan.setVisibility(View.GONE);
                             textViewWaktuPengambilanValue.setVisibility(View.GONE);
@@ -293,5 +322,13 @@ public class DetailPemesananStatus5 extends AppCompatActivity {
         intent.putExtras(bundle);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId()==android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

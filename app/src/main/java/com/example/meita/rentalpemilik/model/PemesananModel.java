@@ -13,13 +13,26 @@ public class PemesananModel implements Serializable {
     public double latitude_penjemputan, longitude_penjemputan;
     public String jamPengambilan, batasWaktuPembayaran, kategoriKendaraan, idRekeningRental;
     String alasanPembatalan;
-    String namaBankRental, namaRekeningRental, nomorRekeningRental, jumlahTransferPengembalian, uriBuktiPengembalian;
+    String namaBankRental, namaRekeningRental, nomorRekeningRental, jumlahTransferPengembalian, uriBuktiPengembalian, waktuTransferPengembalian;
     String idPembayaran, uriFotoBuktiPembayaran,
             bankPelanggan, namaPemilikRekeningPelanggan, nomorRekeningPelanggan, jumlahTransfer, waktuPembayaran;
-
+    String idPemberitahuan;
 
     public PemesananModel() {
 
+    }
+
+
+    public PemesananModel(String idPemberitahuan, String idPelanggan, String idRental, String idPemesanan, String idKendaraan, String statusPemesanan, String tglSewa,
+                          String tglKembali) {
+        this.idPemberitahuan = idPemberitahuan;
+        this.idPelanggan = idPelanggan;
+        this.idRental = idRental;
+        this.idPemesanan = idPemesanan;
+        this.idKendaraan = idKendaraan;
+        this.statusPemesanan = statusPemesanan;
+        this.tglSewa = tglSewa;
+        this.tglKembali = tglKembali;
     }
 
     public PemesananModel(String idPemesanan, String idKendaraan, String idPelanggan, String idRental, String statusPemesanan,
@@ -345,6 +358,10 @@ public class PemesananModel implements Serializable {
 
     public void setWaktuPembayaran(String waktuPembayaran) {
         this.waktuPembayaran = waktuPembayaran;
+    }
+
+    public String getWaktuTransferPengembalian() {
+        return waktuTransferPengembalian;
     }
 }
 

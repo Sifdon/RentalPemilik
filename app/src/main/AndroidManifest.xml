@@ -12,7 +12,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo_app"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -29,7 +29,12 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="com.example.rentalPemilik_mainActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity android:name=".Autentifikasi.InputProfilRental" />
         <activity android:name=".Autentifikasi.Registrasi" />
         <activity android:name=".Autentifikasi.Login" />
@@ -69,10 +74,10 @@
         <activity
             android:name=".MenuStatusPemesanan.DetailPemesananStatus6"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".MenuPembatalanPesanan.UnggahBuktiPengembalianDana" />
-        <activity android:name=".MenuProfilRental.UbahProfil" />
+        <activity android:name=".MenuPembatalanPesanan.UnggahBuktiPengembalianDana" android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".MenuProfilRental.UbahProfil" android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".MenuProfilRental.PengaturanRekeningPembayaran" />
-        <activity android:name=".MenuProfilRental.PengaturanProfil" />
+        <activity android:name=".MenuProfilRental.PengaturanProfil" android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name="com.gun0912.tedpicker.ImagePickerActivity"
             android:screenOrientation="portrait"
@@ -85,7 +90,11 @@
         <activity
             android:name=".ProfilPelanggan.LihatProfilPelanggan"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".MenuPenilaianDanUlasan.MenuPenilaianDanUlasanAdapter"></activity>
+        <service android:name=".FirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

@@ -12,5 +12,7 @@
     <color name="grey">#bfbfbf</color>
     <color name="merah">#FF0000</color>
     <color name="hijau_tua">#ff009688</color>
+    <color name="ratingBarActived">#ffbf41</color>
+    <color name="ratingBarNotActived">#ffde9d</color>
 
 </resources>

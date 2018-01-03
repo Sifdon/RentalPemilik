@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.meita.rentalpemilik.R;
 
@@ -32,31 +33,114 @@ public class MenuStatusPemesanan extends Fragment {
         tabLayout.setupWithViewPager(viewPager);
 
         try {
-            Bundle extras = getActivity().getIntent().getExtras();
-            int valueStatusHalaman2 = extras.getInt("halamanStatus2", 1);
-            if (valueStatusHalaman2 == 2) {
-                viewPager.setCurrentItem(2);
-            }
+            int position = getArguments().getInt("tab1");
+            viewPager.setCurrentItem(position);
+         } catch (Exception e) {
+
+         }
+
+        try {
+            int position = getArguments().getInt("tab2");
+            viewPager.setCurrentItem(position);
         } catch (Exception e) {
+
         }
 
         try {
-            Bundle extras = getActivity().getIntent().getExtras();
-            int valueStatusHalaman3 = extras.getInt("halamanStatus3", 2);
-            if (valueStatusHalaman3 == 3) {
-                viewPager.setCurrentItem(3);
-            }
+            int position = getArguments().getInt("tab3");
+            viewPager.setCurrentItem(position);
         } catch (Exception e) {
+
         }
 
         try {
-            Bundle extras = getActivity().getIntent().getExtras();
-            int valueStatusHalaman4= extras.getInt("halamanStatus4", 3);
-            if (valueStatusHalaman4 == 4) {
-                viewPager.setCurrentItem(5);
-            }
+            int position = getArguments().getInt("tab4");
+            viewPager.setCurrentItem(position);
         } catch (Exception e) {
+
         }
+
+//        try {
+//            Bundle extras = getActivity().getIntent().getExtras();
+//            if (extras.getInt("notifStatus1") == 1) {
+//                viewPager.setCurrentItem(0);
+//                Toast.makeText(getActivity(), "tab belum bayar ", Toast.LENGTH_LONG).show();
+//            } else if (extras.getInt("notifStatus2") == 2) {
+//                viewPager.setCurrentItem(1);
+//                Toast.makeText(getActivity(), "tab menunggu konfirmasi ", Toast.LENGTH_LONG).show();
+//            }
+//         } catch (Exception e) {
+//
+//         }
+//
+//
+//
+//        try {
+//            Bundle extras = getActivity().getIntent().getExtras();
+//            String valueStatusHalaman0 = extras.getString("a");
+//            if (valueStatusHalaman0.equals("laper")) {
+//                viewPager.setCurrentItem(0);
+//            }
+//        } catch (Exception e) {
+//        }
+//
+//        try {
+//            Bundle extras = getActivity().getIntent().getExtras();
+//            String valueStatusHalaman1 = extras.getString("notifStatus2");
+//            if (valueStatusHalaman1.equals("menungguKonfirmasi")) {
+//                viewPager.setCurrentItem(1);
+//            }
+//        } catch (Exception e) {
+//        }
+
+//        try {
+//            Bundle extras = getActivity().getIntent().getExtras();
+//            int valueStatusHalaman1 = extras.getInt("notifStatus1", 0);
+//            if (valueStatusHalaman1 == 1) {
+//                Toast.makeText(getActivity(), "tab belum bayar ", Toast.LENGTH_LONG).show();
+//
+//            }
+//        } catch (Exception e) {
+//        }
+//
+//        try {
+//            Bundle extras = getActivity().getIntent().getExtras();
+//            int valueStatusHalaman2 = extras.getInt("valueHalamanStatus2", 1);
+//            if (valueStatusHalaman2 == 2) {
+//                viewPager.setCurrentItem(1);
+//                Toast.makeText(getActivity(), "tab menunggu konfirmasi ", Toast.LENGTH_LONG).show();
+//            }
+//        } catch (Exception e) {
+//        }
+
+
+//
+//        try {
+//            Bundle extras = getActivity().getIntent().getExtras();
+//            int valueStatusHalaman3 = extras.getInt("halamanStatus3", 2);
+//            if (valueStatusHalaman3 == 3) {
+//                viewPager.setCurrentItem(3);
+//            }
+//        } catch (Exception e) {
+//        }
+//
+//        try {
+//            Bundle extras = getActivity().getIntent().getExtras();
+//            int valueStatusHalaman4= extras.getInt("halamanStatus4", 3);
+//            if (valueStatusHalaman4 == 4) {
+//                viewPager.setCurrentItem(5);
+//            }
+//        } catch (Exception e) {
+//        }
+//
+//        try {
+//            Bundle extras = getActivity().getIntent().getExtras();
+//            String valueHalamanPemberitahuanBelumBayar = extras.getString("valueHalamanPemberitahuanBelumBayar");
+//            if (valueHalamanPemberitahuanBelumBayar.equals("pemberitahuanBelumBayar")) {
+//                viewPager.setCurrentItem(0);
+//            }
+//        } catch (Exception e) {
+//        }
 
 
         return v;

@@ -3,6 +3,8 @@ package com.example.meita.rentalpemilik.MenuStatusPemesanan;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -27,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 public class DetailPemesananStatus3 extends AppCompatActivity {
 
@@ -41,6 +44,7 @@ public class DetailPemesananStatus3 extends AppCompatActivity {
     Button buttonLihatBuktiPembayaran, buttonKonfirmasiPenyewaanSelesai;
     Date tglSewaCekSisa, tglKembaliCekSisa, tglSewaDipesan, tglKembaliDipesan;
     DatabaseReference mDatabase;
+    TextView textViewTglSewa, textViewTglKembali, textViewJumlahSewaKendaraan, textViewMobil, textViewMotor, textViewJmlHariPenyewaan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,11 +84,25 @@ public class DetailPemesananStatus3 extends AppCompatActivity {
 
         buttonKonfirmasiPenyewaanSelesai = (Button)findViewById(R.id.buttonKonfirmasiPenyewaanSelesai);
 
+        textViewTglSewa = (TextView)findViewById(R.id.textViewTglSewa);
+        textViewTglKembali = (TextView)findViewById(R.id.textViewTglKembali);
+        textViewJumlahSewaKendaraan = (TextView)findViewById(R.id.textViewJumlahSewaKendaraan);
+        textViewMobil = (TextView)findViewById(R.id.textViewMobil);
+        textViewMotor = (TextView)findViewById(R.id.textViewMotor);
+        textViewJmlHariPenyewaan = (TextView)findViewById(R.id.textViewJmlHariPenyewaan);
+
         checkListDenganSupir = (ImageView)findViewById(R.id.icCheckListDenganSupir);
         checkListTanpaSupir = (ImageView)findViewById(R.id.icCheckListTanpaSupir);
         checkListDenganBBM = (ImageView)findViewById(R.id.icCheckListDenganBBM);
         checkListTanpaBBM = (ImageView)findViewById(R.id.icCheckListTanpaBBM);
         icLokasiPenjemputan = (ImageView)findViewById(R.id.icLokasiPenjemputan);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         buttonLihatBuktiPembayaran = (Button)findViewById(R.id.btnLihatBuktiPembayaran);
         buttonLihatBuktiPembayaran.setOnClickListener(new View.OnClickListener() {
@@ -134,9 +152,10 @@ public class DetailPemesananStatus3 extends AppCompatActivity {
                         perbaruiSisaKendaraan(idKendaraan, jmlKendaraanDipesan, tglSewaDipesan, tglKembaliDipesan);
                         Toast.makeText(getApplicationContext(), "Konfirmasi Pemenyewaan Selesai Berhasil", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(DetailPemesananStatus3.this, MainActivity.class);
-                        intent.putExtra("halamanStatus3", 3);
+                        intent.putExtra("halamanStatusKonfirmasiSelesai", 3);
                         startActivity(intent);
                         finish();
+                        buatPemberitahuan();
                     }
                 });
             }
@@ -150,6 +169,30 @@ public class DetailPemesananStatus3 extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private void buatPemberitahuan() {
+        String idPemberitahuan = mDatabase.push().getKey();
+        final String idRental = getIntent().getStringExtra("idRental");
+        final String idKendaraan = getIntent().getStringExtra("idKendaraan");
+        final String tglSewaPencarian = getIntent().getStringExtra("tglSewaPencarian");
+        final String tglKembaliPencarian = getIntent().getStringExtra("tglKembaliPencarian");
+        final String idPelanggan = getIntent().getStringExtra("idPelanggan");
+        final String idPemesanan = getIntent().getStringExtra("idPemesanan");
+        //int valueHalaman1 = 0;
+        String valueHalaman1 = "selesai";
+        String statusPemesanan1 = "Selesai";
+        HashMap<String, Object> dataNotif = new HashMap<>();
+        dataNotif.put("idPemberitahuan", idPemberitahuan);
+        dataNotif.put("idRental", idRental);
+        dataNotif.put("idKendaraan", idKendaraan);
+        dataNotif.put("tglSewa", tglSewaPencarian);
+        dataNotif.put("tglKembalian", tglKembaliPencarian);
+        dataNotif.put("nilaiHalaman", valueHalaman1);
+        dataNotif.put("statusPemesanan", statusPemesanan1);
+        dataNotif.put("idPelanggan", idPelanggan);
+        dataNotif.put("idPemesanan", idPemesanan);
+        mDatabase.child("pemberitahuan").child("pelanggan").child("selesai").child(idPelanggan).child(idPemberitahuan).setValue(dataNotif);
+        //mDatabase.child("pemberitahuan").child("rental").child("belumBayar").child(idRental).child(idPemberitahuan).child("nilaiHalaman").setValue(valueHalaman);
+    }
 
     public void perbaruiSisaKendaraan(String idKendaraan, final int jumlahKendaraanDipesan, final String tanggalSewaDipesan, final String tanggalKembaliDipesan) {
         try {
@@ -303,6 +346,18 @@ public class DetailPemesananStatus3 extends AppCompatActivity {
                             textViewLokasiPenjemputanValue.setVisibility(View.GONE);
                             icLokasiPenjemputan.setVisibility(View.GONE);
                             textViewWaktuPengambilanValue.setText(dataPemesanan.getJamPengambilan());
+
+                            textViewTglSewa.setText(dataPemesanan.getTglSewa());
+                            textViewTglKembali.setText(dataPemesanan.getTglKembali());
+                            textViewJumlahSewaKendaraan.setText(String.valueOf(dataPemesanan.getJumlahKendaraan()));
+                            textViewJmlHariPenyewaan.setText(String.valueOf(dataPemesanan.getJumlahHariPenyewaan()));
+                            if (dataPemesanan.getKategoriKendaraan().equals("Mobil")) {
+                                textViewMobil.setVisibility(View.VISIBLE);
+                                textViewMotor.setVisibility(View.GONE);
+                            } else {
+                                textViewMotor.setVisibility(View.VISIBLE);
+                                textViewMobil.setVisibility(View.GONE);
+                            }
                         } else {
                             textViewWaktuPengambilan.setVisibility(View.GONE);
                             textViewWaktuPengambilanValue.setVisibility(View.GONE);
@@ -363,5 +418,13 @@ public class DetailPemesananStatus3 extends AppCompatActivity {
         } catch (Exception e) {
 
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId()==android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

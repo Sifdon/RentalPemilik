@@ -27,6 +27,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+
 public class DetailPemesananStatus2 extends AppCompatActivity {
 
     TextView textViewTipeKendaraan, textViewNamaRental, textViewDenganSupir, textViewTanpaSupir,
@@ -40,6 +42,7 @@ public class DetailPemesananStatus2 extends AppCompatActivity {
     Button buttonLihatBuktiPembayaran, buttonKonfirmasiPembayaran;
     Button btnLihatProfilPelanggan, btnLihatLokasiPenjemputan;
     DatabaseReference mDatabase;
+    TextView textViewTglSewa, textViewTglKembali, textViewJumlahSewaKendaraan, textViewMobil, textViewMotor, textViewJmlHariPenyewaan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +80,13 @@ public class DetailPemesananStatus2 extends AppCompatActivity {
         textViewTelponPemesan = (TextView)findViewById(R.id.textViewTelponPemesan);
         textViewEmailPemesan = (TextView)findViewById(R.id.textViewEmailPemesan);
         buttonKonfirmasiPembayaran = (Button)findViewById(R.id.buttonKonfirmasiPembayaran);
+
+        textViewTglSewa = (TextView)findViewById(R.id.textViewTglSewa);
+        textViewTglKembali = (TextView)findViewById(R.id.textViewTglKembali);
+        textViewJumlahSewaKendaraan = (TextView)findViewById(R.id.textViewJumlahSewaKendaraan);
+        textViewMobil = (TextView)findViewById(R.id.textViewMobil);
+        textViewMotor = (TextView)findViewById(R.id.textViewMotor);
+        textViewJmlHariPenyewaan = (TextView)findViewById(R.id.textViewJmlHariPenyewaan);
 
         checkListDenganSupir = (ImageView)findViewById(R.id.icCheckListDenganSupir);
         checkListTanpaSupir = (ImageView)findViewById(R.id.icCheckListTanpaSupir);
@@ -145,9 +155,10 @@ public class DetailPemesananStatus2 extends AppCompatActivity {
                         mDatabase.child("pemesananKendaraan").child("menungguKonfirmasiRental").child(idPemesanan).removeValue();
                         Toast.makeText(getApplicationContext(), "Konfirmasi Pembayaran Berhasil", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(DetailPemesananStatus2.this, MainActivity.class);
-                        intent.putExtra("halamanStatus2", 2);
+                        intent.putExtra("halamanStatusKonfirmasiPesanan", 2);
                         startActivity(intent);
                         finish();
+                        buatPemberitahuan();
                     }
                 });
             }
@@ -155,6 +166,31 @@ public class DetailPemesananStatus2 extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+    }
+
+    private void buatPemberitahuan() {
+        String idPemberitahuan = mDatabase.push().getKey();
+        final String idRental = getIntent().getStringExtra("idRental");
+        final String idKendaraan = getIntent().getStringExtra("idKendaraan");
+        final String tglSewaPencarian = getIntent().getStringExtra("tglSewaPencarian");
+        final String tglKembaliPencarian = getIntent().getStringExtra("tglKembaliPencarian");
+        final String idPelanggan = getIntent().getStringExtra("idPelanggan");
+        final String idPemesanan = getIntent().getStringExtra("idPemesanan");
+        //int valueHalaman1 = 0;
+        String valueHalaman1 = "berhasil";
+        String statusPemesanan1 = "Berhasil";
+        HashMap<String, Object> dataNotif = new HashMap<>();
+        dataNotif.put("idPemberitahuan", idPemberitahuan);
+        dataNotif.put("idRental", idRental);
+        dataNotif.put("idKendaraan", idKendaraan);
+        dataNotif.put("tglSewa", tglSewaPencarian);
+        dataNotif.put("tglKembalian", tglKembaliPencarian);
+        dataNotif.put("nilaiHalaman", valueHalaman1);
+        dataNotif.put("statusPemesanan", statusPemesanan1);
+        dataNotif.put("idPelanggan", idPelanggan);
+        dataNotif.put("idPemesanan", idPemesanan);
+        mDatabase.child("pemberitahuan").child("pelanggan").child("berhasil").child(idPelanggan).child(idPemberitahuan).setValue(dataNotif);
+        //mDatabase.child("pemberitahuan").child("rental").child("belumBayar").child(idRental).child(idPemberitahuan).child("nilaiHalaman").setValue(valueHalaman);
     }
 
     public void infoKendaraan() {
@@ -267,6 +303,18 @@ public class DetailPemesananStatus2 extends AppCompatActivity {
                             icLokasiPenjemputan.setVisibility(View.GONE);
                             btnLihatLokasiPenjemputan.setVisibility(View.GONE);
                             textViewWaktuPengambilanValue.setText(dataPemesanan.getJamPengambilan());
+
+                            textViewTglSewa.setText(dataPemesanan.getTglSewa());
+                            textViewTglKembali.setText(dataPemesanan.getTglKembali());
+                            textViewJumlahSewaKendaraan.setText(String.valueOf(dataPemesanan.getJumlahKendaraan()));
+                            textViewJmlHariPenyewaan.setText(String.valueOf(dataPemesanan.getJumlahHariPenyewaan()));
+                            if (dataPemesanan.getKategoriKendaraan().equals("Mobil")) {
+                                textViewMobil.setVisibility(View.VISIBLE);
+                                textViewMotor.setVisibility(View.GONE);
+                            } else {
+                                textViewMotor.setVisibility(View.VISIBLE);
+                                textViewMobil.setVisibility(View.GONE);
+                            }
                         } else {
                             textViewWaktuPengambilan.setVisibility(View.GONE);
                             textViewWaktuPengambilanValue.setVisibility(View.GONE);

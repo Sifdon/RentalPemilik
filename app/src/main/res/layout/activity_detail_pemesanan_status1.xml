@@ -51,18 +51,36 @@
                 android:layout_weight="5"
                 android:orientation="vertical"
                 android:background="@drawable/rectangle_border">
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Tanggal Sewa"
-                    android:textSize="15dp"
-                    android:background="@color/orange"/>
+                    android:orientation="horizontal"
+                    android:background="@color/orange">
+                    <TextView
+                        android:id="@+id/textViewTglSewa"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tanggal Sewa"
+                        android:textSize="16dp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" - "
+                        android:textSize="16dp" />
+                    <TextView
+                        android:id="@+id/textViewTglKembali"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tanggal Kembali"
+                        android:textSize="16dp" />
+                </LinearLayout>
+
                 <TextView
                     android:id="@+id/textViewTipeKendaraan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Tipe Kendaraan"
-                    android:textSize="15dp"
+                    android:textSize="16dp"
                     android:textColor="@color/orange"
                     android:layout_marginTop="5dp"
                     android:layout_marginLeft="15dp"></TextView>
@@ -74,6 +92,56 @@
                     android:textSize="15dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginLeft="15dp"></TextView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/textViewJumlahSewaKendaraan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="jumlah"
+                        android:textSize="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="15dp"></TextView>
+                    <TextView
+                        android:id="@+id/textViewMobil"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Mobil"
+                        android:textSize="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="5dp"></TextView>
+                    <TextView
+                        android:id="@+id/textViewMotor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Motor"
+                        android:textSize="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="5dp"></TextView>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/textViewJmlHariPenyewaan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Lama Sewa"
+                        android:textSize="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="15dp"></TextView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hari"
+                        android:textSize="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="5dp"></TextView>
+                </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -369,6 +437,5 @@
             </LinearLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
-
 </LinearLayout>
 
