@@ -32,6 +32,8 @@ import com.example.meita.rentalpemilik.MainActivity;
 import com.example.meita.rentalpemilik.R;
 import com.example.meita.rentalpemilik.Utils.ShowAlertDialog;
 import com.example.meita.rentalpemilik.model.RentalModel;
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
@@ -268,6 +270,9 @@ public class InputProfilRental extends AppCompatActivity {
                                     if (!task.isSuccessful()) {
                                         Toast.makeText(getApplicationContext(), "Biodata Anda Gagal Disimpan", Toast.LENGTH_SHORT).show();
                                     } else {
+                                        GeoFire geoFire;
+                                        geoFire = new GeoFire(mDatabase.child("geofire"));
+                                        geoFire.setLocation(userID, new GeoLocation(latitude_rental, longitude_rental));
                                         Toast.makeText(getApplicationContext(), "Biodata Anda Berhasil Disimpan", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(InputProfilRental.this, MainActivity.class);
                                         startActivity(intent);
@@ -275,6 +280,8 @@ public class InputProfilRental extends AppCompatActivity {
                                     }
                                 }
                             });
+
+
 
                             int childCount = container.getChildCount();
                             for(int c=0; c<childCount; c++) {
