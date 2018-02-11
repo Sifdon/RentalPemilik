@@ -2,6 +2,7 @@ package com.example.meita.rentalpemilik.MenuStatusPemesanan;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -25,40 +26,102 @@ public class MenuStatusPemesanan extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        getActivity().setTitle("Kelola Pesanan");
+        getActivity().setTitle("Kelola Penyewaan");
         View v = inflater.inflate(R.layout.fragment_menu_status_pemesanan, container, false);
         viewPager = (ViewPager) v.findViewById(R.id.viewpager);
         tabLayout = (TabLayout) v.findViewById(R.id.tabs);
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
+        viewPager.getAdapter().notifyDataSetChanged();
+        Bundle extras = getActivity().getIntent().getExtras();
 
+        //ini bisa
         try {
-            int position = getArguments().getInt("tab1");
-            viewPager.setCurrentItem(position);
-         } catch (Exception e) {
 
-         }
+            final int positionTab1 = getArguments().getInt("tab1");
+            final int positionTab2 = getArguments().getInt("tab2");
+            final int positionTab3 = getArguments().getInt("tab3");
+            final int positionTab4 = getArguments().getInt("tab4");
+            if (positionTab1 == 1) {
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewPager.setCurrentItem(0);
 
-        try {
-            int position = getArguments().getInt("tab2");
-            viewPager.setCurrentItem(position);
+                    }
+                });
+            } else if (positionTab2 == 2) {
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewPager.setCurrentItem(1);
+                    }
+                });
+            } else if (positionTab3 == 3) {
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewPager.setCurrentItem(2);
+                    }
+                });
+            } else if (positionTab4 == 4) {
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewPager.setCurrentItem(3);
+                    }
+                });
+            }
         } catch (Exception e) {
 
         }
 
-        try {
-            int position = getArguments().getInt("tab3");
-            viewPager.setCurrentItem(position);
-        } catch (Exception e) {
 
-        }
+//        try {
+//            final int position = getArguments().getInt("tab1");
+//            new Handler().post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    viewPager.setCurrentItem(position);
+//                }
+//            });
+//         } catch (Exception e) {
+//
+//         }
+//
+//        try {
+//            final int position = getArguments().getInt("tab2");
+//            new Handler().post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    viewPager.setCurrentItem(position);
+//                    //Toast.makeText(getActivity(), "nilai tab2 = "+position, Toast.LENGTH_SHORT).show();
+//                }
+//            });
+//        } catch (Exception e) {
+//
+//        }
+//
+//        try {
+//            final int position = getArguments().getInt("tab3");
+//            new Handler().post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    viewPager.setCurrentItem(position);
+//                }
+//            });
+//        } catch (Exception e) {
+//
+//        }
+//
+//        try {
+//            int position = getArguments().getInt("tab4");
+//            viewPager.setCurrentItem(position);
+//        } catch (Exception e) {
+//
+//        }
 
-        try {
-            int position = getArguments().getInt("tab4");
-            viewPager.setCurrentItem(position);
-        } catch (Exception e) {
 
-        }
 
 //        try {
 //            Bundle extras = getActivity().getIntent().getExtras();

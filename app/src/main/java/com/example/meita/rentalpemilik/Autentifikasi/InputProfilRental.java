@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -242,7 +243,6 @@ public class InputProfilRental extends AppCompatActivity {
             //displaying progress dialog while image is uploading
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Menyimpan Data");
-            //progressDialog.show();
 
             //getting the storage reference
             StorageReference sRef = mStorageRef.child(Constants.STORAGE_PATH_UPLOADS_FOTO_PROFIL_RENTAL + System.currentTimeMillis() + "." + getFileExtension(imgProfileUri));
@@ -273,7 +273,6 @@ public class InputProfilRental extends AppCompatActivity {
                                         startActivity(intent);
                                         finish();
                                     }
-
                                 }
                             });
 
@@ -310,13 +309,16 @@ public class InputProfilRental extends AppCompatActivity {
 
     public boolean cekKolomIsian() {
         boolean sukses = true;
-        if (nama_lengkap.getText().toString() == null || nama_rental.getText().toString() == null || alamat_rental.getText().toString() == null ||
-        no_telfon_rental.getText().toString().trim() == null || kebijakan_sewa.getText().toString() == null || kebijakan_pemesanan.getText().toString() == null ||
-                kebijakan_pembatalan.getText().toString() == null) {
+        if ( TextUtils.isEmpty(nama_lengkap.getText()) ||
+                TextUtils.isEmpty(nama_rental.getText()) ||
+                TextUtils.isEmpty(alamat_rental.getText()) ||
+                TextUtils.isEmpty(no_telfon_rental.getText()) ||
+                TextUtils.isEmpty(kebijakan_sewa.getText()) ||
+                TextUtils.isEmpty(kebijakan_pemesanan.getText()) ||
+                TextUtils.isEmpty(kebijakan_pembatalan.getText())) {
             sukses = false;
             ShowAlertDialog.showAlert("Lengkapi Seluruh Kolom Isian", this);
         }
-
         return sukses;
     }
 

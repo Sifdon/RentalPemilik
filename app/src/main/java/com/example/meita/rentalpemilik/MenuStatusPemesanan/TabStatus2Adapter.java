@@ -33,6 +33,7 @@ public class TabStatus2Adapter extends RecyclerView.Adapter<TabStatus2Adapter.Vi
     private List<PemesananModel> pemesananModel;
     DatabaseReference mDatabase;
     Context context;
+    String idPemesanan, tglSewa, tglKembali;
 
     public TabStatus2Adapter(Context context, List<PemesananModel> pemesananModel) {
         this.pemesananModel = pemesananModel;
@@ -56,6 +57,10 @@ public class TabStatus2Adapter extends RecyclerView.Adapter<TabStatus2Adapter.Vi
         final String idRental = dataPemesanan.getIdRental();
         final String idPelanggan = dataPemesanan.getIdPelanggan();
         final String statusPemesanan = dataPemesanan.getStatusPemesanan();
+        idPemesanan = dataPemesanan.getIdPemesanan();
+
+        getTanggal();
+
         holder.textViewStatusPemesanan.setText(dataPemesanan.getStatusPemesanan());
         holder.textViewTglSewa.setText(dataPemesanan.getTglSewa());
         holder.textViewTglKembali.setText(dataPemesanan.getTglKembali());
@@ -72,6 +77,8 @@ public class TabStatus2Adapter extends RecyclerView.Adapter<TabStatus2Adapter.Vi
                     bundle.putString("idPelanggan", idPelanggan);
                     bundle.putString("kategoriKendaraan", kategoriKendaraan);
                     bundle.putString("statusPemesanan", statusPemesanan);
+                    bundle.putString("tglSewa", tglSewa);
+                    bundle.putString("tglKembali", tglKembali);
                     intent.putExtras(bundle);
                     context.startActivity(intent);
                 } else {
@@ -83,6 +90,8 @@ public class TabStatus2Adapter extends RecyclerView.Adapter<TabStatus2Adapter.Vi
                     bundle.putString("idPelanggan", idPelanggan);
                     bundle.putString("kategoriKendaraan", kategoriKendaraan);
                     bundle.putString("statusPemesanan", statusPemesanan);
+                    bundle.putString("tglSewa", tglSewa);
+                    bundle.putString("tglKembali", tglKembali);
                     intent.putExtras(bundle);
                     context.startActivity(intent);
                 }
@@ -139,6 +148,29 @@ public class TabStatus2Adapter extends RecyclerView.Adapter<TabStatus2Adapter.Vi
 
             }
         });
+    }
+
+    private void getTanggal() {
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        try {
+            mDatabase.child("pemesananKendaraan").child("menungguKonfirmasiRental").child(idPemesanan).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        PemesananModel dataPemesanan = dataSnapshot.getValue(PemesananModel.class);
+                        tglSewa = dataPemesanan.getTglSewa();
+                        tglKembali = dataPemesanan.getTglKembali();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        } catch (Exception e) {
+
+        }
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.example.meita.rentalpemilik.model.PemesananModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class GambarBuktiPembayaran extends AppCompatActivity {
@@ -24,12 +25,19 @@ public class GambarBuktiPembayaran extends AppCompatActivity {
         setContentView(R.layout.activity_gambar_bukti_pembayaran);
         imageViewBuktiPembayaran = (ImageView)findViewById(R.id.imageViewBuktiPembayaran);
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
         final String idPemesanan = getIntent().getStringExtra("idPemesanan");
-        mDatabase.child("pemesananKendaraan").child("menungguKonfirmasiRental").child(idPemesanan).addValueEventListener(new ValueEventListener() {
+        mDatabase.child("pemesananKendaraan").child("menungguKonfirmasiRental").child(idPemesanan).child("pembayaran").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 PemesananModel dataPemesanan = dataSnapshot.getValue(PemesananModel.class);
-                Glide.with(getApplication()).load(dataPemesanan.getUriFotoBuktiPembayaran()).into(imageViewBuktiPembayaran);
+                if (dataPemesanan !=null) {
+                    String uriFoto = dataPemesanan.getUriFotoBuktiPembayaran();
+                    String idPesanan = dataPemesanan.getIdPemesanan();
+                    Glide.with(GambarBuktiPembayaran.this).load(dataPemesanan.getUriFotoBuktiPembayaran()).into(imageViewBuktiPembayaran);
+                }
+
             }
 
             @Override

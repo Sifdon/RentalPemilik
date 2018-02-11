@@ -169,7 +169,7 @@
                     android:layout_height="80dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:hint="Kebijakan Sewa"
+                    android:hint="Kebijakan Kelebihan Waktu"
                     android:background="@null"/>
             </LinearLayout>
             <LinearLayout
@@ -183,7 +183,7 @@
                     android:layout_height="80dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:hint="Kebijakan Pemesanan"
+                    android:hint="Kebijakan Pemakaian"
                     android:background="@null"/>
             </LinearLayout>
             <LinearLayout

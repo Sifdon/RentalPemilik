@@ -38,12 +38,13 @@ public class DetailPemesananStatus5 extends AppCompatActivity {
     DatabaseReference mDatabase;
     String alasanPembatalan;
     TextView textViewTglSewa, textViewTglKembali, textViewJumlahSewaKendaraan, textViewMobil, textViewMotor, textViewJmlHariPenyewaan;
+    String tglSewa, tglKembali;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_pemesanan_status5);
-        setTitle("Detail Pesanan Status Pengajuan Pembatalan");
+        setTitle("Detail Penyewaan Status Pengajuan Pembatalan");
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         textViewStatusPemesanan = (TextView)findViewById(R.id.textViewStatusPemesanan);
@@ -222,6 +223,8 @@ public class DetailPemesananStatus5 extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
                         PemesananModel dataPemesanan = dataSnapshot.getValue(PemesananModel.class);
+                        tglSewa = dataPemesanan.getTglSewa();
+                        tglKembali = dataPemesanan.getTglKembali();
                         textViewStatusPemesanan.setText(dataPemesanan.getStatusPemesanan());
                         alasanPembatalan = dataPemesanan.getAlasanPembatalan();
                         textViewAlasanPembatalan.setText(alasanPembatalan);
@@ -319,6 +322,8 @@ public class DetailPemesananStatus5 extends AppCompatActivity {
         bundle.putString("idPelanggan", idPelanggan);
         bundle.putString("kategoriKendaraan", kategoriKendaraan);
         bundle.putString("alasanPembatalan", alasanPembatalan);
+        bundle.putString("tglSewa", tglSewa);
+        bundle.putString("tglKembali", tglKembali);
         intent.putExtras(bundle);
         startActivity(intent);
         finish();

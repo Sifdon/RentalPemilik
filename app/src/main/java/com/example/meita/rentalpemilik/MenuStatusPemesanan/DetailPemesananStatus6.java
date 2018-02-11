@@ -44,7 +44,7 @@ public class DetailPemesananStatus6 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_pemesanan_status6);
-        setTitle("Detail Pesanan Status Batal");
+        setTitle("Detail Penyewaan Status Batal");
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 

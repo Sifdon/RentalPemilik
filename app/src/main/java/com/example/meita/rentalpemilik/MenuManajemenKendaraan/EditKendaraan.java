@@ -70,34 +70,40 @@ public class EditKendaraan extends AppCompatActivity {
     }
 
     public void loadDataKendaraan() {
-        dataKendaraan = (KendaraanModel) getIntent().getSerializableExtra(Constants.KENDARAAN);
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("kendaraan").child(dataKendaraan.getKategoriKendaraan()).child(dataKendaraan.getIdKendaraan()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                KendaraanModel dataKendaraan = dataSnapshot.getValue(KendaraanModel.class);
-                editTextTipeKendaraan.setText(dataKendaraan.getTipeKendaraan());
-                editTextHargaSewa.setText(String.valueOf(dataKendaraan.getHargaSewa()));
-                editTextJumlahKendaraan.setText(String.valueOf(dataKendaraan.getJumlahKendaraan()));
-                editTextJumlahPenumpang.setText(dataKendaraan.getJumlahPenumpang());
-                editTextFasilitasKendaraan.setText(dataKendaraan.getFasilitasKendaraan());
-                editTextCakupanAreaPemakaian.setText(dataKendaraan.getAreaPemakaian());
+        try {
+            dataKendaraan = (KendaraanModel) getIntent().getSerializableExtra(Constants.KENDARAAN);
+            mDatabase = FirebaseDatabase.getInstance().getReference();
+            mDatabase.child("kendaraan").child(dataKendaraan.getKategoriKendaraan()).child(dataKendaraan.getIdKendaraan()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        KendaraanModel dataKendaraan = dataSnapshot.getValue(KendaraanModel.class);
+                        editTextTipeKendaraan.setText(dataKendaraan.getTipeKendaraan());
+                        editTextHargaSewa.setText(String.valueOf(dataKendaraan.getHargaSewa()));
+                        editTextJumlahKendaraan.setText(String.valueOf(dataKendaraan.getJumlahKendaraan()));
+                        editTextJumlahPenumpang.setText(dataKendaraan.getJumlahPenumpang());
+                        editTextFasilitasKendaraan.setText(dataKendaraan.getFasilitasKendaraan());
+                        editTextCakupanAreaPemakaian.setText(dataKendaraan.getAreaPemakaian());
 
-                if (dataKendaraan.isSupir() == true) {
-                    checkBoxSupir.isChecked();
+                        if (dataKendaraan.isSupir() == true) {
+                            checkBoxSupir.isChecked();
+                        }
+
+                        if (dataKendaraan.isBahanBakar() == true) {
+                            checkBoxBahanBakar.isChecked();
+                        }
+                    }
                 }
 
-                if (dataKendaraan.isBahanBakar() == true) {
-                    checkBoxBahanBakar.isChecked();
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
                 }
+            });
+        } catch (Exception e) {
 
-            }
+        }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
 
     }

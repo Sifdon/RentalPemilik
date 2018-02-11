@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -135,17 +136,31 @@ public class UbahProfil extends AppCompatActivity {
     }
 
     private boolean cekUpdateData(){
-        boolean sukses = true;
-        if ( editTextNamaPemilikRental.getText() == null ||
-                editTextNamaRental.getText() == null ||
-                editTextAlamatRental.getText() == null ||
-                editTextKebijakanSewa.getText() == null ||
-                editTextKebijakanPemesanan.getText() == null ||
-                editTextKebijakanPembatalan.getText() == null ||
-                editTextKontakRental.getText() == null && (editTextKontakRental.getText().length() >12 || editTextKontakRental.getText().length() <10) ){
+        boolean sukses;
+        if (TextUtils.isEmpty(editTextNamaPemilikRental.getText().toString()) ||
+                TextUtils.isEmpty(editTextNamaRental.getText().toString()) ||
+                TextUtils.isEmpty(editTextAlamatRental.getText().toString()) ||
+                TextUtils.isEmpty(editTextKebijakanSewa.getText().toString()) ||
+                TextUtils.isEmpty(editTextKebijakanPemesanan.getText().toString()) ||
+                TextUtils.isEmpty(editTextKebijakanPembatalan.getText().toString()) ||
+                TextUtils.isEmpty(editTextKontakRental.getText().toString())
+                ) {
             sukses = false;
             ShowAlertDialog.showAlert("Lengkapi Seluruh Kolom Isian", this);
+        } else {
+            sukses = true;
         }
+//        if ( editTextNamaPemilikRental.getText() == null ||
+//                editTextNamaRental.getText() == null ||
+//                editTextAlamatRental.getText() == null ||
+//                editTextKebijakanSewa.getText() == null ||
+//                editTextKebijakanPemesanan.getText() == null ||
+//                editTextKebijakanPembatalan.getText() == null ||
+//                editTextKontakRental.getText() == null &&
+//                        (editTextKontakRental.getText().length() >12 || editTextKontakRental.getText().length() <10) ){
+//            sukses = false;
+//            ShowAlertDialog.showAlert("Lengkapi Seluruh Kolom Isian", this);
+//        }
         return sukses;
     }
 

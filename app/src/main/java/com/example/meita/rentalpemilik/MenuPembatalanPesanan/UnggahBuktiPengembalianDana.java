@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import com.example.meita.rentalpemilik.Constants;
 import com.example.meita.rentalpemilik.MainActivity;
 import com.example.meita.rentalpemilik.R;
+import com.example.meita.rentalpemilik.Utils.ShowAlertDialog;
 import com.example.meita.rentalpemilik.model.PemesananModel;
 import com.example.meita.rentalpemilik.model.PengembalianDanaModel;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -38,6 +40,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 public class UnggahBuktiPengembalianDana extends AppCompatActivity {
     TextView textViewNamaBankPelanggan, textViewNamaPemilikBank,
@@ -46,6 +49,7 @@ public class UnggahBuktiPengembalianDana extends AppCompatActivity {
             editTextNomorRekeningRental,
             editTextJumlahTransfer;
     ImageView imageViewBuktiPembayaran;
+    String idPelanggan;
     Button btn_cari, buttonUnggahBuktiPengembalian;
 
     DatabaseReference mDatabase;
@@ -92,7 +96,10 @@ public class UnggahBuktiPengembalianDana extends AppCompatActivity {
         buttonUnggahBuktiPengembalian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                konfirmasiPembatalan();
+                if (cekKolomIsian() == true) {
+                    konfirmasiPembatalan();
+                }
+
             }
         });
 
@@ -107,6 +114,7 @@ public class UnggahBuktiPengembalianDana extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     PemesananModel dataPemesanan = dataSnapshot.getValue(PemesananModel.class);
+                    idPelanggan = dataPemesanan.getIdPelanggan();
                     textViewTotalPembayaran.setText(String.valueOf(dataPemesanan.totalBiayaPembayaran));
                     textViewNamaBankPelanggan.setText(dataPemesanan.getBankPelanggan());
                     textViewNamaPemilikBank.setText(dataPemesanan.getNamaPemilikRekeningPelanggan());
@@ -147,7 +155,8 @@ public class UnggahBuktiPengembalianDana extends AppCompatActivity {
                             progressDialog.dismiss();
                             String idPembayaran = mDatabase.push().getKey();
                             String waktuTransferPengembalian = DateFormat.getDateTimeInstance().format(new Date());
-                            final PengembalianDanaModel dataPengembalian = new PengembalianDanaModel(alasanPembatalan, editTextBankRental.getText().toString(), editTextNamaPemilikRekeningRental.getText().toString(),
+                            final PengembalianDanaModel dataPengembalian = new PengembalianDanaModel(alasanPembatalan, editTextBankRental.getText().toString(),
+                                    editTextNamaPemilikRekeningRental.getText().toString(),
                                     editTextNomorRekeningRental.getText().toString(), editTextJumlahTransfer.getText().toString(), taskSnapshot.getDownloadUrl().toString(), waktuTransferPengembalian);
 
                             mDatabase.child("pemesananKendaraan").child("pengajuanPembatalan").child(idPemesanan).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -165,6 +174,7 @@ public class UnggahBuktiPengembalianDana extends AppCompatActivity {
                                             intent.putExtra("halamanStatus4", 4);
                                             startActivity(intent);
                                             finish();
+                                            buatPemberitahuan();
                                         }
                                     });
 
@@ -190,6 +200,40 @@ public class UnggahBuktiPengembalianDana extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Silahkan Pilih Foto Bukti Pengembalian Dana", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    private void buatPemberitahuan() {
+        String idPemberitahuan = mDatabase.push().getKey();
+        final String idRental = getIntent().getStringExtra("idRental");
+        final String idKendaraan = getIntent().getStringExtra("idKendaraan");
+        final String tglSewa = getIntent().getStringExtra("tglSewa");
+        final String tglKembali = getIntent().getStringExtra("tglKembali");
+        final String idPemesanan = getIntent().getStringExtra("idPemesanan");
+        String valueHalaman = "pengajuanPembatalan";
+        String statusPemesanan1 = "pengajuanPembatalan";
+        HashMap<String, Object> dataNotif = new HashMap<>();
+        dataNotif.put("idPemberitahuan", idPemberitahuan);
+        dataNotif.put("idRental", idRental);
+        dataNotif.put("idKendaraan", idKendaraan);
+        dataNotif.put("tglSewa", tglSewa);
+        dataNotif.put("tglKembalian", tglKembali);
+        dataNotif.put("nilaiHalaman", valueHalaman);
+        dataNotif.put("statusPemesanan", statusPemesanan1);
+        dataNotif.put("idPelanggan", idPelanggan);
+        dataNotif.put("idPemesanan", idPemesanan);
+        mDatabase.child("pemberitahuan").child("pelanggan").child("batal").child(idRental).child(idPemberitahuan).setValue(dataNotif);
+    }
+
+    private boolean cekKolomIsian() {
+        boolean sukses;
+        if (TextUtils.isEmpty(editTextBankRental.getText().toString()) || TextUtils.isEmpty(editTextNamaPemilikRekeningRental.getText().toString()) || TextUtils.isEmpty(editTextNomorRekeningRental.getText().toString())
+                || TextUtils.isEmpty(editTextJumlahTransfer.getText().toString())) {
+            ShowAlertDialog.showAlert("Lengkapi seluruh kolom isian data kendaraan", this);
+            sukses = false;
+        } else {
+            sukses = true;
+        }
+        return sukses;
     }
 
     private void showFileChooser() {

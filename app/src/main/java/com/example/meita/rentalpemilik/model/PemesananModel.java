@@ -14,7 +14,7 @@ public class PemesananModel implements Serializable {
     public String jamPengambilan, batasWaktuPembayaran, kategoriKendaraan, idRekeningRental;
     String alasanPembatalan;
     String namaBankRental, namaRekeningRental, nomorRekeningRental, jumlahTransferPengembalian, uriBuktiPengembalian, waktuTransferPengembalian;
-    String idPembayaran, uriFotoBuktiPembayaran,
+    public String idPembayaran, uriFotoBuktiPembayaran,
             bankPelanggan, namaPemilikRekeningPelanggan, nomorRekeningPelanggan, jumlahTransfer, waktuPembayaran;
     String idPemberitahuan;
 

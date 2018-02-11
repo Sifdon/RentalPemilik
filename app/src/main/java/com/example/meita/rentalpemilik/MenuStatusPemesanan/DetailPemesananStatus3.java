@@ -50,7 +50,7 @@ public class DetailPemesananStatus3 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_pemesanan_status3);
-        setTitle("Detail Pesanan Status Berhasil");
+        setTitle("Detail Penyewaan Status Berhasil");
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -173,8 +173,8 @@ public class DetailPemesananStatus3 extends AppCompatActivity {
         String idPemberitahuan = mDatabase.push().getKey();
         final String idRental = getIntent().getStringExtra("idRental");
         final String idKendaraan = getIntent().getStringExtra("idKendaraan");
-        final String tglSewaPencarian = getIntent().getStringExtra("tglSewaPencarian");
-        final String tglKembaliPencarian = getIntent().getStringExtra("tglKembaliPencarian");
+        final String tglSewa = getIntent().getStringExtra("tglSewa");
+        final String tglKembali = getIntent().getStringExtra("tglKembali");
         final String idPelanggan = getIntent().getStringExtra("idPelanggan");
         final String idPemesanan = getIntent().getStringExtra("idPemesanan");
         //int valueHalaman1 = 0;
@@ -184,8 +184,8 @@ public class DetailPemesananStatus3 extends AppCompatActivity {
         dataNotif.put("idPemberitahuan", idPemberitahuan);
         dataNotif.put("idRental", idRental);
         dataNotif.put("idKendaraan", idKendaraan);
-        dataNotif.put("tglSewa", tglSewaPencarian);
-        dataNotif.put("tglKembalian", tglKembaliPencarian);
+        dataNotif.put("tglSewa", tglSewa);
+        dataNotif.put("tglKembalian", tglKembali);
         dataNotif.put("nilaiHalaman", valueHalaman1);
         dataNotif.put("statusPemesanan", statusPemesanan1);
         dataNotif.put("idPelanggan", idPelanggan);

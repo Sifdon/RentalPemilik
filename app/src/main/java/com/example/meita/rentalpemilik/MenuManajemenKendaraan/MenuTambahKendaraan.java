@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +33,7 @@ import com.example.meita.rentalpemilik.MenuManajemenKendaraan.service.UploadPhot
 import com.example.meita.rentalpemilik.MenuManajemenKendaraan.service.UploadPhotoThreadListener;
 import com.example.meita.rentalpemilik.MenuStatusPemesanan.DetailPemesananStatus2;
 import com.example.meita.rentalpemilik.R;
+import com.example.meita.rentalpemilik.Utils.ShowAlertDialog;
 import com.example.meita.rentalpemilik.model.KendaraanModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -58,8 +60,10 @@ public class MenuTambahKendaraan extends AppCompatActivity implements View.OnCli
     ProgressBar progressBarSimpan;
     CheckBox checkBoxSupir, checkBoxBahanBakar;
     LinearLayout photoContainer;
-    int jumlahKendaraan;
+    int jumlahKendaraan, jumlahInterger;
     boolean supir, bahanBakar;
+    double hargaSewa, hargaDouble;
+
 
     private Uri imgUriFotoKendaraan;
     private StorageReference mStorageRef;
@@ -111,6 +115,7 @@ public class MenuTambahKendaraan extends AppCompatActivity implements View.OnCli
         buttonSimpan.setOnClickListener(this);
 
         progressBarSimpan.setVisibility(View.GONE);
+        handleDataType();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -152,37 +157,62 @@ public class MenuTambahKendaraan extends AppCompatActivity implements View.OnCli
         return mime.getExtensionFromMimeType(cR.getType(uri));
     }
 
-    private void simpanData(){
-        final String idKendaraan = dbKendaraan.push().getKey();
-        final String kategori = spinnerKategori.getSelectedItem().toString();
-        String jmlKendaraan = editTextJumlahKendaraan.getText().toString().trim();
-        String harga = editTextHarga.getText().toString().trim();
-        double hargaSewa = Double.valueOf(harga);
-        jumlahKendaraan = Integer.parseInt(jmlKendaraan);
-        KendaraanModel kendaraan = new KendaraanModel( userID, idKendaraan, spinnerKategori.getSelectedItem().toString(), editTextTipe.getText().toString().trim(),
-                editTextFasilitas.getText().toString().trim(), hargaSewa, spinnerLamaPenyewaan.getSelectedItem().toString(), editTextJmlPenumpang.getText().toString().trim(),
-                editTextAreaPemakaian.getText().toString().trim(), jumlahKendaraan, supir, bahanBakar);
-        dbKendaraan.child(kategori).child(idKendaraan).setValue(kendaraan);
+    private void handleDataType(){
+        try {
+            hargaDouble = Double.parseDouble(editTextHarga.getText().toString());
+            jumlahInterger = Integer.parseInt(editTextJumlahKendaraan.getText().toString());
+        }catch (Exception e){
+            hargaDouble = 0;
+            jumlahInterger = 1;
+        }
+    }
 
-        UploadPhotoThreadListener uploadPhotoThreadListener = new UploadPhotoThreadListener() {
-            @Override
-            public void onUploadPhotoSuccess(ArrayList<String> photoUrls) {
-                Map<String, Object> updateImage = new HashMap<>();
-                updateImage.put(Constants.UPLOAD_FOTO, photoUrls);
-                dbKendaraan.child(kategori).child(idKendaraan).updateChildren(updateImage);
+    public void tambahDataKendaraan(){
+        if (cekKolomIsian() == true) {
+            final String idKendaraan = dbKendaraan.push().getKey();
+            final String kategori = spinnerKategori.getSelectedItem().toString();
+            hargaSewa = hargaDouble;
+            jumlahKendaraan = jumlahInterger;
 
-                KendaraanModel dataKendaraanRental = new KendaraanModel(idKendaraan, kategori);
-                dbRental.child(userID).child("kendaraan").child(idKendaraan).setValue(dataKendaraanRental);
+            final KendaraanModel kendaraan = new KendaraanModel( userID, idKendaraan, spinnerKategori.getSelectedItem().toString(), editTextTipe.getText().toString().trim(),
+                    editTextFasilitas.getText().toString().trim(), hargaSewa, spinnerLamaPenyewaan.getSelectedItem().toString(), editTextJmlPenumpang.getText().toString().trim(),
+                    editTextAreaPemakaian.getText().toString().trim(), jumlahKendaraan, supir, bahanBakar);
+
+            if (listImage.size() == 0) {
+                ShowAlertDialog.showAlert("Anda harus memilih foto kendaraan", this);
+            } else {
+                UploadPhotoThreadListener uploadPhotoThreadListener = new UploadPhotoThreadListener() {
+                    @Override
+                    public void onUploadPhotoSuccess(ArrayList<String> photoUrls) {
+                        Map<String, Object> updateImage = new HashMap<>();
+                        updateImage.put("uriFotoKendaraan", photoUrls);
+                        dbKendaraan.child(kategori).child(idKendaraan).setValue(kendaraan);
+                        dbKendaraan.child(kategori).child(idKendaraan).updateChildren(updateImage);
+                        KendaraanModel dataKendaraanRental = new KendaraanModel(idKendaraan, kategori);
+                        dbRental.child(userID).child("kendaraan").child(idKendaraan).setValue(dataKendaraanRental);
+                        Intent intent = new Intent(MenuTambahKendaraan.this, MainActivity.class);
+                        intent.putExtra("halamanManajemenKendaraan", 11);
+                        startActivity(intent);
+                    }
+                };
+                new UploadPhotoThread(idKendaraan, listImage, uploadPhotoThreadListener).execute();
             }
-        };
-        new UploadPhotoThread(idKendaraan, listImage, uploadPhotoThreadListener).execute();
 
-        Intent intent = new Intent(MenuTambahKendaraan.this, MainActivity.class);
-        intent.putExtra("halamanManajemenKendaraan", 11);
-        startActivity(intent);
-        finish();
+        } else {
+            ShowAlertDialog.showAlert("Lengkapi seluruh kolom isian data kendaraan", this);
+        }
+    }
 
-
+    private boolean cekKolomIsian() {
+       boolean sukses;
+        if ( TextUtils.isEmpty(spinnerKategori.getSelectedItem().toString()) || TextUtils.isEmpty(editTextTipe.getText()) || TextUtils.isEmpty(editTextFasilitas.getText()) ||
+                TextUtils.isEmpty(spinnerLamaPenyewaan.getSelectedItem().toString()) || TextUtils.isEmpty(editTextJmlPenumpang.getText()) ||
+                TextUtils.isEmpty(editTextAreaPemakaian.getText()) || TextUtils.isEmpty(editTextHarga.getText())) {
+            sukses = false;
+        } else {
+            sukses = true;
+        }
+        return sukses;
     }
 
     public void onClick(View view) {
@@ -192,10 +222,11 @@ public class MenuTambahKendaraan extends AppCompatActivity implements View.OnCli
                 addPhoto();
             }
         } else if (view == buttonSimpan) {
-            //simpanDataKendaraan();
-            simpanData();
+            tambahDataKendaraan();
         }
     }
+
+
 
     //add multiple
     private boolean verifyStoragePermission() {
@@ -284,86 +315,4 @@ public class MenuTambahKendaraan extends AppCompatActivity implements View.OnCli
         return super.onOptionsItemSelected(item);
     }
 
-//    private void showFileChooser() {
-//        Intent intent = new Intent();
-//        intent.setType("image/*");
-//        intent.setAction(Intent.ACTION_GET_CONTENT);
-//        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-//    }
-//
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-//            imgUriFotoKendaraan = data.getData();
-//            try {
-//                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imgUriFotoKendaraan);
-//                imageKendaraan.setImageBitmap(bitmap);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
-//
-//    private void simpanDataKendaraan() {
-//        if (imgUriFotoKendaraan != null) {
-//            //displaying progress dialog while image is uploading
-//            final ProgressDialog progressDialog = new ProgressDialog(this);
-//            progressDialog.setTitle("Menyimpan Data Kendaraan");
-//            progressDialog.show();
-//
-//            //getting the storage reference
-//            StorageReference sRef = mStorageRef.child(Constants.STORAGE_PATH_UPLOADS_FOTO_KENDARAAN + System.currentTimeMillis() + "." + getFileExtension(imgUriFotoKendaraan));
-//
-//            //adding the file to reference
-//            sRef.putFile(imgUriFotoKendaraan)
-//                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                        @Override
-//                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//
-//                            //dismissing the progress dialog
-//                            progressDialog.dismiss();
-//
-//                            //creating the upload object to store uploaded image details
-//                            String idKendaraan = dbKendaraan.push().getKey();
-//                            String kategori = spinnerKategori.getSelectedItem().toString();
-//                            String jmlKendaraan = editTextJumlahKendaraan.getText().toString().trim();
-//                            jumlahKendaraan = Integer.parseInt(jmlKendaraan);
-//                            KendaraanModel kendaraan = new KendaraanModel( userID, idKendaraan, spinnerKategori.getSelectedItem().toString(), editTextTipe.getText().toString().trim(),
-//                                    editTextFasilitas.getText().toString().trim(), editTextHarga.getText().toString().trim(), spinnerLamaPenyewaan.getSelectedItem().toString(), editTextJmlPenumpang.getText().toString().trim(),
-//                                    editTextAreaPemakaian.getText().toString().trim(), jumlahKendaraan, supir, bahanBakar);
-//
-//                            dbKendaraan.child(kategori).child(idKendaraan).setValue(kendaraan).addOnCompleteListener(MenuTambahKendaraan.this, new OnCompleteListener<Void>() {
-//                                @Override
-//                                public void onComplete(@NonNull Task<Void> task) {
-//                                    progressBarSimpan.setVisibility(View.GONE);
-//                                    if (!task.isSuccessful()) {
-//                                        Toast.makeText(getApplicationContext(), "Data Gagal Disimpan", Toast.LENGTH_SHORT).show();
-//                                    } else {
-//                                        Toast.makeText(getApplicationContext(), "Data Berhasil Disimpan", Toast.LENGTH_SHORT).show();
-//                                        Intent intent = new Intent(MenuTambahKendaraan.this, MainActivity.class);
-//                                        startActivity(intent);
-//                                        finish();
-//                                    }
-//                                }
-//                            });
-//
-//                            KendaraanModel dataKendaraanRental = new KendaraanModel(idKendaraan, kategori);
-//                            dbRental.child(userID).child("kendaraan").child(idKendaraan).setValue(dataKendaraanRental);
-//
-//
-//                        }
-//                    })
-//                    .addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception exception) {
-//                            progressDialog.dismiss();
-//                            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
-//                        }
-//                    });
-//        } else {
-//            //display an error if no file is selected
-//        }
-//
-//    }
 }
