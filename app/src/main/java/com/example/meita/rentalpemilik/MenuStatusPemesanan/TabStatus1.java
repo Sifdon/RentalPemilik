@@ -12,10 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.example.meita.rentalpemilik.R;
-import com.example.meita.rentalpemilik.model.PemesananModel;
+import com.example.meita.rentalpemilik.model.PenyewaanModel;
 import com.firebase.client.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,7 +30,7 @@ import java.util.List;
 public class TabStatus1 extends Fragment {
     private RecyclerView recyclerView;
     private TabStatus1Adapter adapter;
-    private List<PemesananModel> pemesananModel;
+    private List<PenyewaanModel> penyewaanModel;
     private DatabaseReference mDatabase;
     ProgressBar progressBar;
     private FirebaseAuth auth;
@@ -52,7 +51,7 @@ public class TabStatus1 extends Fragment {
 
         progressBar = (ProgressBar)v.findViewById(R.id.progress_circle);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#FEBD3D"), PorterDuff.Mode.SRC_ATOP);
-        pemesananModel = new ArrayList<>();
+        penyewaanModel = new ArrayList<>();
         progressBar.setVisibility(View.VISIBLE);
         imageViewNoOrder.setVisibility(View.GONE);
 
@@ -64,23 +63,23 @@ public class TabStatus1 extends Fragment {
         Firebase.setAndroidContext(getActivity());
         Firebase.setAndroidContext(getContext());
 
-        getDataPemesanan();
+        getDataPenyewaan();
 
         return v;
     }
 
-    public void getDataPemesanan() {
+    public void getDataPenyewaan() {
         try {
             String status1 = "belumBayar";
-            mDatabase.child("pemesananKendaraan").child(status1).orderByChild("idRental").equalTo(idRental).addValueEventListener(new ValueEventListener() {
+            mDatabase.child("penyewaanKendaraan").child(status1).orderByChild("idRental").equalTo(idRental).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        pemesananModel.clear();
+                        penyewaanModel.clear();
                         for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                            PemesananModel dataPemesanan = postSnapshot.getValue(PemesananModel.class);
-                            pemesananModel.add(dataPemesanan);
-                            adapter = new TabStatus1Adapter(getActivity(), pemesananModel);
+                            PenyewaanModel dataPemesanan = postSnapshot.getValue(PenyewaanModel.class);
+                            penyewaanModel.add(dataPemesanan);
+                            adapter = new TabStatus1Adapter(getActivity(), penyewaanModel);
                             //adding adapter to recyclerview
                             recyclerView.setAdapter(adapter);
                             progressBar.setVisibility(View.GONE);

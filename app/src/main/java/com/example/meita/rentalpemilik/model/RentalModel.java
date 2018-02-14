@@ -6,10 +6,12 @@ package com.example.meita.rentalpemilik.model;
 
 public class RentalModel {
     public String uriFotoProfil, deviceToken;
-    public String idRental, nama_pemilik, nama_rental, alamat_rental, notelfon_rental, kebijakan_sewa_rental,
-    kebijakan_pemesanan_rental, kebijakan_pembatalan_rental, namaBank, namaPemilikBank, nomorRekeningBank, idRekening;
+    public String idRental, nama_pemilik, nama_rental, alamat_rental, notelfon_rental, kebijakanPembatalan,
+    kebijakanPemakaian, kebijakanKelebihanWaktu, namaBank, namaPemilikBank, nomorRekeningBank, idRekening;
     public double latitude, longitude;
     String emailRental;
+
+    //kebijakan pembatalan, pemakaian, kelebihan waktu.
 
     public RentalModel() {
 
@@ -17,7 +19,7 @@ public class RentalModel {
 
 
     public RentalModel(String idRental, String uriFotoProfil, String nama_pemilik, String nama_rental, String alamat_rental, String notelfon_rental,
-                       String kebijakan_sewa_rental, String kebijakan_pemesanan_rental, String kebijakan_pembatalan_rental,
+                       String kebijakanPembatalan, String kebijakanPemakaian, String kebijakanKelebihanWaktu,
                        double latitude, double longitude, String deviceToken, String emailRental) {
         this.idRental = idRental;
         this.uriFotoProfil = uriFotoProfil;
@@ -25,9 +27,9 @@ public class RentalModel {
         this.nama_rental = nama_rental;
         this.alamat_rental = alamat_rental;
         this.notelfon_rental = notelfon_rental;
-        this.kebijakan_sewa_rental = kebijakan_sewa_rental;
-        this.kebijakan_pemesanan_rental = kebijakan_pemesanan_rental;
-        this.kebijakan_pembatalan_rental = kebijakan_pembatalan_rental;
+        this.kebijakanPembatalan = kebijakanPembatalan;
+        this.kebijakanPemakaian = kebijakanPemakaian;
+        this.kebijakanKelebihanWaktu = kebijakanKelebihanWaktu;
         this.latitude = latitude;
         this.longitude = longitude;
         this.deviceToken = deviceToken;
@@ -41,15 +43,15 @@ public class RentalModel {
         this.nomorRekeningBank = nomorRekeningBank;
     }
 
-    public RentalModel(String uriFotoProfil, String nama_pemilik, String nama_rental, String alamat_rental, String notelfon_rental, String kebijakan_sewa_rental, String kebijakan_pemesanan_rental, String kebijakan_pembatalan_rental) {
+    public RentalModel(String uriFotoProfil, String nama_pemilik, String nama_rental, String alamat_rental, String notelfon_rental, String kebijakanPembatalan, String kebijakanPemakaian, String kebijakanKelebihanWaktu) {
         this.uriFotoProfil = uriFotoProfil;
         this.nama_pemilik = nama_pemilik;
         this.nama_rental = nama_rental;
         this.alamat_rental = alamat_rental;
         this.notelfon_rental = notelfon_rental;
-        this.kebijakan_sewa_rental = kebijakan_sewa_rental;
-        this.kebijakan_pemesanan_rental = kebijakan_pemesanan_rental;
-        this.kebijakan_pembatalan_rental = kebijakan_pembatalan_rental;
+        this.kebijakanPembatalan = kebijakanPembatalan;
+        this.kebijakanPemakaian = kebijakanPemakaian;
+        this.kebijakanKelebihanWaktu = kebijakanKelebihanWaktu;
     }
 
     public String getIdRental() {
@@ -100,28 +102,28 @@ public class RentalModel {
         this.notelfon_rental = notelfon_rental;
     }
 
-    public String getKebijakan_sewa_rental() {
-        return kebijakan_sewa_rental;
+    public String getkebijakanPembatalan() {
+        return kebijakanPembatalan;
     }
 
-    public void setKebijakan_sewa_rental(String kebijakan_sewa_rental) {
-        this.kebijakan_sewa_rental = kebijakan_sewa_rental;
+    public void setkebijakanPembatalan(String kebijakanPembatalan) {
+        this.kebijakanPembatalan = kebijakanPembatalan;
     }
 
-    public String getKebijakan_pemesanan_rental() {
-        return kebijakan_pemesanan_rental;
+    public String getkebijakanPemakaian() {
+        return kebijakanPemakaian;
     }
 
-    public void setKebijakan_pemesanan_rental(String kebijakan_pemesanan_rental) {
-        this.kebijakan_pemesanan_rental = kebijakan_pemesanan_rental;
+    public void setkebijakanPemakaian(String kebijakanPemakaian) {
+        this.kebijakanPemakaian = kebijakanPemakaian;
     }
 
-    public String getKebijakan_pembatalan_rental() {
-        return kebijakan_pembatalan_rental;
+    public String getkebijakanKelebihanWaktu() {
+        return kebijakanKelebihanWaktu;
     }
 
-    public void setKebijakan_pembatalan_rental(String kebijakan_pembatalan_rental) {
-        this.kebijakan_pembatalan_rental = kebijakan_pembatalan_rental;
+    public void setkebijakanKelebihanWaktu(String kebijakanKelebihanWaktu) {
+        this.kebijakanKelebihanWaktu = kebijakanKelebihanWaktu;
     }
 
     public String getNamaBank() {

@@ -6,8 +6,8 @@ import java.io.Serializable;
  * Created by meita on 17/09/2017.
  */
 
-public class PemesananModel implements Serializable {
-    public String idPemesanan, idKendaraan, idPelanggan, idRental, statusPemesanan, tglPembuatanPesanan, tglSewa, tglKembali,
+public class PenyewaanModel implements Serializable {
+    public String idPenyewaan, idKendaraan, idPelanggan, idRental, statusPenyewaan, tglPembuatanPesanan, tglSewa, tglKembali,
             keteranganKhusus, jamPenjemputan, alamatPenjemputan;
     public int jumlahKendaraan, jumlahHariPenyewaan, totalBiayaPembayaran;
     public double latitude_penjemputan, longitude_penjemputan;
@@ -18,31 +18,31 @@ public class PemesananModel implements Serializable {
             bankPelanggan, namaPemilikRekeningPelanggan, nomorRekeningPelanggan, jumlahTransfer, waktuPembayaran;
     String idPemberitahuan;
 
-    public PemesananModel() {
+    public PenyewaanModel() {
 
     }
 
 
-    public PemesananModel(String idPemberitahuan, String idPelanggan, String idRental, String idPemesanan, String idKendaraan, String statusPemesanan, String tglSewa,
+    public PenyewaanModel(String idPemberitahuan, String idPelanggan, String idRental, String idPenyewaan, String idKendaraan, String statusPenyewaan, String tglSewa,
                           String tglKembali) {
         this.idPemberitahuan = idPemberitahuan;
         this.idPelanggan = idPelanggan;
         this.idRental = idRental;
-        this.idPemesanan = idPemesanan;
+        this.idPenyewaan = idPenyewaan;
         this.idKendaraan = idKendaraan;
-        this.statusPemesanan = statusPemesanan;
+        this.statusPenyewaan = statusPenyewaan;
         this.tglSewa = tglSewa;
         this.tglKembali = tglKembali;
     }
 
-    public PemesananModel(String idPemesanan, String idKendaraan, String idPelanggan, String idRental, String statusPemesanan,
+    public PenyewaanModel(String idPenyewaan, String idKendaraan, String idPelanggan, String idRental, String statusPenyewaan,
                           String tglPembuatanPesanan, String tglSewa, String tglKembali, String keteranganKhusus, String jamPengambilan,
                           int jumlahKendaraan, int jumlahHariPenyewaan, int totalBiayaPembayaran, String batasWaktuPembayaran, String kategoriKendaraan, String idRekeningRental) {
-        this.idPemesanan = idPemesanan;
+        this.idPenyewaan = idPenyewaan;
         this.idKendaraan = idKendaraan;
         this.idPelanggan = idPelanggan;
         this.idRental = idRental;
-        this.statusPemesanan = statusPemesanan;
+        this.statusPenyewaan = statusPenyewaan;
         this.tglPembuatanPesanan = tglPembuatanPesanan;
         this.tglSewa = tglSewa;
         this.tglKembali = tglKembali;
@@ -56,15 +56,15 @@ public class PemesananModel implements Serializable {
         this.idRekeningRental = idRekeningRental;
     }
 
-    public PemesananModel(String idPemesanan, String idKendaraan, String idPelanggan, String idRental, String statusPemesanan,
+    public PenyewaanModel(String idPenyewaan, String idKendaraan, String idPelanggan, String idRental, String statusPenyewaan,
                           String tglPembuatanPesanan, String tglSewa, String tglKembali, String keteranganKhusus, String jamPenjemputan,
                           int jumlahKendaraan, double latitude_penjemputan, double longitude_penjemputan, String alamatPenjemputan,
                           int jumlahHariPenyewaan, int totalBiayaPembayaran, String batasWaktuPembayaran, String kategoriKendaraan, String idRekeningRental) {
-        this.idPemesanan = idPemesanan;
+        this.idPenyewaan = idPenyewaan;
         this.idKendaraan = idKendaraan;
         this.idPelanggan = idPelanggan;
         this.idRental = idRental;
-        this.statusPemesanan = statusPemesanan;
+        this.statusPenyewaan = statusPenyewaan;
         this.tglPembuatanPesanan = tglPembuatanPesanan;
         this.tglSewa = tglSewa;
         this.tglKembali = tglKembali;
@@ -82,12 +82,12 @@ public class PemesananModel implements Serializable {
         this.idRekeningRental = idRekeningRental;
     }
 
-    public PemesananModel(String idPemesanan, String idKendaraan, String idRental, String statusPemesanan, String tglPembuatanPesanan, String tglSewa,
+    public PenyewaanModel(String idPenyewaan, String idKendaraan, String idRental, String statusPenyewaan, String tglPembuatanPesanan, String tglSewa,
                           String tglKembali, int jumlahKendaraan, String kategoriKendaraan) {
-        this.idPemesanan = idPemesanan;
+        this.idPenyewaan = idPenyewaan;
         this.idKendaraan = idKendaraan;
         this.idRental = idRental;
-        this.statusPemesanan = statusPemesanan;
+        this.statusPenyewaan = statusPenyewaan;
         this.tglPembuatanPesanan = tglPembuatanPesanan;
         this.tglSewa = tglSewa;
         this.tglKembali = tglKembali;
@@ -95,12 +95,12 @@ public class PemesananModel implements Serializable {
         this.kategoriKendaraan = kategoriKendaraan;
     }
 
-    public String getIdPemesanan() {
-        return idPemesanan;
+    public String getidPenyewaan() {
+        return idPenyewaan;
     }
 
-    public void setIdPemesanan(String idPemesanan) {
-        this.idPemesanan = idPemesanan;
+    public void setidPenyewaan(String idPenyewaan) {
+        this.idPenyewaan = idPenyewaan;
     }
 
     public String getIdKendaraan() {
@@ -127,12 +127,12 @@ public class PemesananModel implements Serializable {
         this.idRental = idRental;
     }
 
-    public String getStatusPemesanan() {
-        return statusPemesanan;
+    public String getstatusPenyewaan() {
+        return statusPenyewaan;
     }
 
-    public void setStatusPemesanan(String statusPemesanan) {
-        this.statusPemesanan = statusPemesanan;
+    public void setstatusPenyewaan(String statusPenyewaan) {
+        this.statusPenyewaan = statusPenyewaan;
     }
 
     public String getTglSewa() {

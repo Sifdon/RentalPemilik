@@ -8,7 +8,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.meita.rentalpemilik.R;
-import com.example.meita.rentalpemilik.model.PemesananModel;
+import com.example.meita.rentalpemilik.model.PenyewaanModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,14 +27,14 @@ public class GambarBuktiPembayaran extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        final String idPemesanan = getIntent().getStringExtra("idPemesanan");
-        mDatabase.child("pemesananKendaraan").child("menungguKonfirmasiRental").child(idPemesanan).child("pembayaran").addValueEventListener(new ValueEventListener() {
+        final String idPenyewaan = getIntent().getStringExtra("idPenyewaan");
+        mDatabase.child("penyewaanKendaraan").child("menungguKonfirmasiRental").child(idPenyewaan).child("pembayaran").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                PemesananModel dataPemesanan = dataSnapshot.getValue(PemesananModel.class);
+                PenyewaanModel dataPemesanan = dataSnapshot.getValue(PenyewaanModel.class);
                 if (dataPemesanan !=null) {
                     String uriFoto = dataPemesanan.getUriFotoBuktiPembayaran();
-                    String idPesanan = dataPemesanan.getIdPemesanan();
+                    String idPesanan = dataPemesanan.getidPenyewaan();
                     Glide.with(GambarBuktiPembayaran.this).load(dataPemesanan.getUriFotoBuktiPembayaran()).into(imageViewBuktiPembayaran);
                 }
 

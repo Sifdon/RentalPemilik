@@ -108,9 +108,9 @@ public class UbahProfil extends AppCompatActivity {
                 editTextNamaRental.setText(dataRental.getNama_rental());
                 editTextAlamatRental.setText(dataRental.getAlamat_rental());
                 editTextKontakRental.setText(dataRental.getNotelfon_rental());
-                editTextKebijakanSewa.setText(dataRental.getKebijakan_sewa_rental());
-                editTextKebijakanPemesanan.setText(dataRental.getKebijakan_pemesanan_rental());
-                editTextKebijakanPembatalan.setText(dataRental.getKebijakan_pembatalan_rental());
+                editTextKebijakanSewa.setText(dataRental.getkebijakanPembatalan());
+                editTextKebijakanPemesanan.setText(dataRental.getkebijakanPemakaian());
+                editTextKebijakanPembatalan.setText(dataRental.getkebijakanKelebihanWaktu());
                 imgUri = dataRental.getUriFotoProfil();
             }
 

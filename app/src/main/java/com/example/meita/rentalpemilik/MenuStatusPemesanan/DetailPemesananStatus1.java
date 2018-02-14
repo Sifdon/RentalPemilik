@@ -17,9 +17,8 @@ import com.example.meita.rentalpemilik.ProfilPelanggan.LihatProfilPelanggan;
 import com.example.meita.rentalpemilik.R;
 import com.example.meita.rentalpemilik.model.KendaraanModel;
 import com.example.meita.rentalpemilik.model.PelangganModel;
-import com.example.meita.rentalpemilik.model.PemesananModel;
+import com.example.meita.rentalpemilik.model.PenyewaanModel;
 import com.example.meita.rentalpemilik.model.RentalModel;
-import com.google.android.gms.vision.text.Line;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -89,7 +88,7 @@ public class DetailPemesananStatus1 extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        infoPemesanan();
+        infoPenyewaan();
         infoKendaraan();
         infoRentalKendaraan();
         infoPelanggan();
@@ -105,15 +104,15 @@ public class DetailPemesananStatus1 extends AppCompatActivity {
         });
     }
 
-    public void infoPemesanan() {
+    public void infoPenyewaan() {
         try {
-            final String idPemesanan = getIntent().getStringExtra("idPemesanan");
-            mDatabase.child("pemesananKendaraan").child("belumBayar").child(idPemesanan).addValueEventListener(new ValueEventListener() {
+            final String idPenyewaan = getIntent().getStringExtra("idPenyewaan");
+            mDatabase.child("penyewaanKendaraan").child("belumBayar").child(idPenyewaan).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
-                        PemesananModel dataPemesanan = dataSnapshot.getValue(PemesananModel.class);
-                        textViewStatusPemesanan.setText(dataPemesanan.getStatusPemesanan());
+                        PenyewaanModel dataPemesanan = dataSnapshot.getValue(PenyewaanModel.class);
+                        textViewStatusPemesanan.setText(dataPemesanan.getstatusPenyewaan());
                         textViewTotalPembayaran.setText("Rp. "+ BaseActivity.rupiah().format(dataPemesanan.getTotalBiayaPembayaran()));
                         if (dataPemesanan.getJamPenjemputan() == null) {
                             textViewWaktuPenjemputan.setVisibility(View.GONE);

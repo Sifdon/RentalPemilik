@@ -105,9 +105,9 @@ public class MenuProfil extends Fragment {
                 textViewAlamatRental.setText(dataRental.getAlamat_rental());
                 textViewTelpRental.setText(dataRental.getNotelfon_rental());
                 textViewEmailRental.setText(emailRental);
-                textViewKebijakanSewa.setText(dataRental.getKebijakan_sewa_rental());
-                textViewKebijakanPemesanan.setText(dataRental.getKebijakan_pemesanan_rental());
-                textViewKebijakanPembatalan.setText(dataRental.getKebijakan_pembatalan_rental());
+                textViewKebijakanSewa.setText(dataRental.getkebijakanPembatalan());
+                textViewKebijakanPemesanan.setText(dataRental.getkebijakanPemakaian());
+                textViewKebijakanPembatalan.setText(dataRental.getkebijakanKelebihanWaktu());
                 Glide.with(getActivity()).load(dataRental.getUriFotoProfil()).into(imageViewFotoRental);
 
             }

@@ -56,7 +56,8 @@ import java.io.IOException;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class InputProfilRental extends AppCompatActivity {
-    private EditText nama_rental, no_telfon_rental, alamat_rental, nama_lengkap, kebijakan_sewa, kebijakan_pemesanan, kebijakan_pembatalan, namaPemilikBank, nomorRekeningBank;
+    private EditText nama_rental, no_telfon_rental, alamat_rental, nama_lengkap, namaPemilikBank, nomorRekeningBank;
+    private EditText kebijakanPemakaian, kebijakanPembatalan, kebijakanKelebihanWaktu;
     Spinner spinnerNamaBank;
     Button buttonTambahRekening;
     private Button buttonSimpanData;
@@ -75,6 +76,7 @@ public class InputProfilRental extends AppCompatActivity {
     private FirebaseDatabase databaseRental;
     private FirebaseAuth auth;
     private DatabaseReference mDatabase;
+    ProgressDialog progressDialog;
 
     public static final int PICK_IMAGE_REQUEST = 234;
 
@@ -88,9 +90,9 @@ public class InputProfilRental extends AppCompatActivity {
         nama_lengkap = (EditText) findViewById(R.id.input_nama_lengkap);
         alamat_rental = (EditText) findViewById(R.id.input_alamat);
         no_telfon_rental = (EditText) findViewById(R.id.input_no_telefon);
-        kebijakan_sewa = (EditText) findViewById(R.id.input_kebijakan_sewa);
-        kebijakan_pembatalan = (EditText) findViewById(R.id.input_kebijakan_pembatalan);
-        kebijakan_pemesanan = (EditText) findViewById(R.id.input_kebijakan_pemesanan);
+        kebijakanPembatalan = (EditText) findViewById(R.id.input_kebijakan_pembatalan);
+        kebijakanPemakaian = (EditText) findViewById(R.id.input_kebijakan_pemakaian);
+        kebijakanKelebihanWaktu = (EditText) findViewById(R.id.input_kebijakan_kelebihan_waktu);
 
         namaPemilikBank = (EditText) findViewById(R.id.editTextNamaPemilikBank);
         nomorRekeningBank = (EditText) findViewById(R.id.editTextNmrRekening);
@@ -102,6 +104,7 @@ public class InputProfilRental extends AppCompatActivity {
         buttonCariGambar = (Button)findViewById(R.id.btn_cari);
         buttonTambahRekening = (Button)findViewById(R.id.buttonTambahRekening);
         container = (LinearLayout)findViewById(R.id.container);
+        progressDialog = new ProgressDialog(InputProfilRental.this);
 
         auth = FirebaseAuth.getInstance();
         databaseRental = FirebaseDatabase.getInstance();
@@ -242,9 +245,11 @@ public class InputProfilRental extends AppCompatActivity {
     private void simpanDataRental() {
         //checking if file is available
         if (imgProfileUri != null) {
-            //displaying progress dialog while image is uploading
-            final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Menyimpan Data");
+            progressDialog.setMessage("Harap tunggu..."); // Setting Message
+            progressDialog.setTitle("Menyimpan Biodata Anda"); // Setting Title
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
+            progressDialog.show(); // Display Progress Dialog
+            progressDialog.setCancelable(false);
 
             //getting the storage reference
             StorageReference sRef = mStorageRef.child(Constants.STORAGE_PATH_UPLOADS_FOTO_PROFIL_RENTAL + System.currentTimeMillis() + "." + getFileExtension(imgProfileUri));
@@ -260,8 +265,8 @@ public class InputProfilRental extends AppCompatActivity {
                             //creating the upload object to store uploaded image details
                             RentalModel dataProfil = new RentalModel(userID, taskSnapshot.getDownloadUrl().toString(), nama_lengkap.getText().toString().trim(),
                                     nama_rental.getText().toString().trim(), alamat_rental.getText().toString().trim(), no_telfon_rental.getText().toString().trim(),
-                                     kebijakan_sewa.getText().toString().trim(), kebijakan_pemesanan.getText().toString().trim(),
-                                    kebijakan_pembatalan.getText().toString().trim(), latitude_rental, longitude_rental, getToken(), emailRental);
+                                     kebijakanPembatalan.getText().toString().trim(), kebijakanPemakaian.getText().toString().trim(),
+                                    kebijakanKelebihanWaktu.getText().toString().trim(), latitude_rental, longitude_rental, getToken(), emailRental);
 
                             mDatabase.child("rentalKendaraan").child(userID).setValue(dataProfil).addOnCompleteListener(InputProfilRental.this, new OnCompleteListener<Void>() {
                                 @Override
@@ -273,6 +278,7 @@ public class InputProfilRental extends AppCompatActivity {
                                         GeoFire geoFire;
                                         geoFire = new GeoFire(mDatabase.child("geofire"));
                                         geoFire.setLocation(userID, new GeoLocation(latitude_rental, longitude_rental));
+                                        progressDialog.dismiss();
                                         Toast.makeText(getApplicationContext(), "Biodata Anda Berhasil Disimpan", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(InputProfilRental.this, MainActivity.class);
                                         startActivity(intent);
@@ -320,9 +326,9 @@ public class InputProfilRental extends AppCompatActivity {
                 TextUtils.isEmpty(nama_rental.getText()) ||
                 TextUtils.isEmpty(alamat_rental.getText()) ||
                 TextUtils.isEmpty(no_telfon_rental.getText()) ||
-                TextUtils.isEmpty(kebijakan_sewa.getText()) ||
-                TextUtils.isEmpty(kebijakan_pemesanan.getText()) ||
-                TextUtils.isEmpty(kebijakan_pembatalan.getText())) {
+                TextUtils.isEmpty(kebijakanPembatalan.getText()) ||
+                TextUtils.isEmpty(kebijakanPemakaian.getText()) ||
+                TextUtils.isEmpty(kebijakanKelebihanWaktu.getText())) {
             sukses = false;
             ShowAlertDialog.showAlert("Lengkapi Seluruh Kolom Isian", this);
         }

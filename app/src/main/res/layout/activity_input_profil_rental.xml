@@ -164,12 +164,12 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/border_text_input">
                 <EditText
-                    android:id="@+id/input_kebijakan_sewa"
+                    android:id="@+id/input_kebijakan_pembatalan"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:hint="Kebijakan Kelebihan Waktu"
+                    android:hint="Kebijakan Pembatalan"
                     android:background="@null"/>
             </LinearLayout>
             <LinearLayout
@@ -178,7 +178,7 @@
                 android:orientation="vertical"
                 android:background="@drawable/border_text_input">
                 <EditText
-                    android:id="@+id/input_kebijakan_pemesanan"
+                    android:id="@+id/input_kebijakan_pemakaian"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:paddingLeft="20dp"
@@ -192,12 +192,12 @@
                 android:orientation="vertical"
                 android:background="@drawable/border_text_input">
                 <EditText
-                    android:id="@+id/input_kebijakan_pembatalan"
+                    android:id="@+id/input_kebijakan_kelebihan_waktu"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:hint="Kebijakan Pembatalan"
+                    android:hint="Kebijakan Kelebihan Waktu"
                     android:background="@null"/>
             </LinearLayout>
             <LinearLayout

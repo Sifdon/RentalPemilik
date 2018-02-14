@@ -12,10 +12,9 @@ import com.example.meita.rentalpemilik.MainActivity;
 import com.example.meita.rentalpemilik.R;
 import com.example.meita.rentalpemilik.Utils.ShowAlertDialog;
 import com.example.meita.rentalpemilik.model.KendaraanModel;
-import com.example.meita.rentalpemilik.model.PemesananModel;
+import com.example.meita.rentalpemilik.model.PenyewaanModel;
 import com.gildaswise.horizontalcounter.HorizontalCounter;
 import com.gildaswise.horizontalcounter.RepeatListener;
-import com.google.android.gms.vision.text.Line;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -128,7 +127,7 @@ public class KelolaKetersediaan extends AppCompatActivity {
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
 
-                        PemesananModel pemesanan = postSnapshot.getValue(PemesananModel.class);
+                        PenyewaanModel pemesanan = postSnapshot.getValue(PenyewaanModel.class);
                         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
                         jmlKendaraanDipesan = pemesanan.getJumlahKendaraan();
 
@@ -200,7 +199,7 @@ public class KelolaKetersediaan extends AppCompatActivity {
         final String tanggalKembaliPencarian = getIntent().getStringExtra("tglKembaliPencarian");
 
 
-        PemesananModel dataKelolaKetersediaan = new PemesananModel(idPemesanan, idKendaraan, idRental, status, tglPembuatanPesanan, tanggalSewaPencarian, tanggalKembaliPencarian, aturJumlahKendaraan, kategoriKendaraan);
+        PenyewaanModel dataKelolaKetersediaan = new PenyewaanModel(idPemesanan, idKendaraan, idRental, status, tglPembuatanPesanan, tanggalSewaPencarian, tanggalKembaliPencarian, aturJumlahKendaraan, kategoriKendaraan);
         mDatabase.child("cekKetersediaanKendaraan").child(idPemesanan).setValue(dataKelolaKetersediaan);
         mDatabase.child("pemesananKendaraan").child("dikelolaRental").child(idPemesanan).setValue(dataKelolaKetersediaan);
         Intent intent = new Intent(KelolaKetersediaan.this, MainActivity.class);

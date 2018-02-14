@@ -14,7 +14,7 @@ import com.example.meita.rentalpemilik.Base.BaseActivity;
 import com.example.meita.rentalpemilik.MenuManajemenKendaraan.ImageLoader;
 import com.example.meita.rentalpemilik.R;
 import com.example.meita.rentalpemilik.model.KendaraanModel;
-import com.example.meita.rentalpemilik.model.PemesananModel;
+import com.example.meita.rentalpemilik.model.PenyewaanModel;
 import com.example.meita.rentalpemilik.model.RentalModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,12 +25,12 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.List;
 
 public class TabStatus6Adapter extends RecyclerView.Adapter<TabStatus6Adapter.ViewHolder> implements View.OnClickListener {
-    private List<PemesananModel> pemesananModel;
+    private List<PenyewaanModel> penyewaanModel;
     DatabaseReference mDatabase;
     Context context;
 
-    public TabStatus6Adapter(Context context, List<PemesananModel> pemesananModel) {
-        this.pemesananModel = pemesananModel;
+    public TabStatus6Adapter(Context context, List<PenyewaanModel> penyewaanModel) {
+        this.penyewaanModel = penyewaanModel;
         this.context = context;
     }
 
@@ -45,13 +45,13 @@ public class TabStatus6Adapter extends RecyclerView.Adapter<TabStatus6Adapter.Vi
 
     @Override
     public void onBindViewHolder(final TabStatus6Adapter.ViewHolder holder, int position) {
-        final PemesananModel dataPemesanan = pemesananModel.get(position);
+        final PenyewaanModel dataPemesanan = penyewaanModel.get(position);
         final String kategoriKendaraan = dataPemesanan.getKategoriKendaraan();
         final String idKendaraan = dataPemesanan.getIdKendaraan();
         final String idRental = dataPemesanan.getIdRental();
         final String idPelanggan = dataPemesanan.getIdPelanggan();
-        final String statusPemesanan = dataPemesanan.getStatusPemesanan();
-        holder.textViewStatusPemesanan.setText(dataPemesanan.getStatusPemesanan());
+        final String statusPemesanan = dataPemesanan.getstatusPenyewaan();
+        holder.textViewStatusPemesanan.setText(dataPemesanan.getstatusPenyewaan());
         holder.textViewTglSewa.setText(dataPemesanan.getTglSewa());
         holder.textViewTglKembali.setText(dataPemesanan.getTglKembali());
         holder.textViewTotalPembayaran.setText("Rp. "+ BaseActivity.rupiah().format(dataPemesanan.getTotalBiayaPembayaran()));
@@ -61,7 +61,7 @@ public class TabStatus6Adapter extends RecyclerView.Adapter<TabStatus6Adapter.Vi
                 if (isLongClick) {
                     Bundle bundle = new Bundle();
                     Intent intent = new Intent(context, DetailPemesananStatus6.class);
-                    bundle.putString("idPemesanan", dataPemesanan.getIdPemesanan());
+                    bundle.putString("idPenyewaan", dataPemesanan.getidPenyewaan());
                     bundle.putString("idKendaraan", idKendaraan);
                     bundle.putString("idRental", idRental);
                     bundle.putString("idPelanggan", idPelanggan);
@@ -72,7 +72,7 @@ public class TabStatus6Adapter extends RecyclerView.Adapter<TabStatus6Adapter.Vi
                 } else {
                     Bundle bundle = new Bundle();
                     Intent intent = new Intent(context, DetailPemesananStatus6.class);
-                    bundle.putString("idPemesanan", dataPemesanan.getIdPemesanan());
+                    bundle.putString("idPenyewaan", dataPemesanan.getidPenyewaan());
                     bundle.putString("idKendaraan", idKendaraan);
                     bundle.putString("idRental", idRental);
                     bundle.putString("idPelanggan", idPelanggan);
@@ -139,7 +139,7 @@ public class TabStatus6Adapter extends RecyclerView.Adapter<TabStatus6Adapter.Vi
 
     @Override
     public int getItemCount() {
-        return pemesananModel.size();
+        return penyewaanModel.size();
     }
 
     @Override
