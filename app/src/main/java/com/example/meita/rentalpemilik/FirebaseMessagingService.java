@@ -21,50 +21,54 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        String notification_title = remoteMessage.getNotification().getTitle();
-        String notification_message = remoteMessage.getNotification().getBody();
-
-        String click_action = remoteMessage.getNotification().getClickAction();
-
-        String idPelanggan = remoteMessage.getData().get("id_pengirim");
-        String valueHalaman1 = remoteMessage.getData().get("valueHalaman1");
-        String valueHalaman2 = remoteMessage.getData().get("valueHalaman2");
-        String valueHalaman5 = remoteMessage.getData().get("valueHalaman5");
-        String idPemesanan = remoteMessage.getData().get("idPemesanan");
-
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle(notification_title)
-                        .setContentText(notification_message);
-
-
-        Intent resultIntent = new Intent(click_action);
-        resultIntent.putExtra("idPelanggan", idPelanggan);
-        resultIntent.putExtra("notifBelumBayar", valueHalaman1);
-        resultIntent.putExtra("notifMenungguKonfirmasi", valueHalaman2);
-        resultIntent.putExtra("notifPenilaian", valueHalaman5);
-        resultIntent.putExtra("idPemesanan", idPemesanan);
-
-        PendingIntent resultPendingIntent =
-                PendingIntent.getActivity(
-                        this,
-                        0,
-                        resultIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                );
-
-        mBuilder.setContentIntent(resultPendingIntent);
-
-
-
-
-        int mNotificationId = (int) System.currentTimeMillis();
-
-        NotificationManager mNotifyMgr =
-                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-        mNotifyMgr.notify(mNotificationId, mBuilder.build());
+//        String notification_title = remoteMessage.getNotification().getTitle();
+//        String notification_message = remoteMessage.getNotification().getBody();
+//
+//        String click_action = remoteMessage.getNotification().getClickAction();
+//
+//        String idPelanggan = remoteMessage.getData().get("id_pengirim");
+//        String valueHalaman1 = remoteMessage.getData().get("valueHalaman1");
+//        String valueHalaman2 = remoteMessage.getData().get("valueHalaman2");
+//        String valueHalaman5 = remoteMessage.getData().get("valueHalaman5");
+//        String valueHalaman6 = remoteMessage.getData().get("valueHalaman6");
+//        String valueHalaman11 = remoteMessage.getData().get("valueHalaman11");
+//        String idPemesanan = remoteMessage.getData().get("idPemesanan");
+//
+//        NotificationCompat.Builder mBuilder =
+//                new NotificationCompat.Builder(this)
+//                        .setSmallIcon(R.mipmap.ic_launcher)
+//                        .setContentTitle(notification_title)
+//                        .setContentText(notification_message);
+//
+//
+//        Intent resultIntent = new Intent(click_action);
+//        resultIntent.putExtra("idPelanggan", idPelanggan);
+//        resultIntent.putExtra("notifBelumBayar", valueHalaman1);
+//        resultIntent.putExtra("notifMenungguKonfirmasi", valueHalaman2);
+//        resultIntent.putExtra("notifPenilaian", valueHalaman5);
+//        resultIntent.putExtra("notifMenungguKonfirmasiSisaPembayaran", valueHalaman11);
+//        resultIntent.putExtra("notifPengajuanPembatalan", valueHalaman6);
+//        resultIntent.putExtra("idPemesanan", idPemesanan);
+//
+//        PendingIntent resultPendingIntent =
+//                PendingIntent.getActivity(
+//                        this,
+//                        0,
+//                        resultIntent,
+//                        PendingIntent.FLAG_UPDATE_CURRENT
+//                );
+//
+//        mBuilder.setContentIntent(resultPendingIntent);
+//
+//
+//
+//
+//        int mNotificationId = (int) System.currentTimeMillis();
+//
+//        NotificationManager mNotifyMgr =
+//                (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+//
+//        mNotifyMgr.notify(mNotificationId, mBuilder.build());
 
 
     }
