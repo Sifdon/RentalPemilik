@@ -48,7 +48,7 @@ public class MenuPenilaianDanUlasanAdapter extends RecyclerView.Adapter<MenuPeni
         holder.textViewUlasan.setText(dataUlasan.getUlasan());
         holder.rb_kualitas_kendaraan.setRating(dataUlasan.getRatingKendaraan());
         holder.rb_kualitas_pelayanan.setRating(dataUlasan.getRatingPelayanan());
-
+        holder.textViewWaktuUlasan.setText(dataUlasan.getWaktuUlasan());
         String idPelanggan = dataUlasan.getIdPelanggan();
         mDatabase.child("pelanggan").child(idPelanggan).addValueEventListener(new ValueEventListener() {
             @Override
@@ -85,7 +85,7 @@ public class MenuPenilaianDanUlasanAdapter extends RecyclerView.Adapter<MenuPeni
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView textViewNamaPelanggan, textViewTipeKendaraan, textViewUlasan;
+        public TextView textViewNamaPelanggan, textViewTipeKendaraan, textViewUlasan, textViewWaktuUlasan;
         RatingBar rb_kualitas_pelayanan, rb_kualitas_kendaraan;
 
         public ViewHolder(View itemView) {
@@ -94,6 +94,7 @@ public class MenuPenilaianDanUlasanAdapter extends RecyclerView.Adapter<MenuPeni
             textViewTipeKendaraan = (TextView)itemView.findViewById(R.id.textViewTipeKendaraan);
             textViewNamaPelanggan = (TextView)itemView.findViewById(R.id.textViewNamaPelanggan);
             textViewUlasan = (TextView)itemView.findViewById(R.id.textViewUlasan);
+            textViewWaktuUlasan = (TextView)itemView.findViewById(R.id.textViewWaktuUlasan);
             rb_kualitas_pelayanan = (RatingBar)itemView.findViewById(R.id.rb_kualitas_pelayanan);
             rb_kualitas_kendaraan = (RatingBar)itemView.findViewById(R.id.rb_kualitas_kendaraan);
         }

@@ -16,6 +16,7 @@ import com.example.meita.rentalpemilik.Base.BaseActivity;
 import com.example.meita.rentalpemilik.MainActivity;
 import com.example.meita.rentalpemilik.ProfilPelanggan.LihatProfilPelanggan;
 import com.example.meita.rentalpemilik.R;
+import com.example.meita.rentalpemilik.TolakPembayaran.TolakPembayaran;
 import com.example.meita.rentalpemilik.model.KendaraanModel;
 import com.example.meita.rentalpemilik.model.PelangganModel;
 import com.example.meita.rentalpemilik.model.PembayaranModel;
@@ -40,7 +41,7 @@ public class DetailPemesananStatus2 extends AppCompatActivity {
     TextView textViewNamaRekeningRental, textViewNomorRekeningRental, textViewNamaBankRental;
     public ImageView checkListDenganSupir, checkListTanpaSupir, checkListDenganBBM, checkListTanpaBBM, icLokasiPenjemputan;
     Button buttonLihatBuktiPembayaran, buttonKonfirmasiPembayaran;
-    Button btnLihatProfilPelanggan, btnLihatLokasiPenjemputan;
+    Button btnLihatProfilPelanggan, btnLihatLokasiPenjemputan, buttonTolakPembayaran;
     DatabaseReference mDatabase;
     TextView textViewTglSewa, textViewTglKembali, textViewJumlahSewaKendaraan, textViewMobil, textViewMotor, textViewJmlHariPenyewaan;
 
@@ -80,6 +81,7 @@ public class DetailPemesananStatus2 extends AppCompatActivity {
         textViewTelponPemesan = (TextView)findViewById(R.id.textViewTelponPemesan);
         textViewEmailPemesan = (TextView)findViewById(R.id.textViewEmailPemesan);
         buttonKonfirmasiPembayaran = (Button)findViewById(R.id.buttonKonfirmasiPembayaran);
+        buttonTolakPembayaran = (Button)findViewById(R.id.buttonTolakPembayaran);
 
         textViewTglSewa = (TextView)findViewById(R.id.textViewTglSewa);
         textViewTglKembali = (TextView)findViewById(R.id.textViewTglKembali);
@@ -109,9 +111,11 @@ public class DetailPemesananStatus2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final String idPenyewaan = getIntent().getStringExtra("idPenyewaan");
+                final String statusPenyewaan = getIntent().getStringExtra("statusPenyewaan");
                 Bundle bundle = new Bundle();
                 Intent intent = new Intent(DetailPemesananStatus2.this, GambarBuktiPembayaran.class);
                 bundle.putString("idPenyewaan", idPenyewaan);
+                bundle.putString("statusPenyewaan", statusPenyewaan);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -130,6 +134,39 @@ public class DetailPemesananStatus2 extends AppCompatActivity {
                 final String idPelanggan = getIntent().getStringExtra("idPelanggan");
                 Intent intent = new Intent(DetailPemesananStatus2.this, LihatProfilPelanggan.class);
                 intent.putExtra("idPelanggan", idPelanggan);
+                startActivity(intent);
+            }
+        });
+
+        buttonTolakPembayaran.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String idRental = getIntent().getStringExtra("idRental");
+                final String idKendaraan = getIntent().getStringExtra("idKendaraan");
+                final String tglSewa = getIntent().getStringExtra("tglSewa");
+                final String tglKembali = getIntent().getStringExtra("tglKembali");
+                final String idPelanggan = getIntent().getStringExtra("idPelanggan");
+                final String idPenyewaan = getIntent().getStringExtra("idPenyewaan");
+                Bundle bundle = new Bundle();
+                Intent intent = new Intent(DetailPemesananStatus2.this, TolakPembayaran.class);
+                bundle.putString("idPenyewaan", idPenyewaan);
+                bundle.putString("idRental", idRental);
+                bundle.putString("idKendaraan", idKendaraan);
+                bundle.putString("idPelanggan", idPelanggan);
+                bundle.putString("tglSewa", tglSewa);
+                bundle.putString("tglKembali", tglKembali);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
+
+        btnLihatLokasiPenjemputan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String idPenyewaan = getIntent().getStringExtra("idPenyewaan");
+                Intent intent = new Intent(DetailPemesananStatus2.this, PetaLokasiPenjemputan.class);
+                intent.putExtra("idPenyewaan", idPenyewaan);
+                intent.putExtra("statusPenyewaan", "menungguKonfirmasiRental");
                 startActivity(intent);
             }
         });
@@ -302,6 +339,7 @@ public class DetailPemesananStatus2 extends AppCompatActivity {
                             icLokasiPenjemputan.setVisibility(View.GONE);
                             btnLihatLokasiPenjemputan.setVisibility(View.GONE);
                             textViewWaktuPengambilanValue.setText(dataPemesanan.getJamPengambilan());
+                            btnLihatLokasiPenjemputan.setVisibility(View.GONE);
 
                             textViewTglSewa.setText(dataPemesanan.getTglSewa());
                             textViewTglKembali.setText(dataPemesanan.getTglKembali());

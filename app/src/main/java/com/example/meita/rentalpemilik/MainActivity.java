@@ -31,6 +31,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.onesignal.OneSignal;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity
         auth = FirebaseAuth.getInstance();
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         idRental = user.getUid();
+        OneSignal.sendTag("UID", idRental);
 
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -82,6 +84,9 @@ public class MainActivity extends AppCompatActivity
         String notif1 = getIntent().getStringExtra("notifBelumBayar");
         String notif2 = getIntent().getStringExtra("notifMenungguKonfirmasi");
         String notifPenilaian = getIntent().getStringExtra("notifPenilaian");
+        String notifMenungguKonfirmasiSisaPembayaran = getIntent().getStringExtra("notifMenungguKonfirmasiSisaPembayaran");
+        String notifPengajuanPembatalan = getIntent().getStringExtra("notifPengajuanPembatalan");
+
 
         // ini intent dari halaman tertentu
         int halamanManajemenKendaraan = getIntent().getIntExtra("halamanManajemenKendaraan", 10);
@@ -89,20 +94,33 @@ public class MainActivity extends AppCompatActivity
         int halamanHapusKendaraan = getIntent().getIntExtra("hapusKendaraan", 12);
         int halamanStatusKonfirmasiPesanan = getIntent().getIntExtra("halamanStatusKonfirmasiPesanan", 1);
         int halamanStatusKonfirmasiSelesai = getIntent().getIntExtra("halamanStatusKonfirmasiSelesai", 2);
+        int halamanStatusBatal = getIntent().getIntExtra("halamanStatusBatal", 3);
+        int halamanStatusSisaPembayaran = getIntent().getIntExtra("halamanStatusTolakPembayaran", 5);
 
 
         //ini intent dari builder notif ke halaman status penyewaan
         if (findViewById(R.id.content_frame) != null && notif1 != null && notif1.equals("belumBayar") ) {
-            Toast.makeText(getApplicationContext(), "value halaman yang di eksekusi : " + notif1, Toast.LENGTH_LONG).show();
+            Log.i("pusing", "valueNotif : "+notif1);
             Bundle bundle=new Bundle();
             bundle.putInt("tab1", 1);
             MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
             menuStatusPemesanan.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuStatusPemesanan).commit();
         } else if (findViewById(R.id.content_frame) != null && notif2 != null && notif2.equals("menungguKonfirmasiRental")) {
-            Toast.makeText(getApplicationContext(), "value halaman yang di eksekusi : " + notif2, Toast.LENGTH_LONG).show();
             Bundle bundle=new Bundle();
             bundle.putInt("tab2", 2);
+            MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
+            menuStatusPemesanan.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuStatusPemesanan).commit();
+        } else if (findViewById(R.id.content_frame) != null && notifPengajuanPembatalan != null && notifPengajuanPembatalan.equals("pengajuanPembatalan")) {
+            Bundle bundle=new Bundle();
+            bundle.putInt("tab5", 5);
+            MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
+            menuStatusPemesanan.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuStatusPemesanan).commit();
+        } else if (findViewById(R.id.content_frame) != null && notifMenungguKonfirmasiSisaPembayaran != null && notifMenungguKonfirmasiSisaPembayaran.equals("menungguKonfirmasiSisaPembayaran")) {
+            Bundle bundle=new Bundle();
+            bundle.putInt("tab8", 8);
             MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
             menuStatusPemesanan.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuStatusPemesanan).commit();
@@ -117,6 +135,18 @@ public class MainActivity extends AppCompatActivity
         } else if (findViewById(R.id.content_frame) != null && halamanStatusKonfirmasiSelesai != 2) {
             Bundle bundle=new Bundle();
             bundle.putInt("tab4", 4);
+            MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
+            menuStatusPemesanan.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuStatusPemesanan).commit();
+        } else if (findViewById(R.id.content_frame) != null && halamanStatusBatal != 3) {
+            Bundle bundle=new Bundle();
+            bundle.putInt("tab6", 6);
+            MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
+            menuStatusPemesanan.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuStatusPemesanan).commit();
+        } else if (findViewById(R.id.content_frame) != null && halamanStatusSisaPembayaran != 5) {
+            Bundle bundle=new Bundle();
+            bundle.putInt("tab7", 7);
             MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
             menuStatusPemesanan.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, menuStatusPemesanan).commit();

@@ -42,6 +42,10 @@ public class MenuStatusPemesanan extends Fragment {
             final int positionTab2 = getArguments().getInt("tab2");
             final int positionTab3 = getArguments().getInt("tab3");
             final int positionTab4 = getArguments().getInt("tab4");
+            final int positionTab5 = getArguments().getInt("tab5");
+            final int positionTab6 = getArguments().getInt("tab6");
+            final int positionTab7 = getArguments().getInt("tab7");
+            final int positionTab8 = getArguments().getInt("tab8");
             if (positionTab1 == 1) {
                 new Handler().post(new Runnable() {
                     @Override
@@ -71,139 +75,38 @@ public class MenuStatusPemesanan extends Fragment {
                         viewPager.setCurrentItem(3);
                     }
                 });
+            } else if (positionTab5 == 5) {
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewPager.setCurrentItem(4);
+                    }
+                });
+            } else if (positionTab6 == 6) {
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewPager.setCurrentItem(5);
+                    }
+                });
+            } else if (positionTab7 == 7) {
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewPager.setCurrentItem(6);
+                    }
+                });
+            } else if (positionTab8 == 8) {
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewPager.setCurrentItem(7);
+                    }
+                });
             }
         } catch (Exception e) {
 
         }
-
-
-//        try {
-//            final int position = getArguments().getInt("tab1");
-//            new Handler().post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    viewPager.setCurrentItem(position);
-//                }
-//            });
-//         } catch (Exception e) {
-//
-//         }
-//
-//        try {
-//            final int position = getArguments().getInt("tab2");
-//            new Handler().post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    viewPager.setCurrentItem(position);
-//                    //Toast.makeText(getActivity(), "nilai tab2 = "+position, Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//        } catch (Exception e) {
-//
-//        }
-//
-//        try {
-//            final int position = getArguments().getInt("tab3");
-//            new Handler().post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    viewPager.setCurrentItem(position);
-//                }
-//            });
-//        } catch (Exception e) {
-//
-//        }
-//
-//        try {
-//            int position = getArguments().getInt("tab4");
-//            viewPager.setCurrentItem(position);
-//        } catch (Exception e) {
-//
-//        }
-
-
-
-//        try {
-//            Bundle extras = getActivity().getIntent().getExtras();
-//            if (extras.getInt("notifStatus1") == 1) {
-//                viewPager.setCurrentItem(0);
-//                Toast.makeText(getActivity(), "tab belum bayar ", Toast.LENGTH_LONG).show();
-//            } else if (extras.getInt("notifStatus2") == 2) {
-//                viewPager.setCurrentItem(1);
-//                Toast.makeText(getActivity(), "tab menunggu konfirmasi ", Toast.LENGTH_LONG).show();
-//            }
-//         } catch (Exception e) {
-//
-//         }
-//
-//
-//
-//        try {
-//            Bundle extras = getActivity().getIntent().getExtras();
-//            String valueStatusHalaman0 = extras.getString("a");
-//            if (valueStatusHalaman0.equals("laper")) {
-//                viewPager.setCurrentItem(0);
-//            }
-//        } catch (Exception e) {
-//        }
-//
-//        try {
-//            Bundle extras = getActivity().getIntent().getExtras();
-//            String valueStatusHalaman1 = extras.getString("notifStatus2");
-//            if (valueStatusHalaman1.equals("menungguKonfirmasi")) {
-//                viewPager.setCurrentItem(1);
-//            }
-//        } catch (Exception e) {
-//        }
-
-//        try {
-//            Bundle extras = getActivity().getIntent().getExtras();
-//            int valueStatusHalaman1 = extras.getInt("notifStatus1", 0);
-//            if (valueStatusHalaman1 == 1) {
-//                Toast.makeText(getActivity(), "tab belum bayar ", Toast.LENGTH_LONG).show();
-//
-//            }
-//        } catch (Exception e) {
-//        }
-//
-//        try {
-//            Bundle extras = getActivity().getIntent().getExtras();
-//            int valueStatusHalaman2 = extras.getInt("valueHalamanStatus2", 1);
-//            if (valueStatusHalaman2 == 2) {
-//                viewPager.setCurrentItem(1);
-//                Toast.makeText(getActivity(), "tab menunggu konfirmasi ", Toast.LENGTH_LONG).show();
-//            }
-//        } catch (Exception e) {
-//        }
-
-
-//
-//        try {
-//            Bundle extras = getActivity().getIntent().getExtras();
-//            int valueStatusHalaman3 = extras.getInt("halamanStatus3", 2);
-//            if (valueStatusHalaman3 == 3) {
-//                viewPager.setCurrentItem(3);
-//            }
-//        } catch (Exception e) {
-//        }
-//
-//        try {
-//            Bundle extras = getActivity().getIntent().getExtras();
-//            int valueStatusHalaman4= extras.getInt("halamanStatus4", 3);
-//            if (valueStatusHalaman4 == 4) {
-//                viewPager.setCurrentItem(5);
-//            }
-//        } catch (Exception e) {
-//        }
-//
-//        try {
-//            Bundle extras = getActivity().getIntent().getExtras();
-//            String valueHalamanPemberitahuanBelumBayar = extras.getString("valueHalamanPemberitahuanBelumBayar");
-//            if (valueHalamanPemberitahuanBelumBayar.equals("pemberitahuanBelumBayar")) {
-//                viewPager.setCurrentItem(0);
-//            }
-//        } catch (Exception e) {
-//        }
 
 
         return v;
@@ -218,6 +121,8 @@ public class MenuStatusPemesanan extends Fragment {
         adapter.addFragment(new TabStatus4(), "Selesai");
         adapter.addFragment(new TabStatus5(), "Pengajuan Pembatalan");
         adapter.addFragment(new TabStatus6(), "Batal");
+        adapter.addFragment(new TabStatus7(), "Menunggu Sisa Pembayaran");
+        adapter.addFragment(new TabStatus8(), "Konfirmasi Sisa Pembayaran");
         viewPager.setAdapter(adapter);
     }
 

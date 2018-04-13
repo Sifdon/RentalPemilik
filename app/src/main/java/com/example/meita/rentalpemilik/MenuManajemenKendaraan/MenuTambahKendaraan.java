@@ -159,7 +159,7 @@ public class MenuTambahKendaraan extends AppCompatActivity implements View.OnCli
 
     private void handleDataType(){
         try {
-            hargaDouble = Double.parseDouble(editTextHarga.getText().toString());
+            hargaDouble = Double.parseDouble(editTextHarga.getText().toString().trim());
             jumlahInterger = Integer.parseInt(editTextJumlahKendaraan.getText().toString());
         }catch (Exception e){
             hargaDouble = 0;
@@ -171,8 +171,7 @@ public class MenuTambahKendaraan extends AppCompatActivity implements View.OnCli
         if (cekKolomIsian() == true) {
             final String idKendaraan = dbKendaraan.push().getKey();
             final String kategori = spinnerKategori.getSelectedItem().toString();
-            hargaSewa = hargaDouble;
-            jumlahKendaraan = jumlahInterger;
+            double hargaSewa = Double.valueOf(editTextHarga.getText().toString().trim());
 
             final KendaraanModel kendaraan = new KendaraanModel( userID, idKendaraan, spinnerKategori.getSelectedItem().toString(), editTextTipe.getText().toString().trim(),
                     editTextFasilitas.getText().toString().trim(), hargaSewa, spinnerLamaPenyewaan.getSelectedItem().toString(), editTextJmlPenumpang.getText().toString().trim(),
@@ -188,7 +187,10 @@ public class MenuTambahKendaraan extends AppCompatActivity implements View.OnCli
                         updateImage.put("uriFotoKendaraan", photoUrls);
                         dbKendaraan.child(kategori).child(idKendaraan).setValue(kendaraan);
                         dbKendaraan.child(kategori).child(idKendaraan).updateChildren(updateImage);
-                        KendaraanModel dataKendaraanRental = new KendaraanModel(idKendaraan, kategori);
+
+                        Map<String, Object> dataKendaraanRental = new HashMap<>();
+                        dataKendaraanRental.put("idKendaraan", idKendaraan);
+                        dataKendaraanRental.put("kategoriKendaraan", kategori);
                         dbRental.child(userID).child("kendaraan").child(idKendaraan).setValue(dataKendaraanRental);
                         Intent intent = new Intent(MenuTambahKendaraan.this, MainActivity.class);
                         intent.putExtra("halamanManajemenKendaraan", 11);
@@ -225,8 +227,6 @@ public class MenuTambahKendaraan extends AppCompatActivity implements View.OnCli
             tambahDataKendaraan();
         }
     }
-
-
 
     //add multiple
     private boolean verifyStoragePermission() {

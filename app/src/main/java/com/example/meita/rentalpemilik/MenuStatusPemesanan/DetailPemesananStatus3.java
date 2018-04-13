@@ -8,11 +8,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.meita.rentalpemilik.Base.BaseActivity;
 import com.example.meita.rentalpemilik.MainActivity;
+import com.example.meita.rentalpemilik.ProfilPelanggan.LihatProfilPelanggan;
 import com.example.meita.rentalpemilik.R;
 import com.example.meita.rentalpemilik.SisaKendaraanModel;
 import com.example.meita.rentalpemilik.model.KendaraanModel;
@@ -41,10 +43,17 @@ public class DetailPemesananStatus3 extends AppCompatActivity {
             textViewJumlahTransfer, textViewWaktuTransfer;
     TextView textViewNamaRekeningRental, textViewNomorRekeningRental, textViewNamaBankRental;
     public ImageView checkListDenganSupir, checkListTanpaSupir, checkListDenganBBM, checkListTanpaBBM, icLokasiPenjemputan;
-    Button buttonLihatBuktiPembayaran, buttonKonfirmasiPenyewaanSelesai;
+    Button buttonLihatBuktiPembayaran, buttonKonfirmasiPenyewaanSelesai, btnLihatLokasiPenjemputan;
     Date tglSewaCekSisa, tglKembaliCekSisa, tglSewaDipesan, tglKembaliDipesan;
     DatabaseReference mDatabase;
     TextView textViewTglSewa, textViewTglKembali, textViewJumlahSewaKendaraan, textViewMobil, textViewMotor, textViewJmlHariPenyewaan;
+    TextView textViewNamaRekeningPelangganSisaPembayaran,textViewNomorRekeningPelangganSisaPembayaran,
+            textViewNamaBankPelangganSisaPembayaran, textViewJumlahTransferSisaPembayaran,textViewWaktuTransferSisaPembayaran,
+            textViewNamaRekeningRentalSisaPembayaran, textViewNomorRekeningRentalSisaPembayaran,
+            textViewNamaBankRentalSisaPembayaran;
+    LinearLayout linearLayoutInfoSisapembayaran;
+    View pembatas5;
+    Button  btnLihatBuktiSisaPembayaran, btnLihatProfilPelanggan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +90,7 @@ public class DetailPemesananStatus3 extends AppCompatActivity {
         textViewAlamatPemesan = (TextView)findViewById(R.id.textViewAlamatPemesan);
         textViewTelponPemesan = (TextView)findViewById(R.id.textViewTelponPemesan);
         textViewEmailPemesan = (TextView)findViewById(R.id.textViewEmailPemesan);
-
+        btnLihatProfilPelanggan = (Button)findViewById(R.id.btnLihatProfilPelanggan);
         buttonKonfirmasiPenyewaanSelesai = (Button)findViewById(R.id.buttonKonfirmasiPenyewaanSelesai);
 
         textViewTglSewa = (TextView)findViewById(R.id.textViewTglSewa);
@@ -97,6 +106,19 @@ public class DetailPemesananStatus3 extends AppCompatActivity {
         checkListTanpaBBM = (ImageView)findViewById(R.id.icCheckListTanpaBBM);
         icLokasiPenjemputan = (ImageView)findViewById(R.id.icLokasiPenjemputan);
 
+        //text view dari pembayaran sisa
+        textViewNamaRekeningPelangganSisaPembayaran = (TextView)findViewById(R.id.textViewNamaRekeningPelangganSisaPembayaran);
+        textViewNomorRekeningPelangganSisaPembayaran = (TextView)findViewById(R.id.textViewNomorRekeningPelangganSisaPembayaran);
+        textViewNamaBankPelangganSisaPembayaran = (TextView)findViewById(R.id.textViewNamaBankPelangganSisaPembayaran);
+        textViewJumlahTransferSisaPembayaran = (TextView)findViewById(R.id.textViewJumlahTransferSisaPembayaran);
+        textViewWaktuTransferSisaPembayaran = (TextView)findViewById(R.id.textViewWaktuTransferSisaPembayaran);
+        textViewNamaRekeningRentalSisaPembayaran = (TextView)findViewById(R.id.textViewNamaRekeningRentalSisaPembayaran);
+        textViewNomorRekeningRentalSisaPembayaran = (TextView)findViewById(R.id.textViewNomorRekeningRentalSisaPembayaran);
+        textViewNamaBankRentalSisaPembayaran = (TextView)findViewById(R.id.textViewNamaBankRentalSisaPembayaran);
+        btnLihatBuktiSisaPembayaran = (Button)findViewById(R.id.btnLihatBuktiSisaPembayaran);
+        linearLayoutInfoSisapembayaran = (LinearLayout)findViewById(R.id.linearLayoutInfoSisapembayaran);
+        pembatas5 = (View)findViewById(R.id.pembatas5);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
@@ -105,13 +127,27 @@ public class DetailPemesananStatus3 extends AppCompatActivity {
         }
 
         buttonLihatBuktiPembayaran = (Button)findViewById(R.id.btnLihatBuktiPembayaran);
+        btnLihatLokasiPenjemputan = (Button)findViewById(R.id.btnLihatLokasiPenjemputan);
+        btnLihatLokasiPenjemputan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String idPenyewaan = getIntent().getStringExtra("idPenyewaan");
+                Intent intent = new Intent(DetailPemesananStatus3.this, PetaLokasiPenjemputan.class);
+                intent.putExtra("idPenyewaan", idPenyewaan);
+                intent.putExtra("statusPenyewaan", "berhasil");
+                startActivity(intent);
+            }
+        });
+
         buttonLihatBuktiPembayaran.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final String idPenyewaan = getIntent().getStringExtra("idPenyewaan");
+                final String statusPenyewaan = getIntent().getStringExtra("statusPenyewaan");
                 Bundle bundle = new Bundle();
                 Intent intent = new Intent(DetailPemesananStatus3.this, GambarBuktiPembayaran.class);
                 bundle.putString("idPenyewaan", idPenyewaan);
+                bundle.putString("statusPenyewaan", statusPenyewaan);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -124,11 +160,31 @@ public class DetailPemesananStatus3 extends AppCompatActivity {
             }
         });
 
+        btnLihatBuktiSisaPembayaran.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                lihatBuktiSisaPembayaran();
+            }
+        });
+
+        btnLihatProfilPelanggan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String idPelanggan = getIntent().getStringExtra("idPelanggan");
+                Intent intent = new Intent(DetailPemesananStatus3.this, LihatProfilPelanggan.class);
+                intent.putExtra("idPelanggan", idPelanggan);
+                startActivity(intent);
+            }
+        });
+
+
+
         infoPenyewaan();
         infoPembayaran();
         infoKendaraan();
         infoRentalKendaraan();
         infoPelanggan();
+        infoSisaPembayaran();
     }
 
     public void konfirmasiPemesananSelesai() {
@@ -148,7 +204,6 @@ public class DetailPemesananStatus3 extends AppCompatActivity {
                     public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                         mDatabase.child("penyewaanKendaraan").child("selesai").child(idPenyewaan).child("statusPenyewaan").setValue(statusPemesanan4);
                         mDatabase.child("penyewaanKendaraan").child("berhasil").child(idPenyewaan).removeValue();
-                        mDatabase.child("cekKetersediaanKendaraan").child(idPenyewaan).removeValue();
                         perbaruiSisaKendaraan(idKendaraan, jmlKendaraanDipesan, tglSewaDipesan, tglKembaliDipesan);
                         Toast.makeText(getApplicationContext(), "Konfirmasi Pemenyewaan Selesai Berhasil", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(DetailPemesananStatus3.this, MainActivity.class);
@@ -346,7 +401,7 @@ public class DetailPemesananStatus3 extends AppCompatActivity {
                             textViewLokasiPenjemputanValue.setVisibility(View.GONE);
                             icLokasiPenjemputan.setVisibility(View.GONE);
                             textViewWaktuPengambilanValue.setText(dataPemesanan.getJamPengambilan());
-
+                            btnLihatLokasiPenjemputan.setVisibility(View.GONE);
                             textViewTglSewa.setText(dataPemesanan.getTglSewa());
                             textViewTglKembali.setText(dataPemesanan.getTglKembali());
                             textViewJumlahSewaKendaraan.setText(String.valueOf(dataPemesanan.getJumlahKendaraan()));
@@ -418,6 +473,62 @@ public class DetailPemesananStatus3 extends AppCompatActivity {
         } catch (Exception e) {
 
         }
+    }
+
+    public void infoSisaPembayaran() {
+        try {
+            final String idPenyewaan = getIntent().getStringExtra("idPenyewaan");
+            final String idRental = getIntent().getStringExtra("idRental");
+            mDatabase.child("penyewaanKendaraan").child("berhasil").child(idPenyewaan).child("pembayaran").child("sisaPembayaran").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        PembayaranModel dataPembayaran = dataSnapshot.getValue(PembayaranModel.class);
+                        final String idRekening = dataPembayaran.getIdRekeningRental();
+                        textViewNamaRekeningPelangganSisaPembayaran.setText(dataPembayaran.getNamaPemilikRekeningPelanggan());
+                        textViewNomorRekeningPelangganSisaPembayaran.setText(dataPembayaran.getNomorRekeningPelanggan());
+                        textViewNamaBankPelangganSisaPembayaran.setText(dataPembayaran.getBankPelanggan());
+                        textViewJumlahTransferSisaPembayaran.setText(dataPembayaran.getJumlahTransfer());
+                        textViewWaktuTransferSisaPembayaran.setText(dataPembayaran.getWaktuPembayaran());
+                        btnLihatBuktiSisaPembayaran.setVisibility(View.VISIBLE);
+                        mDatabase.child("rentalKendaraan").child(idRental).child("rekeningPembayaran").child(idRekening).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                RentalModel dataRental = dataSnapshot.getValue(RentalModel.class);
+                                textViewNamaRekeningRentalSisaPembayaran.setText(dataRental.getNamaPemilikBank());
+                                textViewNomorRekeningRentalSisaPembayaran.setText(dataRental.getNomorRekeningBank());
+                                textViewNamaBankRentalSisaPembayaran.setText(dataRental.getNamaBank());
+                            }
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    } else {
+                        linearLayoutInfoSisapembayaran.setVisibility(View.GONE);
+                        pembatas5.setVisibility(View.GONE);
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        } catch (Exception e) {
+            linearLayoutInfoSisapembayaran.setVisibility(View.GONE);
+            pembatas5.setVisibility(View.GONE);
+            btnLihatBuktiSisaPembayaran.setVisibility(View.GONE);
+        }
+    }
+
+    public void lihatBuktiSisaPembayaran() {
+        final String idPenyewaan = getIntent().getStringExtra("idPenyewaan");
+        Bundle bundle = new Bundle();
+        Intent intent = new Intent(DetailPemesananStatus3.this, GambarBuktiSisaPembayaran.class);
+        bundle.putString("idPenyewaan", idPenyewaan);
+        bundle.putString("statusPenyewaan", "berhasil");
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     @Override

@@ -7,7 +7,7 @@ import java.io.Serializable;
  */
 
 public class PenyewaanModel implements Serializable {
-    public String idPenyewaan, idKendaraan, idPelanggan, idRental, statusPenyewaan, tglPembuatanPesanan, tglSewa, tglKembali,
+    public String idPenyewaan, idKendaraan, idPelanggan, idRental, statusPenyewaan, tglPembuatanPenyewaan, tglSewa, tglKembali,
             keteranganKhusus, jamPenjemputan, alamatPenjemputan;
     public int jumlahKendaraan, jumlahHariPenyewaan, totalBiayaPembayaran;
     public double latitude_penjemputan, longitude_penjemputan;
@@ -17,6 +17,8 @@ public class PenyewaanModel implements Serializable {
     public String idPembayaran, uriFotoBuktiPembayaran,
             bankPelanggan, namaPemilikRekeningPelanggan, nomorRekeningPelanggan, jumlahTransfer, waktuPembayaran;
     String idPemberitahuan;
+    boolean statusUlasan;
+    String keteranganSisaPembayaran;
 
     public PenyewaanModel() {
 
@@ -36,14 +38,14 @@ public class PenyewaanModel implements Serializable {
     }
 
     public PenyewaanModel(String idPenyewaan, String idKendaraan, String idPelanggan, String idRental, String statusPenyewaan,
-                          String tglPembuatanPesanan, String tglSewa, String tglKembali, String keteranganKhusus, String jamPengambilan,
+                          String tglPembuatanPenyewaan, String tglSewa, String tglKembali, String keteranganKhusus, String jamPengambilan,
                           int jumlahKendaraan, int jumlahHariPenyewaan, int totalBiayaPembayaran, String batasWaktuPembayaran, String kategoriKendaraan, String idRekeningRental) {
         this.idPenyewaan = idPenyewaan;
         this.idKendaraan = idKendaraan;
         this.idPelanggan = idPelanggan;
         this.idRental = idRental;
         this.statusPenyewaan = statusPenyewaan;
-        this.tglPembuatanPesanan = tglPembuatanPesanan;
+        this.tglPembuatanPenyewaan = tglPembuatanPenyewaan;
         this.tglSewa = tglSewa;
         this.tglKembali = tglKembali;
         this.keteranganKhusus = keteranganKhusus;
@@ -57,7 +59,7 @@ public class PenyewaanModel implements Serializable {
     }
 
     public PenyewaanModel(String idPenyewaan, String idKendaraan, String idPelanggan, String idRental, String statusPenyewaan,
-                          String tglPembuatanPesanan, String tglSewa, String tglKembali, String keteranganKhusus, String jamPenjemputan,
+                          String tglPembuatanPenyewaan, String tglSewa, String tglKembali, String keteranganKhusus, String jamPenjemputan,
                           int jumlahKendaraan, double latitude_penjemputan, double longitude_penjemputan, String alamatPenjemputan,
                           int jumlahHariPenyewaan, int totalBiayaPembayaran, String batasWaktuPembayaran, String kategoriKendaraan, String idRekeningRental) {
         this.idPenyewaan = idPenyewaan;
@@ -65,7 +67,7 @@ public class PenyewaanModel implements Serializable {
         this.idPelanggan = idPelanggan;
         this.idRental = idRental;
         this.statusPenyewaan = statusPenyewaan;
-        this.tglPembuatanPesanan = tglPembuatanPesanan;
+        this.tglPembuatanPenyewaan = tglPembuatanPenyewaan;
         this.tglSewa = tglSewa;
         this.tglKembali = tglKembali;
         this.keteranganKhusus = keteranganKhusus;
@@ -76,19 +78,19 @@ public class PenyewaanModel implements Serializable {
         this.alamatPenjemputan = alamatPenjemputan;
         this.jumlahHariPenyewaan = jumlahHariPenyewaan;
         this.totalBiayaPembayaran = totalBiayaPembayaran;
-        this.tglPembuatanPesanan = tglPembuatanPesanan;
+        this.tglPembuatanPenyewaan = tglPembuatanPenyewaan;
         this.batasWaktuPembayaran = batasWaktuPembayaran;
         this.kategoriKendaraan = kategoriKendaraan;
         this.idRekeningRental = idRekeningRental;
     }
 
-    public PenyewaanModel(String idPenyewaan, String idKendaraan, String idRental, String statusPenyewaan, String tglPembuatanPesanan, String tglSewa,
+    public PenyewaanModel(String idPenyewaan, String idKendaraan, String idRental, String statusPenyewaan, String tglPembuatanPenyewaan, String tglSewa,
                           String tglKembali, int jumlahKendaraan, String kategoriKendaraan) {
         this.idPenyewaan = idPenyewaan;
         this.idKendaraan = idKendaraan;
         this.idRental = idRental;
         this.statusPenyewaan = statusPenyewaan;
-        this.tglPembuatanPesanan = tglPembuatanPesanan;
+        this.tglPembuatanPenyewaan = tglPembuatanPenyewaan;
         this.tglSewa = tglSewa;
         this.tglKembali = tglKembali;
         this.jumlahKendaraan = jumlahKendaraan;
@@ -224,13 +226,10 @@ public class PenyewaanModel implements Serializable {
         this.jamPengambilan = jamPengambilan;
     }
 
-    public String getTglPembuatanPesanan() {
-        return tglPembuatanPesanan;
+    public String getTglPembuatanPenyewaan() {
+        return tglPembuatanPenyewaan;
     }
 
-    public void setTglPembuatanPesanan(String tglPembuatanPesanan) {
-        this.tglPembuatanPesanan = tglPembuatanPesanan;
-    }
 
     public String getBatasWaktuPembayaran() {
         return batasWaktuPembayaran;
@@ -362,6 +361,14 @@ public class PenyewaanModel implements Serializable {
 
     public String getWaktuTransferPengembalian() {
         return waktuTransferPengembalian;
+    }
+
+    public boolean getStatusUlasan() {
+        return statusUlasan;
+    }
+
+    public String getKeteranganSisaPembayaran() {
+        return keteranganSisaPembayaran;
     }
 }
 

@@ -98,7 +98,6 @@ public class InputProfilRental extends AppCompatActivity {
         nomorRekeningBank = (EditText) findViewById(R.id.editTextNmrRekening);
         spinnerNamaBank = (Spinner)findViewById(R.id.spinnerNamaBank);
 
-        progressBarSimpan = (ProgressBar) findViewById(R.id.progressBar);
         imageView = (ImageView)findViewById(R.id.imageView);
         buttonSimpanData = (Button) findViewById(R.id.btn_simpanData);
         buttonCariGambar = (Button)findViewById(R.id.btn_cari);
@@ -271,14 +270,14 @@ public class InputProfilRental extends AppCompatActivity {
                             mDatabase.child("rentalKendaraan").child(userID).setValue(dataProfil).addOnCompleteListener(InputProfilRental.this, new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    progressBarSimpan.setVisibility(View.GONE);
+
                                     if (!task.isSuccessful()) {
                                         Toast.makeText(getApplicationContext(), "Biodata Anda Gagal Disimpan", Toast.LENGTH_SHORT).show();
                                     } else {
                                         GeoFire geoFire;
                                         geoFire = new GeoFire(mDatabase.child("geofire"));
                                         geoFire.setLocation(userID, new GeoLocation(latitude_rental, longitude_rental));
-                                        progressDialog.dismiss();
+
                                         Toast.makeText(getApplicationContext(), "Biodata Anda Berhasil Disimpan", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(InputProfilRental.this, MainActivity.class);
                                         startActivity(intent);

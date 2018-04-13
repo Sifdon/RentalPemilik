@@ -54,10 +54,13 @@ public class TabStatus1Adapter extends RecyclerView.Adapter<TabStatus1Adapter.Vi
         final String idKendaraan = dataPemesanan.getIdKendaraan();
         final String idRental = dataPemesanan.getIdRental();
         final String idPelanggan = dataPemesanan.getIdPelanggan();
+        final String tglSewa = dataPemesanan.getTglSewa();
+        final String tglKembali = dataPemesanan.getTglKembali();
         holder.textViewStatusPemesanan.setText(dataPemesanan.getstatusPenyewaan());
         holder.textViewTglSewa.setText(dataPemesanan.getTglSewa());
         holder.textViewTglKembali.setText(dataPemesanan.getTglKembali());
         holder.textViewTotalPembayaran.setText("Rp. "+ BaseActivity.rupiah().format(dataPemesanan.getTotalBiayaPembayaran()));
+        holder.tglBuatPenyewaan.setText(dataPemesanan.getTglPembuatanPenyewaan());
         holder.setClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClick) {
@@ -69,6 +72,8 @@ public class TabStatus1Adapter extends RecyclerView.Adapter<TabStatus1Adapter.Vi
                     bundle.putString("idRental", idRental);
                     bundle.putString("idPelanggan", idPelanggan);
                     bundle.putString("kategoriKendaraan", kategoriKendaraan);
+                    bundle.putString("tglSewa", tglSewa);
+                    bundle.putString("tglKembali", tglKembali);
                     intent.putExtras(bundle);
                     context.startActivity(intent);
                 } else {
@@ -79,6 +84,8 @@ public class TabStatus1Adapter extends RecyclerView.Adapter<TabStatus1Adapter.Vi
                     bundle.putString("idRental", idRental);
                     bundle.putString("idPelanggan", idPelanggan);
                     bundle.putString("kategoriKendaraan", kategoriKendaraan);
+                    bundle.putString("tglSewa", tglSewa);
+                    bundle.putString("tglKembali", tglKembali);
                     intent.putExtras(bundle);
                     context.startActivity(intent);
                 }
@@ -152,7 +159,7 @@ public class TabStatus1Adapter extends RecyclerView.Adapter<TabStatus1Adapter.Vi
         public ImageView fotoKendaraan, checkListDenganSupir, checkListTanpaSupir, checkListDenganBBM, checkListTanpaBBM;
         public TextView textViewStatusPemesanan, textViewTglSewa, textViewTglKembali, textViewTipeKendaraan,
                 textViewNamaRental, textViewDenganSupir, textViewTanpaSupir, textViewDenganBBM,
-                textViewTanpaBBM, textViewTotalPembayaran;
+                textViewTanpaBBM, textViewTotalPembayaran, tglBuatPenyewaan;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -174,6 +181,7 @@ public class TabStatus1Adapter extends RecyclerView.Adapter<TabStatus1Adapter.Vi
             textViewDenganBBM = (TextView)itemView.findViewById(R.id.textViewDenganBBM);
             textViewTanpaBBM = (TextView)itemView.findViewById(R.id.textViewTanpaBBM);
             textViewTotalPembayaran = (TextView)itemView.findViewById(R.id.textViewTotalPembayaran);
+            tglBuatPenyewaan = (TextView)itemView.findViewById(R.id.tglBuatPenyewaan);
         }
 
         public void setClickListener(ItemClickListener itemClickListener) {

@@ -11,10 +11,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.meita.rentalpemilik.Base.BaseActivity;
+import com.example.meita.rentalpemilik.MainActivity;
 import com.example.meita.rentalpemilik.ProfilPelanggan.LihatProfilPelanggan;
 import com.example.meita.rentalpemilik.R;
+import com.example.meita.rentalpemilik.SisaKendaraanModel;
 import com.example.meita.rentalpemilik.model.KendaraanModel;
 import com.example.meita.rentalpemilik.model.PelangganModel;
 import com.example.meita.rentalpemilik.model.PenyewaanModel;
@@ -24,6 +27,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 
 public class DetailPemesananStatus1 extends AppCompatActivity {
     TextView textViewTipeKendaraan, textViewNamaRental, textViewDenganSupir, textViewTanpaSupir,
@@ -35,6 +43,8 @@ public class DetailPemesananStatus1 extends AppCompatActivity {
     LinearLayout linearLayoutLokasiPenjemputan;
     DatabaseReference mDatabase;
     TextView textViewTglSewa, textViewTglKembali, textViewJumlahSewaKendaraan, textViewMobil, textViewMotor, textViewJmlHariPenyewaan;
+    Button btnTolakPenyewaan;
+    Date tglSewaCekSisa, tglKembaliCekSisa, tglSewaDipesan, tglKembaliDipesan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +90,7 @@ public class DetailPemesananStatus1 extends AppCompatActivity {
 
         btnLihatProfilPelanggan = (Button)findViewById(R.id.btnLihatProfilPelanggan);
         btnLihatLokasiPenjemputan = (Button)findViewById(R.id.btnLihatLokasiPenjemputan);
+        btnTolakPenyewaan = (Button)findViewById(R.id.buttonTolakPenyewaan);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -102,6 +113,129 @@ public class DetailPemesananStatus1 extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        btnTolakPenyewaan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tolakPenyewaan();
+            }
+        });
+
+        btnLihatLokasiPenjemputan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String idPenyewaan = getIntent().getStringExtra("idPenyewaan");
+                Intent intent = new Intent(DetailPemesananStatus1.this, PetaLokasiPenjemputan.class);
+                intent.putExtra("idPenyewaan", idPenyewaan);
+                intent.putExtra("statusPenyewaan", "belumBayar");
+                startActivity(intent);
+            }
+        });
+    }
+
+    public void tolakPenyewaan() {
+        final String idPenyewaan = getIntent().getStringExtra("idPenyewaan");
+        final String idKendaraan = getIntent().getStringExtra("idKendaraan");
+        final String statusBatal = "Batal";
+        final String alasanPembatalan = "Pelanggan tidak melakukan pembayaran";
+        mDatabase.child("penyewaanKendaraan").child("belumBayar").child(idPenyewaan).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                PenyewaanModel dataPemesanan = dataSnapshot.getValue(PenyewaanModel.class);
+                final int jmlKendaraanDipesan = dataPemesanan.getJumlahKendaraan();
+                final String tglSewaDipesan = dataPemesanan.getTglSewa();
+                final String tglKembaliDipesan = dataPemesanan.getTglKembali();
+
+                mDatabase.child("penyewaanKendaraan").child("batal").child(idPenyewaan).setValue(dataSnapshot.getValue(), new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                        mDatabase.child("penyewaanKendaraan").child("batal").child(idPenyewaan).child("statusPenyewaan").setValue(statusBatal);
+                        mDatabase.child("penyewaanKendaraan").child("batal").child(idPenyewaan).child("alasanPembatalan").setValue(alasanPembatalan);
+                        mDatabase.child("penyewaanKendaraan").child("belumBayar").child(idPenyewaan).removeValue();
+                        buatPemberitahuanTolakPenyewaan();
+                        perbaruiSisaKendaraan(idKendaraan, jmlKendaraanDipesan, tglSewaDipesan, tglKembaliDipesan);
+                        Toast.makeText(getApplicationContext(), "Pembatalan Berhasil", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(DetailPemesananStatus1.this, MainActivity.class);
+                        intent.putExtra("halamanStatusBatal", 4);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+    }
+
+    public void perbaruiSisaKendaraan(String idKendaraan, final int jumlahKendaraanDipesan, final String tanggalSewaDipesan, final String tanggalKembaliDipesan) {
+        try {
+            mDatabase.child("cekSisaKendaraan").orderByChild("idKendaraan").equalTo(idKendaraan).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        SisaKendaraanModel sisaModel = postSnapshot.getValue(SisaKendaraanModel.class);
+                        final int sisaKendaraan = sisaModel.getSisaKendaraan();
+                        final String idCek = sisaModel.getIdCekSisa();
+
+                        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+
+                        try {
+                            tglSewaCekSisa = format.parse(sisaModel.getTglSewa());
+                            tglKembaliCekSisa = format.parse(sisaModel.getTglKembali());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        try {
+                            tglSewaDipesan = format.parse(tanggalSewaDipesan);
+                            tglKembaliDipesan = format.parse(tanggalKembaliDipesan);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        if ((tglSewaDipesan.before(tglKembaliCekSisa) || tglSewaDipesan.equals(tglKembaliCekSisa)) && (tglKembaliDipesan.after(tglSewaCekSisa) ||
+                                tglKembaliDipesan.equals(tglSewaCekSisa))
+                                || tglSewaDipesan.equals(tglSewaCekSisa) && tglKembaliDipesan.equals(tglKembaliCekSisa)) {
+                            int perbaruiSisa = sisaKendaraan + jumlahKendaraanDipesan;
+                            mDatabase.child("cekSisaKendaraan").child(idCek).child("sisaKendaraan").setValue(perbaruiSisa);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        } catch (Exception e) {
+
+        }
+    }
+
+    public void buatPemberitahuanTolakPenyewaan() {
+        String idPemberitahuan = mDatabase.push().getKey();
+        final String idRental = getIntent().getStringExtra("idRental");
+        final String idKendaraan = getIntent().getStringExtra("idKendaraan");
+        final String tglSewa = getIntent().getStringExtra("tglSewa");
+        final String tglKembali = getIntent().getStringExtra("tglKembali");
+        final String idPelanggan = getIntent().getStringExtra("idPelanggan");
+        final String idPenyewaan = getIntent().getStringExtra("idPenyewaan");
+        //int valueHalaman1 = 0;
+        String valueHalaman = "batal";
+        String statusPemesanan = "Batal";
+        HashMap<String, Object> dataNotif = new HashMap<>();
+        dataNotif.put("idPemberitahuan", idPemberitahuan);
+        dataNotif.put("idRental", idRental);
+        dataNotif.put("idKendaraan", idKendaraan);
+        dataNotif.put("tglSewa", tglSewa);
+        dataNotif.put("tglKembali", tglKembali);
+        dataNotif.put("nilaiHalaman", valueHalaman);
+        dataNotif.put("statusPenyewaan", statusPemesanan);
+        dataNotif.put("idPelanggan", idPelanggan);
+        dataNotif.put("idPenyewaan", idPenyewaan);
+        mDatabase.child("pemberitahuan").child("pelanggan").child("batal").child(idPelanggan).child(idPemberitahuan).setValue(dataNotif);
     }
 
     public void infoPenyewaan() {
@@ -122,6 +256,7 @@ public class DetailPemesananStatus1 extends AppCompatActivity {
                             icLokasiPenjemputan.setVisibility(View.GONE);
                             btnLihatLokasiPenjemputan.setVisibility(View.GONE);
                             textViewWaktuPengambilanValue.setText(dataPemesanan.getJamPengambilan());
+                            btnLihatLokasiPenjemputan.setVisibility(View.GONE);
 
                             textViewTglSewa.setText(dataPemesanan.getTglSewa());
                             textViewTglKembali.setText(dataPemesanan.getTglKembali());

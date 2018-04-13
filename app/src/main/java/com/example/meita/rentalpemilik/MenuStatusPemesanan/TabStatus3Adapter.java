@@ -62,6 +62,7 @@ public class TabStatus3Adapter extends RecyclerView.Adapter<TabStatus3Adapter.Vi
         holder.textViewTglSewa.setText(dataPemesanan.getTglSewa());
         holder.textViewTglKembali.setText(dataPemesanan.getTglKembali());
         holder.textViewTotalPembayaran.setText("Rp. "+ BaseActivity.rupiah().format(dataPemesanan.getTotalBiayaPembayaran()));
+        holder.tglBuatPenyewaan.setText(dataPemesanan.getTglPembuatanPenyewaan());
         holder.setClickListener(new ItemClickListener() {
             @Override
             public void onClick(View view, int position, boolean isLongClick) {
@@ -76,6 +77,7 @@ public class TabStatus3Adapter extends RecyclerView.Adapter<TabStatus3Adapter.Vi
                     bundle.putString("statusPemesanan", statusPemesanan);
                     bundle.putString("tglSewa", tglSewa);
                     bundle.putString("tglKembali", tglKembali);
+                    bundle.putString("statusPenyewaan", "berhasil");
                     intent.putExtras(bundle);
                     context.startActivity(intent);
                 } else {
@@ -89,6 +91,7 @@ public class TabStatus3Adapter extends RecyclerView.Adapter<TabStatus3Adapter.Vi
                     bundle.putString("statusPemesanan", statusPemesanan);
                     bundle.putString("tglSewa", tglSewa);
                     bundle.putString("tglKembali", tglKembali);
+                    bundle.putString("statusPenyewaan", "berhasil");
                     intent.putExtras(bundle);
                     context.startActivity(intent);
                 }
@@ -185,7 +188,7 @@ public class TabStatus3Adapter extends RecyclerView.Adapter<TabStatus3Adapter.Vi
         public ImageView fotoKendaraan, checkListDenganSupir, checkListTanpaSupir, checkListDenganBBM, checkListTanpaBBM;
         public TextView textViewStatusPemesanan, textViewTglSewa, textViewTglKembali, textViewTipeKendaraan,
                 textViewNamaRental, textViewDenganSupir, textViewTanpaSupir, textViewDenganBBM,
-                textViewTanpaBBM, textViewTotalPembayaran;
+                textViewTanpaBBM, textViewTotalPembayaran, tglBuatPenyewaan;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -207,6 +210,7 @@ public class TabStatus3Adapter extends RecyclerView.Adapter<TabStatus3Adapter.Vi
             textViewDenganBBM = (TextView)itemView.findViewById(R.id.textViewDenganBBM);
             textViewTanpaBBM = (TextView)itemView.findViewById(R.id.textViewTanpaBBM);
             textViewTotalPembayaran = (TextView)itemView.findViewById(R.id.textViewTotalPembayaran);
+            tglBuatPenyewaan = (TextView)itemView.findViewById(R.id.tglBuatPenyewaan);
         }
 
         public void setClickListener(ItemClickListener itemClickListener) {

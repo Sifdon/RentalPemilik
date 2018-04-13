@@ -23,21 +23,27 @@ public class GambarBuktiPembayaran extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gambar_bukti_pembayaran);
+        setTitle("Bukti Pembayaran");
         imageViewBuktiPembayaran = (ImageView)findViewById(R.id.imageViewBuktiPembayaran);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         final String idPenyewaan = getIntent().getStringExtra("idPenyewaan");
-        mDatabase.child("penyewaanKendaraan").child("menungguKonfirmasiRental").child(idPenyewaan).child("pembayaran").addValueEventListener(new ValueEventListener() {
+        final String statusPenyewaan = getIntent().getStringExtra("statusPenyewaan");
+        mDatabase.child("penyewaanKendaraan").child(statusPenyewaan).child(idPenyewaan).child("pembayaran").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                PenyewaanModel dataPemesanan = dataSnapshot.getValue(PenyewaanModel.class);
-                if (dataPemesanan !=null) {
-                    String uriFoto = dataPemesanan.getUriFotoBuktiPembayaran();
-                    String idPesanan = dataPemesanan.getidPenyewaan();
+                if (dataSnapshot.exists()) {
+                    PenyewaanModel dataPemesanan = dataSnapshot.getValue(PenyewaanModel.class);
                     Glide.with(GambarBuktiPembayaran.this).load(dataPemesanan.getUriFotoBuktiPembayaran()).into(imageViewBuktiPembayaran);
                 }
-
             }
 
             @Override
@@ -46,12 +52,7 @@ public class GambarBuktiPembayaran extends AppCompatActivity {
             }
         });
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
+
     }
 
     @Override
