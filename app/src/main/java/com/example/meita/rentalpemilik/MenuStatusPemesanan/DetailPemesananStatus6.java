@@ -301,6 +301,17 @@ public class DetailPemesananStatus6 extends AppCompatActivity {
                         PenyewaanModel dataPemesanan = dataSnapshot.getValue(PenyewaanModel.class);
                         textViewStatusPemesanan.setText(dataPemesanan.getstatusPenyewaan());
                         textViewTotalPembayaran.setText("Rp. " + BaseActivity.rupiah().format(dataPemesanan.getTotalBiayaPembayaran()));
+                        textViewTglSewa.setText(dataPemesanan.getTglSewa());
+                        textViewTglKembali.setText(dataPemesanan.getTglKembali());
+                        textViewJumlahSewaKendaraan.setText(String.valueOf(dataPemesanan.getJumlahKendaraan()));
+                        textViewJmlHariPenyewaan.setText(String.valueOf(dataPemesanan.getJumlahHariPenyewaan()));
+                        if (dataPemesanan.getKategoriKendaraan().equals("Mobil")) {
+                            textViewMobil.setVisibility(View.VISIBLE);
+                            textViewMotor.setVisibility(View.GONE);
+                        } else {
+                            textViewMotor.setVisibility(View.VISIBLE);
+                            textViewMobil.setVisibility(View.GONE);
+                        }
                         if (dataPemesanan.getJamPenjemputan() == null) {
                             textViewWaktuPenjemputan.setVisibility(View.GONE);
                             textViewWaktuPenjemputanValue.setVisibility(View.GONE);
@@ -309,17 +320,7 @@ public class DetailPemesananStatus6 extends AppCompatActivity {
                             icLokasiPenjemputan.setVisibility(View.GONE);
                             textViewWaktuPengambilanValue.setText(dataPemesanan.getJamPengambilan());
                             btnLihatLokasiPenjemputan.setVisibility(View.GONE);
-                            textViewTglSewa.setText(dataPemesanan.getTglSewa());
-                            textViewTglKembali.setText(dataPemesanan.getTglKembali());
-                            textViewJumlahSewaKendaraan.setText(String.valueOf(dataPemesanan.getJumlahKendaraan()));
-                            textViewJmlHariPenyewaan.setText(String.valueOf(dataPemesanan.getJumlahHariPenyewaan()));
-                            if (dataPemesanan.getKategoriKendaraan().equals("Mobil")) {
-                                textViewMobil.setVisibility(View.VISIBLE);
-                                textViewMotor.setVisibility(View.GONE);
-                            } else {
-                                textViewMotor.setVisibility(View.VISIBLE);
-                                textViewMobil.setVisibility(View.GONE);
-                            }
+
                         } else {
                             textViewWaktuPengambilan.setVisibility(View.GONE);
                             textViewWaktuPengambilanValue.setVisibility(View.GONE);

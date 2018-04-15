@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -42,11 +43,15 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class UnggahBuktiPengembalianDana extends AppCompatActivity {
     TextView textViewNamaBankPelanggan, textViewNamaPemilikBank,
@@ -215,7 +220,8 @@ public class UnggahBuktiPengembalianDana extends AppCompatActivity {
         if (imgUri != null) {
             //displaying progress dialog while image is uploading
             final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Menyimpan Bukti Pembayaran");
+            progressDialog.setMessage("Harap tunggu..."); // Setting Message
+            progressDialog.setTitle("Menyimpan Bukti Pengembalian Dana"); // Setting Title
             progressDialog.show();
 
             //getting the storage reference
@@ -251,7 +257,7 @@ public class UnggahBuktiPengembalianDana extends AppCompatActivity {
                                             perbaruiSisaKendaraan(idKendaraan, jmlKendaraanDipesan, tglSewaDipesan, tglKembaliDipesan);
                                             Toast.makeText(getApplicationContext(), "Pengembalian Dana Anda Berhasil", Toast.LENGTH_LONG).show();
                                             Intent intent = new Intent(UnggahBuktiPengembalianDana.this, MainActivity.class);
-                                            intent.putExtra("halamanStatus4", 4);
+                                            intent.putExtra("halamanStatusBatal", 4);
                                             startActivity(intent);
                                             finish();
                                             buatPemberitahuan();
@@ -328,7 +334,7 @@ public class UnggahBuktiPengembalianDana extends AppCompatActivity {
                                             perbaruiSisaKendaraan(idKendaraan, jmlKendaraanDipesan, tglSewaDipesan, tglKembaliDipesan);
                                             Toast.makeText(getApplicationContext(), "Pengembalian Dana Anda Berhasil", Toast.LENGTH_LONG).show();
                                             Intent intent = new Intent(UnggahBuktiPengembalianDana.this, MainActivity.class);
-                                            intent.putExtra("halamanStatus4", 4);
+                                            intent.putExtra("halamanStatusBatal", 4);
                                             startActivity(intent);
                                             finish();
                                             buatPemberitahuanTolakPenyewaan();
@@ -404,49 +410,161 @@ public class UnggahBuktiPengembalianDana extends AppCompatActivity {
     }
 
     private void buatPemberitahuan() {
-        String idPemberitahuan = mDatabase.push().getKey();
-        final String idRental = getIntent().getStringExtra("idRental");
-        final String idKendaraan = getIntent().getStringExtra("idKendaraan");
-        final String tglSewa = getIntent().getStringExtra("tglSewa");
-        final String tglKembali = getIntent().getStringExtra("tglKembali");
-        final String idPenyewaan = getIntent().getStringExtra("idPenyewaan");
         final String idPelanggan = getIntent().getStringExtra("idPelanggan");
-        String valueHalaman = "batal";
-        String statusPemesanan1 = "Batal";
-        HashMap<String, Object> dataNotif = new HashMap<>();
-        dataNotif.put("idPemberitahuan", idPemberitahuan);
-        dataNotif.put("idRental", idRental);
-        dataNotif.put("idKendaraan", idKendaraan);
-        dataNotif.put("tglSewa", tglSewa);
-        dataNotif.put("tglKembali", tglKembali);
-        dataNotif.put("nilaiHalaman", valueHalaman);
-        dataNotif.put("statusPenyewaan", statusPemesanan1);
-        dataNotif.put("idPelanggan", idPelanggan);
-        dataNotif.put("idPenyewaan", idPenyewaan);
-        mDatabase.child("pemberitahuan").child("pelanggan").child("batal").child(idPelanggan).child(idPemberitahuan).setValue(dataNotif);
+        final String tglSewaPencarian = getIntent().getStringExtra("tglSewaPencarian");
+        final String tglKembaliPencarian = getIntent().getStringExtra("tglKembaliPencarian");
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        try {
+            // JSON here
+            String jsonResponse;
+
+            URL url = new URL("https://onesignal.com/api/v1/notifications");
+            HttpURLConnection con = (HttpURLConnection)url.openConnection();
+            con.setUseCaches(false);
+            con.setDoOutput(true);
+            con.setDoInput(true);
+
+            con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            con.setRequestProperty("Authorization", "Basic MWRlZjUzNzUtMjMwMS00NDQxLTgyMDEtYThhNmU0MDlmNTg5");
+            con.setRequestMethod("POST");
+
+            String strJsonBody = "{"
+                    +   "\"app_id\": \"8d59b6c9-1cd7-4c76-8390-38a065ac6924\","
+                    +   "\"filters\": [{\"field\": \"tag\", \"key\": \"UID\", \"relation\": \"=\", \"value\": \"" + idPelanggan +"\"}],"
+                    +   "\"data\": {\"statusPenyewaan\": \"batal\"},"
+                    +   "\"headings\": {\"en\": \"Pengajuan Pembatalan Telah Disetujui\"},"
+                    +   "\"contents\": {\"en\": \"Terdapat pengembalian dana\"}"
+                    + "}";
+
+            System.out.println("strJsonBody:\n" + strJsonBody);
+
+            byte[] sendBytes = strJsonBody.getBytes("UTF-8");
+            con.setFixedLengthStreamingMode(sendBytes.length);
+
+            OutputStream outputStream = con.getOutputStream();
+            outputStream.write(sendBytes);
+
+            int httpResponse = con.getResponseCode();
+            System.out.println("httpResponse: " + httpResponse);
+
+            if (  httpResponse >= HttpURLConnection.HTTP_OK
+                    && httpResponse < HttpURLConnection.HTTP_BAD_REQUEST) {
+                Scanner scanner = new Scanner(con.getInputStream(), "UTF-8");
+                jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
+                scanner.close();
+            }
+            else {
+                Scanner scanner = new Scanner(con.getErrorStream(), "UTF-8");
+                jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
+                scanner.close();
+            }
+            System.out.println("jsonResponse:\n" + jsonResponse);
+        }
+        catch(Throwable t) {
+            t.printStackTrace();
+        }
+//        String idPemberitahuan = mDatabase.push().getKey();
+//        final String idRental = getIntent().getStringExtra("idRental");
+//        final String idKendaraan = getIntent().getStringExtra("idKendaraan");
+//        final String tglSewa = getIntent().getStringExtra("tglSewa");
+//        final String tglKembali = getIntent().getStringExtra("tglKembali");
+//        final String idPenyewaan = getIntent().getStringExtra("idPenyewaan");
+//        final String idPelanggan = getIntent().getStringExtra("idPelanggan");
+//        String valueHalaman = "batal";
+//        String statusPemesanan1 = "Batal";
+//        HashMap<String, Object> dataNotif = new HashMap<>();
+//        dataNotif.put("idPemberitahuan", idPemberitahuan);
+//        dataNotif.put("idRental", idRental);
+//        dataNotif.put("idKendaraan", idKendaraan);
+//        dataNotif.put("tglSewa", tglSewa);
+//        dataNotif.put("tglKembali", tglKembali);
+//        dataNotif.put("nilaiHalaman", valueHalaman);
+//        dataNotif.put("statusPenyewaan", statusPemesanan1);
+//        dataNotif.put("idPelanggan", idPelanggan);
+//        dataNotif.put("idPenyewaan", idPenyewaan);
+//        mDatabase.child("pemberitahuan").child("pelanggan").child("batal").child(idPelanggan).child(idPemberitahuan).setValue(dataNotif);
     }
 
     private void buatPemberitahuanTolakPenyewaan() {
-        String idPemberitahuan = mDatabase.push().getKey();
-        final String idRental = getIntent().getStringExtra("idRental");
-        final String idKendaraan = getIntent().getStringExtra("idKendaraan");
-        final String tglSewa = getIntent().getStringExtra("tglSewa");
-        final String tglKembali = getIntent().getStringExtra("tglKembali");
-        final String idPenyewaan = getIntent().getStringExtra("idPenyewaan");
         final String idPelanggan = getIntent().getStringExtra("idPelanggan");
-        String valueHalaman = "batal";
-        String statusPemesanan1 = "Batal";
-        HashMap<String, Object> dataNotif = new HashMap<>();
-        dataNotif.put("idPemberitahuan", idPemberitahuan);
-        dataNotif.put("idRental", idRental);
-        dataNotif.put("idKendaraan", idKendaraan);
-        dataNotif.put("tglSewa", tglSewa);
-        dataNotif.put("tglKembali", tglKembali);
-        dataNotif.put("nilaiHalaman", valueHalaman);
-        dataNotif.put("statusPenyewaan", statusPemesanan1);
-        dataNotif.put("idPelanggan", idPelanggan);
-        dataNotif.put("idPenyewaan", idPenyewaan);
-        mDatabase.child("pemberitahuan").child("pelanggan").child("batal").child(idPelanggan).child(idPemberitahuan).setValue(dataNotif);
+        final String tglSewaPencarian = getIntent().getStringExtra("tglSewaPencarian");
+        final String tglKembaliPencarian = getIntent().getStringExtra("tglKembaliPencarian");
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        try {
+            // JSON here
+            String jsonResponse;
+
+            URL url = new URL("https://onesignal.com/api/v1/notifications");
+            HttpURLConnection con = (HttpURLConnection)url.openConnection();
+            con.setUseCaches(false);
+            con.setDoOutput(true);
+            con.setDoInput(true);
+
+            con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            con.setRequestProperty("Authorization", "Basic MWRlZjUzNzUtMjMwMS00NDQxLTgyMDEtYThhNmU0MDlmNTg5");
+            con.setRequestMethod("POST");
+
+            String strJsonBody = "{"
+                    +   "\"app_id\": \"8d59b6c9-1cd7-4c76-8390-38a065ac6924\","
+                    +   "\"filters\": [{\"field\": \"tag\", \"key\": \"UID\", \"relation\": \"=\", \"value\": \"" + idPelanggan +"\"}],"
+                    +   "\"data\": {\"statusPenyewaan\": \"batal\"},"
+                    +   "\"headings\": {\"en\": \"Penyewaan Dibatalkan\"},"
+                    +   "\"contents\": {\"en\": \"Karena kendaraan tidak tersedia \"}"
+                    + "}";
+
+            System.out.println("strJsonBody:\n" + strJsonBody);
+
+            byte[] sendBytes = strJsonBody.getBytes("UTF-8");
+            con.setFixedLengthStreamingMode(sendBytes.length);
+
+            OutputStream outputStream = con.getOutputStream();
+            outputStream.write(sendBytes);
+
+            int httpResponse = con.getResponseCode();
+            System.out.println("httpResponse: " + httpResponse);
+
+            if (  httpResponse >= HttpURLConnection.HTTP_OK
+                    && httpResponse < HttpURLConnection.HTTP_BAD_REQUEST) {
+                Scanner scanner = new Scanner(con.getInputStream(), "UTF-8");
+                jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
+                scanner.close();
+            }
+            else {
+                Scanner scanner = new Scanner(con.getErrorStream(), "UTF-8");
+                jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
+                scanner.close();
+            }
+            System.out.println("jsonResponse:\n" + jsonResponse);
+        }
+        catch(Throwable t) {
+            t.printStackTrace();
+        }
+//        String idPemberitahuan = mDatabase.push().getKey();
+//        final String idRental = getIntent().getStringExtra("idRental");
+//        final String idKendaraan = getIntent().getStringExtra("idKendaraan");
+//        final String tglSewa = getIntent().getStringExtra("tglSewa");
+//        final String tglKembali = getIntent().getStringExtra("tglKembali");
+//        final String idPenyewaan = getIntent().getStringExtra("idPenyewaan");
+//        final String idPelanggan = getIntent().getStringExtra("idPelanggan");
+//        String valueHalaman = "batal";
+//        String statusPemesanan1 = "Batal";
+//        HashMap<String, Object> dataNotif = new HashMap<>();
+//        dataNotif.put("idPemberitahuan", idPemberitahuan);
+//        dataNotif.put("idRental", idRental);
+//        dataNotif.put("idKendaraan", idKendaraan);
+//        dataNotif.put("tglSewa", tglSewa);
+//        dataNotif.put("tglKembali", tglKembali);
+//        dataNotif.put("nilaiHalaman", valueHalaman);
+//        dataNotif.put("statusPenyewaan", statusPemesanan1);
+//        dataNotif.put("idPelanggan", idPelanggan);
+//        dataNotif.put("idPenyewaan", idPenyewaan);
+//        mDatabase.child("pemberitahuan").child("pelanggan").child("batal").child(idPelanggan).child(idPemberitahuan).setValue(dataNotif);
     }
 
     private boolean cekKolomIsian() {

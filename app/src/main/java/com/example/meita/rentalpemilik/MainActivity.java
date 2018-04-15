@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity
 
         //ini intent dari builder notif ke halaman status penyewaan
         if (findViewById(R.id.content_frame) != null && notif1 != null && notif1.equals("belumBayar") ) {
-            Log.i("pusing", "valueNotif : "+notif1);
+            //Log.i("pusing", "valueNotif : "+notif1);
             Bundle bundle=new Bundle();
             bundle.putInt("tab1", 1);
             MenuStatusPemesanan menuStatusPemesanan = new MenuStatusPemesanan();
@@ -331,6 +331,7 @@ public class MainActivity extends AppCompatActivity
     //sign out method
     public void signOut() {
         FirebaseAuth.getInstance().signOut();
+        OneSignal.sendTag("UID", null);
 //        Intent intent = new Intent(this, AutentifikasiTelepon.class);
         Toast.makeText(getApplicationContext(), "Anda Berhasil Logout", Toast.LENGTH_LONG).show();
         //Intent intent = new Intent(this, AutentifikasiTelepon.class);

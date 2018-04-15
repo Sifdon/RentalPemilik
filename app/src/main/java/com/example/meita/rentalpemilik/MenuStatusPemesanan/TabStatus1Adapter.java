@@ -72,8 +72,8 @@ public class TabStatus1Adapter extends RecyclerView.Adapter<TabStatus1Adapter.Vi
                     bundle.putString("idRental", idRental);
                     bundle.putString("idPelanggan", idPelanggan);
                     bundle.putString("kategoriKendaraan", kategoriKendaraan);
-                    bundle.putString("tglSewa", tglSewa);
-                    bundle.putString("tglKembali", tglKembali);
+                    bundle.putString("tglSewaPencarian", tglSewa);
+                    bundle.putString("tglKembaliPencarian", tglKembali);
                     intent.putExtras(bundle);
                     context.startActivity(intent);
                 } else {
@@ -84,8 +84,8 @@ public class TabStatus1Adapter extends RecyclerView.Adapter<TabStatus1Adapter.Vi
                     bundle.putString("idRental", idRental);
                     bundle.putString("idPelanggan", idPelanggan);
                     bundle.putString("kategoriKendaraan", kategoriKendaraan);
-                    bundle.putString("tglSewa", tglSewa);
-                    bundle.putString("tglKembali", tglKembali);
+                    bundle.putString("tglSewaPencarian", tglSewa);
+                    bundle.putString("tglKembaliPencarian", tglKembali);
                     intent.putExtras(bundle);
                     context.startActivity(intent);
                 }
