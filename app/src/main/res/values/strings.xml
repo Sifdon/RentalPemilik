@@ -61,6 +61,8 @@
     <string name="increment">+</string>
     <string name="decrement">-</string>
     <string name="display">1</string>
+    <string name="noInternet">Tidak ada koneksi internet, Mohon periksa kembali koneksi internet anda</string>
+    <string name="ya">YA</string>
 
 
 </resources>

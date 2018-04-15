@@ -10,6 +10,7 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
+import com.example.meita.rentalpemilik.Base.InternetConnection;
 import com.example.meita.rentalpemilik.Constants;
 import com.example.meita.rentalpemilik.MainActivity;
 import com.example.meita.rentalpemilik.MenuManajemenKendaraan.service.UploadPhotoThread;
@@ -63,6 +65,7 @@ public class MenuTambahKendaraan extends AppCompatActivity implements View.OnCli
     int jumlahKendaraan, jumlahInterger;
     boolean supir, bahanBakar;
     double hargaSewa, hargaDouble;
+    ProgressDialog progressDialog;
 
 
     private Uri imgUriFotoKendaraan;
@@ -81,6 +84,7 @@ public class MenuTambahKendaraan extends AppCompatActivity implements View.OnCli
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
     private ArrayList<Uri> listImage = new ArrayList<>();
+    LinearLayout activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +107,9 @@ public class MenuTambahKendaraan extends AppCompatActivity implements View.OnCli
         checkBoxSupir = (CheckBox)findViewById(R.id.checkBoxSupir);
         checkBoxBahanBakar = (CheckBox)findViewById(R.id.checkBoxBahanBakar);
         photoContainer = (LinearLayout) findViewById(R.id.photoContainer);
+        activity = (LinearLayout)findViewById(R.id.activity);
+
+        progressDialog = new ProgressDialog(MenuTambahKendaraan.this);
 
         dbKendaraan = FirebaseDatabase.getInstance().getReference("kendaraan");
         dbRental = FirebaseDatabase.getInstance().getReference("rentalKendaraan");
@@ -169,36 +176,55 @@ public class MenuTambahKendaraan extends AppCompatActivity implements View.OnCli
 
     public void tambahDataKendaraan(){
         if (cekKolomIsian() == true) {
-            final String idKendaraan = dbKendaraan.push().getKey();
-            final String kategori = spinnerKategori.getSelectedItem().toString();
-            double hargaSewa = Double.valueOf(editTextHarga.getText().toString().trim());
+            if (InternetConnection.getInstance().isOnline(MenuTambahKendaraan.this)) {
+                progressDialog.setMessage("Harap tunggu..."); // Setting Message
+                progressDialog.setTitle("Menyimpan Data Kendaraan"); // Setting Title
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
+                progressDialog.show(); // Display Progress Dialog
+                progressDialog.setCancelable(false);
+                final String idKendaraan = dbKendaraan.push().getKey();
+                final String kategori = spinnerKategori.getSelectedItem().toString();
+                double hargaSewa = Double.valueOf(editTextHarga.getText().toString().trim());
+                int jmlKendaraan = Integer.valueOf(editTextJumlahKendaraan.getText().toString().trim());
 
-            final KendaraanModel kendaraan = new KendaraanModel( userID, idKendaraan, spinnerKategori.getSelectedItem().toString(), editTextTipe.getText().toString().trim(),
-                    editTextFasilitas.getText().toString().trim(), hargaSewa, spinnerLamaPenyewaan.getSelectedItem().toString(), editTextJmlPenumpang.getText().toString().trim(),
-                    editTextAreaPemakaian.getText().toString().trim(), jumlahKendaraan, supir, bahanBakar);
+                final KendaraanModel kendaraan = new KendaraanModel( userID, idKendaraan, spinnerKategori.getSelectedItem().toString(), editTextTipe.getText().toString().trim(),
+                        editTextFasilitas.getText().toString().trim(), hargaSewa, spinnerLamaPenyewaan.getSelectedItem().toString(), editTextJmlPenumpang.getText().toString().trim(),
+                        editTextAreaPemakaian.getText().toString().trim(), jmlKendaraan, supir, bahanBakar);
 
-            if (listImage.size() == 0) {
-                ShowAlertDialog.showAlert("Anda harus memilih foto kendaraan", this);
+                if (listImage.size() == 0) {
+                    ShowAlertDialog.showAlert("Anda harus memilih foto kendaraan", this);
+                } else {
+                    UploadPhotoThreadListener uploadPhotoThreadListener = new UploadPhotoThreadListener() {
+                        @Override
+                        public void onUploadPhotoSuccess(ArrayList<String> photoUrls) {
+                            Map<String, Object> updateImage = new HashMap<>();
+                            updateImage.put("uriFotoKendaraan", photoUrls);
+                            dbKendaraan.child(kategori).child(idKendaraan).setValue(kendaraan);
+                            dbKendaraan.child(kategori).child(idKendaraan).updateChildren(updateImage);
+
+                            Map<String, Object> dataKendaraanRental = new HashMap<>();
+                            dataKendaraanRental.put("idKendaraan", idKendaraan);
+                            dataKendaraanRental.put("kategoriKendaraan", kategori);
+                            dbRental.child(userID).child("kendaraan").child(idKendaraan).setValue(dataKendaraanRental);
+                            progressDialog.dismiss();
+                            Intent intent = new Intent(MenuTambahKendaraan.this, MainActivity.class);
+                            intent.putExtra("halamanManajemenKendaraan", 11);
+                            startActivity(intent);
+                        }
+                    };
+                    new UploadPhotoThread(idKendaraan, listImage, uploadPhotoThreadListener).execute();
+                }
             } else {
-                UploadPhotoThreadListener uploadPhotoThreadListener = new UploadPhotoThreadListener() {
+                final Snackbar snackbar = Snackbar.make(activity, getResources().getString(R.string.noInternet), Snackbar.LENGTH_INDEFINITE);
+                snackbar.setAction(getResources().getString(R.string.ya), new View.OnClickListener() {
                     @Override
-                    public void onUploadPhotoSuccess(ArrayList<String> photoUrls) {
-                        Map<String, Object> updateImage = new HashMap<>();
-                        updateImage.put("uriFotoKendaraan", photoUrls);
-                        dbKendaraan.child(kategori).child(idKendaraan).setValue(kendaraan);
-                        dbKendaraan.child(kategori).child(idKendaraan).updateChildren(updateImage);
-
-                        Map<String, Object> dataKendaraanRental = new HashMap<>();
-                        dataKendaraanRental.put("idKendaraan", idKendaraan);
-                        dataKendaraanRental.put("kategoriKendaraan", kategori);
-                        dbRental.child(userID).child("kendaraan").child(idKendaraan).setValue(dataKendaraanRental);
-                        Intent intent = new Intent(MenuTambahKendaraan.this, MainActivity.class);
-                        intent.putExtra("halamanManajemenKendaraan", 11);
-                        startActivity(intent);
+                    public void onClick(View v) {
+                        snackbar.dismiss();
                     }
-                };
-                new UploadPhotoThread(idKendaraan, listImage, uploadPhotoThreadListener).execute();
+                });
+                snackbar.show();
             }
+
 
         } else {
             ShowAlertDialog.showAlert("Lengkapi seluruh kolom isian data kendaraan", this);
